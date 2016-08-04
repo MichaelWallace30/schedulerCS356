@@ -9,11 +9,11 @@
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
     <jar href="lib\derbyclient.jar" size="585704" download="eager" />
-    <jar href="schedulerCS356.jar" size="5803" download="eager" />
+    <jar href="schedulerCS356.jar" size="7456" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="schedulerCS356" >
     <param name="requiredFXVersion" value="8.0+"/>
   </applet-desc>
-  <jfx:javafx-desc  width="800" height="600" main-class="schedulercs356.mainClass"  name="schedulerCS356" />
+  <jfx:javafx-desc  width="800" height="600" main-class="schedulercs356.MainClass"  name="schedulerCS356" />
   <update check="always"/>
 </jnlp>

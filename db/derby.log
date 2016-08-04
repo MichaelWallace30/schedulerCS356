@@ -1,4 +1,20 @@
-Thu Aug 04 12:47:24 PDT 2016 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
+Thu Aug 04 12:52:57 PDT 2016 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Thu Aug 04 12:51:48 PDT 2016: Shutting down Derby engine
+Thu Aug 04 12:53:06 PDT 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0156-571d-ac8c-ffffec477f2c 
+on database directory C:\Users\Lenovo\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_91/db/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_91-b15
+user.dir=C:\Program Files\Java\jdk1.8.0_91\db
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=C:\Users\Lenovo\Documents\GitHub\schedulerCS356\db
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Thu Aug 04 13:44:47 PDT 2016: Shutting down Derby engine
+----------------------------------------------------------------
+Thu Aug 04 13:44:47 PDT 2016:
+Shutting down instance a816c00e-0156-571d-ac8c-ffffec477f2c on database directory C:\Users\Lenovo\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
 ----------------------------------------------------------------

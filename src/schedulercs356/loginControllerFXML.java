@@ -22,9 +22,9 @@ import javafx.scene.input.KeyCode;
  *
  * @author Lenovo
  */
-public class loginControllerFXML implements Initializable {
+public class LoginControllerFXML implements Initializable {
     
-    dataBaseController dbController;
+    DataBaseController dbController;
     
     @FXML
     private TextField inputNameTextField;
@@ -67,7 +67,7 @@ public class loginControllerFXML implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //set focus on inputName TextField
-        dbController = new dataBaseController();
+        dbController = new DataBaseController();
         invalidLabel.setVisible(false);
         Platform.runLater(new Runnable() 
         {

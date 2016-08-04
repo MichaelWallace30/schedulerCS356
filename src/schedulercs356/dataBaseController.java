@@ -15,14 +15,14 @@ import java.sql.ResultSet;
  *
  * @author Michael Wallace
  */
-public class dataBaseController {
-    String host = "jdbc:derby://localhost:1527/companyDataBase";
-    String uName = "root";
-    String uPass = "toor";
-    Connection con;
+public class DataBaseController {
+    private String host = "jdbc:derby://localhost:1527/companyDataBase";
+    private String uName = "root";
+    private String uPass = "toor";
+    private Connection con;
     
     
-    Boolean login(String userName, String password)
+    public Boolean login(String userName, String password)
     {
         try
         {
@@ -46,7 +46,7 @@ public class dataBaseController {
         return false;
     }
     
-    dataBaseController(){
+    public DataBaseController(){
         try
         {
         con = DriverManager.getConnection(host,uName, uPass); 

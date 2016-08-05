@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -87,6 +88,25 @@ public class DataBaseController {
         return newList;
     }
     
+    
+    /***********************************
+     * 
+     * Room Stuff
+     **********************************/
+    
+    private Room parseRoom(ResultSet rs) throws SQLException{
+        Integer roomid = rs.getInt("ROOM_NUMBER");
+        String description = rs.getString("DESCRIPTION");
+        Integer max = rs.getInt("MAX_OCCUPANCY");
+        String meetingList = rs.getString("MEETING_ID_LIST");
+
+        LinkedList<String> lls = new LinkedList<>();
+        lls = stringToLinkedList(meetingList);
+
+        Room newRoom = new Room(max,description,roomid,lls);
+        return newRoom; 
+    }
+    
     public void addRoom(Room room){        
         room.getMaxOccupancy();
         room.getDescription(); 
@@ -110,15 +130,74 @@ public class DataBaseController {
     }
     
     public void removeRoom(Room room){
+         try
+        {
+            Statement stmt = con.createStatement();        
+            stmt.executeUpdate("DELETE FROM ROOMS " + " WHERE ROOM_NUMBER = " +  room.getRoomNumber());
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+    }
+    
+    public Room getRoom(Integer roomID)
+    {         
+        try
+        {
+        Statement stmt = con.createStatement();        
+        ResultSet rs = stmt.executeQuery("SELECT * FROM ROOMS WHERE ROOM_NUMBER =" + roomID);
+                if(rs.next())
+                {
+                   return parseRoom(rs);
+                }
+        }                        
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
         
+        return null;
     }
         
     public LinkedList<Room> getRooms(){
+        LinkedList<Room> rooms = new LinkedList<>();
+        try
+        {
+            Statement stmt = con.createStatement();        
+            ResultSet rs = stmt.executeQuery("SELECT * FROM ROOMS");
+            while(rs.next())
+            {
+                rooms.add(parseRoom(rs));
+            }
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
         return null;
     }
     
     public void updateRoom(Room room){
-        
+        try
+        {
+            PreparedStatement ps = con.prepareStatement(
+            "UPDATE ROOMS SET DESCRIPTION = ?, MAX_OCCUPANCY = ?, MEETING_ID_LIST = ? WHERE ROOM_NUMBER = ?");
+
+            // set the preparedstatement parameters
+            ps.setString(1,room.getDescription());
+            ps.setInt(2,room.getMaxOccupancy());
+            ps.setString(3, listToString(room.getMeetingIDList()));
+            ps.setInt(4,room.getRoomNumber());
+
+            // call executeUpdate to execute our sql update statement
+            ps.executeUpdate();
+            ps.close();
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
     }
 }
 

@@ -49,8 +49,8 @@ public class LoginControllerFXML implements Initializable {
             invalidLabel.setVisible(false);
             LinkedList<String> ll = new LinkedList<>();
             ll.add("0000");
-            Room room = new Room(1,"New Room", 1,ll);
-            dbController.addRoom(room);
+            Room room = new Room(1,"Hello",1,ll);
+            dbController.updateRoom(room);
             
             
         }

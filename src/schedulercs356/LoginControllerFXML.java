@@ -7,6 +7,7 @@ package schedulercs356;
 
 
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -46,6 +47,11 @@ public class LoginControllerFXML implements Initializable {
         {
             //if login succeded
             invalidLabel.setVisible(false);
+            LinkedList<String> ll = new LinkedList<>();
+            ll.add("0000");
+            Room room = new Room(1,"New Room", 1,ll);
+            dbController.addRoom(room);
+            
             
         }
         else

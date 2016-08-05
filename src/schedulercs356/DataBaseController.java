@@ -5,6 +5,7 @@
  */
 package schedulercs356;
 
+import java.lang.reflect.Array;
 import java.util.LinkedList;
 
 import java.sql.Connection;
@@ -22,8 +23,21 @@ public class DataBaseController {
     private String uName = "root";
     private String uPass = "toor";
     private Connection con;
+      
     
-    
+    public DataBaseController(){
+        try
+        {
+        con = DriverManager.getConnection(host,uName, uPass); 
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }                
+    }
+
+
+
     public Boolean login(String userName, String password)
     {
         try
@@ -46,26 +60,53 @@ public class DataBaseController {
             System.out.println(err.getMessage());
         }
         return false;
+    }    
+    
+    public String listToString(LinkedList<String> list){
+        String newString = new String();
+        
+        while(!list.isEmpty())
+        {
+            newString += list.remove();
+            if(!list.isEmpty())newString += ":;:";
+        }        
+        return newString;        
     }
     
-    public DataBaseController(){
-        try
+    public LinkedList<String> stringToLinkedList(String stringArray){
+        String newString = "";
+        
+        String strArr[] = stringArray.split(":;:");
+        LinkedList<String> newList = new LinkedList<>();        
+        
+        for(int x = 0; x < Array.getLength(strArr); x++)
         {
-        con = DriverManager.getConnection(host,uName, uPass); 
+            newList.add(strArr[x]);
         }
-        catch(SQLException err)
-        {
-            System.out.println(err.getMessage());
-        }
-                
+        
+        return newList;
     }
-    
     
     public void addRoom(Room room){        
         room.getMaxOccupancy();
         room.getDescription(); 
         room.getRoomNumber();
         room.getMeetingIDList();
+        
+        String stringArray = listToString(room.getMeetingIDList());
+        
+        try
+        {
+            Statement stmt = con.createStatement();        
+            String formatedString = "" + room.getRoomNumber() + ", '" + room.getDescription() + "', " + room.getMaxOccupancy() + ", '" + stringArray +"'";
+                
+            stmt.executeUpdate("INSERT INTO ROOMS " + "VALUES (" + formatedString + ")");
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+                
     }
     
     public void removeRoom(Room room){

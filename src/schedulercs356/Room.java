@@ -5,6 +5,8 @@
  */
 package schedulercs356;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author Michael Wallace
@@ -14,29 +16,24 @@ package schedulercs356;
  */
 public class Room {
     private int maxOccupancy;
-    private String description;
-    private Schedule schedule;
+    private String description;    
     private Integer roomNumber;
+    private LinkedList<String> meetingIDList;
     
     
-    public Room(int maxOccupancy, String description, Schedule schedule, Integer roomNumber){
+    public Room(int maxOccupancy, String description, Integer roomNumber, LinkedList<String> meetingIDList){
         this.setMaxOccupancy(maxOccupancy);
         this.setDescription(description);
-        this.setSchedule(schedule);
         this.setRoomNumber(roomNumber);
+        this.setMeetingIDList(meetingIDList);
     }
     
-    public void setSchedule(Schedule schedule){
-        this.schedule = schedule;
+    public void addMeetingID(String meetingID){
+        meetingIDList.add(meetingID);
     }
     
-    public void addSchedule(Schedule.miniSchedule schedule){
-        schedule.setOwnerID(roomNumber);
-        this.schedule.addNewSchedule(schedule);
-    }
-    
-    public Schedule getSchedule(){
-        return this.schedule;
+    public void removeMeetinID(String meetingID){
+        meetingIDList.remove(meetingID);
     }
 
     public int getMaxOccupancy() {
@@ -61,6 +58,14 @@ public class Room {
 
     public void setRoomNumber(Integer roomNumber) {
         this.roomNumber = roomNumber;
+    }
+
+    public LinkedList<String> getMeetingIDList() {
+        return meetingIDList;
+    }
+
+    public void setMeetingIDList(LinkedList<String> meetingIDList) {
+        this.meetingIDList = meetingIDList;
     }
     
 }

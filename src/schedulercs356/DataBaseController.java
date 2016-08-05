@@ -63,9 +63,9 @@ public class DataBaseController {
     
     public void addRoom(Room room){        
         room.getMaxOccupancy();
-        room.getDescription();        
-        room.getSchedule();
+        room.getDescription(); 
         room.getRoomNumber();
+        room.getMeetingIDList();
     }
     
     public void removeRoom(Room room){

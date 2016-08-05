@@ -14,13 +14,29 @@ package schedulercs356;
  */
 public class Room {
     private int maxOccupancy;
-    //private Schedule schedule;
     private String description;
+    private Schedule schedule;
+    private Integer roomNumber;
     
     
-    public Room(int maxOccupancy, String description){
+    public Room(int maxOccupancy, String description, Schedule schedule, Integer roomNumber){
         this.setMaxOccupancy(maxOccupancy);
         this.setDescription(description);
+        this.setSchedule(schedule);
+        this.setRoomNumber(roomNumber);
+    }
+    
+    public void setSchedule(Schedule schedule){
+        this.schedule = schedule;
+    }
+    
+    public void addSchedule(Schedule.miniSchedule schedule){
+        schedule.setOwnerID(roomNumber);
+        this.schedule.addNewSchedule(schedule);
+    }
+    
+    public Schedule getSchedule(){
+        return this.schedule;
     }
 
     public int getMaxOccupancy() {
@@ -37,6 +53,14 @@ public class Room {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(Integer roomNumber) {
+        this.roomNumber = roomNumber;
     }
     
 }

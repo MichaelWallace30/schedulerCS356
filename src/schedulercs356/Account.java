@@ -5,11 +5,12 @@
  */
 package schedulercs356;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author Micahel Wallace
  * Needs:
- *  Schedule
  *  getAvailability
  *
  * Not sure if java calendar is too much info to store on data base
@@ -22,12 +23,13 @@ public class Account {
     private String lastName;
     private String userName;
     private int password;    
-    //Schedule schedule;    
+    private Schedule scheduleList;
     private String address;
     private int id;
 
     public Account(String firstName, String lastName, String address,
             int id, String userName, String password,
+            Schedule scheduleList,
             Boolean employee, Boolean admin){
         this.setFirstName(firstName);
         this.setLastName(lastName);
@@ -37,12 +39,12 @@ public class Account {
         this.setUserName(userName);
         this.hashPassword(password);
         
+        this.scheduleList = scheduleList;
         this.setEmployee(employee);
         this.setAdmin(admin);
+        
     }
-            
-    
-    
+         
     public Boolean isAdmin() {
         return admin;
     }
@@ -106,7 +108,6 @@ public class Account {
     public void setId(int id) {
         this.id = id;
     }
-        
     
     
     

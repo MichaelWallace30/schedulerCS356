@@ -5,6 +5,8 @@
  */
 package schedulercs356;
 
+import java.util.LinkedList;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -56,6 +58,26 @@ public class DataBaseController {
             System.out.println(err.getMessage());
         }
                 
+    }
+    
+    
+    public void addRoom(Room room){        
+        room.getMaxOccupancy();
+        room.getDescription();        
+        room.getSchedule();
+        room.getRoomNumber();
+    }
+    
+    public void removeRoom(Room room){
+        
+    }
+        
+    public LinkedList<Room> getRooms(){
+        return null;
+    }
+    
+    public void updateRoom(Room room){
+        
     }
 }
 

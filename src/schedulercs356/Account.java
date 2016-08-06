@@ -7,10 +7,8 @@ package schedulercs356;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.LinkedList;
 
 /**
@@ -24,7 +22,8 @@ import java.util.LinkedList;
  */
 public class Account implements DataBaseInterface {
     private Boolean admin;
-    private String firstName;
+    private Boolean employee;
+    private String firstName;  
     private String lastName;
     private String userName;
     private int password;        
@@ -32,9 +31,11 @@ public class Account implements DataBaseInterface {
     private int id;
     private LinkedList<String> meetingIDList;
 
+    
+    //non hashed password as string
     public Account(String firstName, String lastName, String address,
             int id, String userName, String password,            
-            Boolean admin,
+            Boolean employee, Boolean admin,
             LinkedList<String> meetingIDList){
         
         this.setFirstName(firstName);
@@ -45,12 +46,33 @@ public class Account implements DataBaseInterface {
         this.setUserName(userName);
         this.hashPassword(password);
 
+        this.setEmployee(employee);
         this.setAdmin(admin);
         
         this.setMeetingIDList(meetingIDList);
         
     }
-         
+
+    //hashed password as int
+    public Account(String firstName, String lastName, String address,
+            int id, String userName, int password,            
+            Boolean employee, Boolean admin,
+            LinkedList<String> meetingIDList){
+        
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setAddress(address);
+        
+        this.setId(id);
+        this.setUserName(userName);
+        this.setPassword(password);
+
+        this.setEmployee(employee);
+        this.setAdmin(admin);
+        
+        this.setMeetingIDList(meetingIDList);
+        
+    }
     public Boolean isAdmin() {
         return admin;
     }
@@ -88,7 +110,7 @@ public class Account implements DataBaseInterface {
     }
 
     public void hashPassword(String password) {
-        this.password = password.hashCode();
+        this.setPassword(password.hashCode());
     }
 
     public String getAddress() {
@@ -106,7 +128,14 @@ public class Account implements DataBaseInterface {
     public void setId(int id) {
         this.id = id;
     }
-    
+
+    public Boolean isEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Boolean employee) {
+        this.employee = employee;
+    }    
     public LinkedList<String> getMeetingIDList() {
         return meetingIDList;
     }
@@ -120,21 +149,28 @@ public class Account implements DataBaseInterface {
          }
     }
     @Override
-    public void addObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
-        Account account = (Account)obj;        
-        
-        ResultSet rs = stmt.executeQuery("select last_insert_id() as last_id from EMPLOYEES");
-        String lastid = rs.getString("last_id");
-        
-        account.setId(Integer.parseInt(lastid));
-        
-        
-        String formatedString = "" + account.getId() + ", '" + account.getUserName() + "', " +
-                account.getPassword() +", '" + account.getFirstName() + "', '" + account.getLastName() + "', " +
-                account.isAdmin() + ",'"+ DataBaseController.listToString(account.getMeetingIDList()) + "' ";
-        stmt.executeUpdate("INSERT INTO SCHEDULE " + "VALUES (" + formatedString + ")");
-            
-    }
+    public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{
+Account account = (Account)obj; 
+        PreparedStatement ps = con.prepareStatement(
+        "INSERT INTO EMPLOYEES" 
+            +"(ID, USER_NAME, PASSWORD, FIRST_NAME, LAST_NAME, ADMIN, MEETING_ID_LIST, EMPLOYEE) VALUES"
+            + "(?,?,?,?,?,?,?,?)");
+ 
+        // set the preparedstatement parameters
+        ps.setInt(1,account.getId());
+        ps.setString(2, account.getUserName());
+        ps.setInt(3, account.getPassword());
+        ps.setString(4,account.getFirstName());
+        ps.setString(5,account.getLastName());
+        ps.setBoolean(6, account.isAdmin());
+        ps.setString(7,DataBaseController.listToString(account.getMeetingIDList()));
+        ps.setBoolean(8, account.isEmployee());
+
+        // call executeUpdate to execute our sql update statement
+        ps.executeUpdate();
+        ps.close();   
+    }  
+
                 
     @Override
     public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
@@ -146,8 +182,8 @@ public class Account implements DataBaseInterface {
     public void updateObject(DataBaseInterface obj,  Connection con)throws SQLException{
         Account account = (Account)obj; 
         PreparedStatement ps = con.prepareStatement(
-        "UPDATE SCHEDULE SET  USER_NAME = ?, PASSWORD = ?, FIRST_NAME = ?, "
-                + "LAST_NAME = ?, ADMIN = ?, MEETING_ID_LIST = ? WHERE ID = ?");
+        "UPDATE EMPLOYEES SET  USER_NAME = ?, PASSWORD = ?, FIRST_NAME = ?, "
+                + "LAST_NAME = ?, ADMIN = ?, MEETING_ID_LIST = ?, EMPLOYEE = ? WHERE ID = ?");
  
 
         // set the preparedstatement parameters
@@ -157,9 +193,16 @@ public class Account implements DataBaseInterface {
         ps.setString(4,account.getLastName());
         ps.setBoolean(5, account.isAdmin());
         ps.setString(6,DataBaseController.listToString(account.getMeetingIDList()));
+        ps.setBoolean(7, account.isEmployee());
+        ps.setInt(8, account.getId());
 
         // call executeUpdate to execute our sql update statement
         ps.executeUpdate();
         ps.close();   
     }  
+
+    public void setPassword(int password) {
+        this.password = password;
+    }
+
 }

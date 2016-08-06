@@ -82,14 +82,23 @@ public class Room implements DataBaseInterface {
       
   
     @Override
-    public void addObject(DataBaseInterface obj,  Statement stmt)throws SQLException{   
+    public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{   
+     Room room = (Room)obj;
+        PreparedStatement ps = con.prepareStatement(
+        "INSERT INTO ROOMS" 
+            +"(ROOM_NUMBER, DESCRIPTION, MAX_OCCUPANCY, MEETING_ID_LIST) VALUES"
+            + "(?,?,?,?)");        
         
-        Room room = (Room)obj;
-    
-        String stringArray = DataBaseController.listToString(room.getMeetingIDList());
-        String formatedString = "'" + room.getRoomNumber() + "', '" + room.getDescription() + "', " + room.getMaxOccupancy() + ", '" + stringArray +"'";
-        stmt.executeUpdate("INSERT INTO ROOMS " + "VALUES (" + formatedString + ")");
-     
+        // set the preparedstatement parameters
+        ps.setInt(1, room.getRoomNumber());
+        ps.setString(2,room.getDescription());
+        ps.setInt(3,room.getMaxOccupancy());
+        ps.setString(4, listToString(room.getMeetingIDList()));
+        
+
+        // call executeUpdate to execute our sql update statement
+        ps.executeUpdate();
+        ps.close();          
     }
     
     @Override

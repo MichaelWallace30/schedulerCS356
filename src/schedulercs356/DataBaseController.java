@@ -99,9 +99,8 @@ public class DataBaseController {
      **********************************************************/
     public void addToDataBase(DataBaseInterface obj){
         try
-        {
-            Statement stmt = con.createStatement();
-            obj.addObject(obj, stmt);
+        {            
+            obj.addObject(obj, con);
         }
         catch(SQLException err)
         {
@@ -255,6 +254,7 @@ public class DataBaseController {
         }
         return null;
     }
+
 }
 
 

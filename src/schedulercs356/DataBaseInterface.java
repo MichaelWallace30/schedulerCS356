@@ -19,7 +19,7 @@ import java.sql.Statement;
 
 public interface DataBaseInterface {        
     
-    public void addObject(DataBaseInterface obj,  Statement stmt)throws SQLException;
+    public void addObject(DataBaseInterface obj,  Connection con)throws SQLException;
     
     public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException;       
     

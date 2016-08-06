@@ -7,6 +7,7 @@ package schedulercs356;
 
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -45,8 +46,14 @@ public class LoginControllerFXML implements Initializable {
         if(dbController.login(inputNameTextField.getText(), inputPasswordField.getText()))
         {
             //if login succeded
-            invalidLabel.setVisible(false);         
-            
+            invalidLabel.setVisible(false);   
+            Schedule schedule = new Schedule("0000",LocalDateTime.now(), LocalDateTime.now());
+            Room room = new Room(0,"hellO",12,null);
+            Account account = new Account("Mihcael", "Wallace", "777", 1,"Bender", "toor", true, true,null);
+            DataBaseController newDB = new DataBaseController();
+            newDB.addToDataBase(schedule);
+            newDB.addToDataBase(room);
+            newDB.addToDataBase(account);
         }
         else
         {

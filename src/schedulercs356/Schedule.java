@@ -56,14 +56,25 @@ public class Schedule implements DataBaseInterface  {
         this.ownerID = ownerID;
     }
     @Override
-    public void addObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
-        Schedule schedule = (Schedule)obj;        
+    public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{
+                
+        Schedule schedule = (Schedule)obj;
+        PreparedStatement ps = con.prepareStatement(
+        "INSERT INTO SCHEDULE" 
+            +"(OWNER_ID, START_TIME,END_TIME) VALUES"
+            + "(?,?,?)");
+        
         Timestamp startStamp = Timestamp.valueOf(schedule.getStartDateTime());
         Timestamp endStamp = Timestamp.valueOf(schedule.getEndDateTime());
-        
-        String formatedString = "" + schedule.getOwnerID() + ", " + startStamp + ", " + endStamp +"";
-        stmt.executeUpdate("INSERT INTO SCHEDULE " + "VALUES (" + formatedString + ")");
-            
+
+        // set the preparedstatement parameters
+        ps.setString(1,schedule.getOwnerID());        
+        ps.setTimestamp(2,startStamp);
+        ps.setTimestamp(3, endStamp);      
+
+        // call executeUpdate to execute our sql update statement
+        ps.executeUpdate();
+        ps.close();  
     }
                 
     @Override
@@ -76,16 +87,16 @@ public class Schedule implements DataBaseInterface  {
     public void updateObject(DataBaseInterface obj,  Connection con)throws SQLException{
         Schedule schedule = (Schedule)obj;
         PreparedStatement ps = con.prepareStatement(
-        "UPDATE SCHEDULE SET OWNER_ID = ?, START_TIME = ?, END_TIME = ? WHERE ROOM_NUMBER = ?");
+        "UPDATE SCHEDULE SET START_TIME = ?, END_TIME = ? WHERE OWNER_ID= ?");
         
         Timestamp startStamp = Timestamp.valueOf(schedule.getStartDateTime());
         Timestamp endStamp = Timestamp.valueOf(schedule.getEndDateTime());
 
         // set the preparedstatement parameters
-        ps.setString(1,schedule.getOwnerID());        
-        ps.setTimestamp(2,startStamp);
-        ps.setTimestamp(3, endStamp);      
-
+        ps.setTimestamp(1,startStamp);
+        ps.setTimestamp(2, endStamp);      
+        ps.setString(3,schedule.getOwnerID()); 
+        
         // call executeUpdate to execute our sql update statement
         ps.executeUpdate();
         ps.close();   

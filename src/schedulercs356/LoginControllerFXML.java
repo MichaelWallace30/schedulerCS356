@@ -49,8 +49,8 @@ public class LoginControllerFXML implements Initializable {
             invalidLabel.setVisible(false);
             LinkedList<String> ll = new LinkedList<>();
             ll.add("0000");
-            Room room = new Room(1,"Hello",1,ll);
-            dbController.updateRoom(room);
+            Room room = new Room(1,"Yes I worked",1,ll);
+            dbController.updateObject(room);
             
             
         }
@@ -66,9 +66,7 @@ public class LoginControllerFXML implements Initializable {
     private void handleButtonAction(ActionEvent event) {
         Button whichButton = (Button)event.getSource();
         login();
-    }
-    
-    
+    }    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

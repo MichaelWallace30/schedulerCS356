@@ -5,7 +5,13 @@
  */
 package schedulercs356;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
+import static schedulercs356.DataBaseController.listToString;
+
 
 /**
  *
@@ -14,7 +20,7 @@ import java.util.LinkedList;
  * Needs:
  *      Schedule
  */
-public class Room {
+public class Room implements DataBaseInterface {
     private int maxOccupancy;
     private String description;    
     private Integer roomNumber;
@@ -66,6 +72,43 @@ public class Room {
 
     public void setMeetingIDList(LinkedList<String> meetingIDList) {
         this.meetingIDList = meetingIDList;
+    }
+      
+  
+    @Override
+    public void addObject(DataBaseInterface obj,  Statement stmt)throws SQLException{   
+        
+        Room room = (Room)obj;
+    
+        String stringArray = DataBaseController.listToString(room.getMeetingIDList());
+        String formatedString = "" + room.getRoomNumber() + ", '" + room.getDescription() + "', " + room.getMaxOccupancy() + ", '" + stringArray +"'";
+        stmt.executeUpdate("INSERT INTO ROOMS " + "VALUES (" + formatedString + ")");
+     
+    }
+    
+    @Override
+    public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
+        Room room = (Room)obj;
+        stmt.executeUpdate("DELETE FROM ROOMS " + " WHERE ROOM_NUMBER = " +  room.getRoomNumber());
+
+    }
+    
+    @Override
+    public void updateObject(DataBaseInterface obj, Connection con)throws SQLException{
+        Room room = (Room)obj;
+        PreparedStatement ps = con.prepareStatement(
+        "UPDATE ROOMS SET DESCRIPTION = ?, MAX_OCCUPANCY = ?, MEETING_ID_LIST = ? WHERE ROOM_NUMBER = ?");
+
+        // set the preparedstatement parameters
+        ps.setString(1,room.getDescription());
+        ps.setInt(2,room.getMaxOccupancy());
+        ps.setString(3, listToString(room.getMeetingIDList()));
+        ps.setInt(4,room.getRoomNumber());
+
+        // call executeUpdate to execute our sql update statement
+        ps.executeUpdate();
+        ps.close();
+
     }
     
 }

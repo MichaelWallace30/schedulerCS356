@@ -63,7 +63,13 @@ public class DataBaseController {
         return false;
     }    
     
-    public String listToString(LinkedList<String> list){
+    
+     /*********************************************************
+     * 
+     * Database conversion of list to strings
+     * 
+     **********************************************************/
+    static public String listToString(LinkedList<String> list){
         String newString = new String();
         
         while(!list.isEmpty())
@@ -74,7 +80,7 @@ public class DataBaseController {
         return newString;        
     }
     
-    public LinkedList<String> stringToLinkedList(String stringArray){
+    static public LinkedList<String> stringToList(String stringArray){
         String newString = "";
         
         String strArr[] = stringArray.split(":;:");
@@ -87,53 +93,17 @@ public class DataBaseController {
         
         return newList;
     }
-    
-    
-    /***********************************
+
+     /*********************************************************
      * 
-     * Room Stuff
-     **********************************/
-    
-    private Room parseRoom(ResultSet rs) throws SQLException{
-        Integer roomid = rs.getInt("ROOM_NUMBER");
-        String description = rs.getString("DESCRIPTION");
-        Integer max = rs.getInt("MAX_OCCUPANCY");
-        String meetingList = rs.getString("MEETING_ID_LIST");
-
-        LinkedList<String> lls = new LinkedList<>();
-        lls = stringToLinkedList(meetingList);
-
-        Room newRoom = new Room(max,description,roomid,lls);
-        return newRoom; 
-    }
-    
-    public void addRoom(Room room){        
-        room.getMaxOccupancy();
-        room.getDescription(); 
-        room.getRoomNumber();
-        room.getMeetingIDList();
-        
-        String stringArray = listToString(room.getMeetingIDList());
-        
+     * Object calls for Room, Account, Schedule, Meeting
+     * 
+     **********************************************************/
+    public void addToDataBase(DataBaseInterface obj){
         try
         {
-            Statement stmt = con.createStatement();        
-            String formatedString = "" + room.getRoomNumber() + ", '" + room.getDescription() + "', " + room.getMaxOccupancy() + ", '" + stringArray +"'";
-                
-            stmt.executeUpdate("INSERT INTO ROOMS " + "VALUES (" + formatedString + ")");
-        }
-        catch(SQLException err)
-        {
-            System.out.println(err.getMessage());
-        }
-                
-    }
-    
-    public void removeRoom(Room room){
-         try
-        {
-            Statement stmt = con.createStatement();        
-            stmt.executeUpdate("DELETE FROM ROOMS " + " WHERE ROOM_NUMBER = " +  room.getRoomNumber());
+            Statement stmt = con.createStatement();
+            obj.addObject(obj, stmt);
         }
         catch(SQLException err)
         {
@@ -141,34 +111,64 @@ public class DataBaseController {
         }
     }
     
-    public Room getRoom(Integer roomID)
-    {         
+    public void removeObject(DataBaseInterface obj){
         try
         {
-        Statement stmt = con.createStatement();        
-        ResultSet rs = stmt.executeQuery("SELECT * FROM ROOMS WHERE ROOM_NUMBER =" + roomID);
-                if(rs.next())
-                {
-                   return parseRoom(rs);
-                }
-        }                        
+            Statement stmt = con.createStatement();
+            obj.removeObject(obj, stmt);
+        }
         catch(SQLException err)
         {
             System.out.println(err.getMessage());
         }
+    }
+    
+    public void updateObject(DataBaseInterface obj){
+        try
+        {            
+            obj.updateObject(obj, con);
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+    }
         
+    /*********************************************************
+     * 
+     * none object calls for Room, Account, Schedule, Meeting
+     * 
+     **********************************************************/
+        
+    public Room parseRoom(ResultSet rs){        
+        try
+        {
+            Integer roomid = rs.getInt("ROOM_NUMBER");
+            String description = rs.getString("DESCRIPTION");
+            Integer max = rs.getInt("MAX_OCCUPANCY");
+            String meetingList = rs.getString("MEETING_ID_LIST");
+
+            LinkedList<String> lls = new LinkedList<>();
+            lls = stringToList(meetingList);
+            Room newRoom = new Room(max,description,roomid,lls);
+            return newRoom; 
+
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
         return null;
     }
-        
-    public LinkedList<Room> getRooms(){
-        LinkedList<Room> rooms = new LinkedList<>();
+    
+    public LinkedList<Room> getAllObjects( Statement stmt){
         try
         {
-            Statement stmt = con.createStatement();        
+            LinkedList<DataBaseInterface> rooms = new LinkedList<>();
             ResultSet rs = stmt.executeQuery("SELECT * FROM ROOMS");
             while(rs.next())
             {
-                rooms.add(parseRoom(rs));
+               rooms.add(parseRoom(rs));
             }
         }
         catch(SQLException err)
@@ -178,27 +178,24 @@ public class DataBaseController {
         return null;
     }
     
-    public void updateRoom(Room room){
+    
+    public Room getObject(Integer objID){         
         try
         {
-            PreparedStatement ps = con.prepareStatement(
-            "UPDATE ROOMS SET DESCRIPTION = ?, MAX_OCCUPANCY = ?, MEETING_ID_LIST = ? WHERE ROOM_NUMBER = ?");
-
-            // set the preparedstatement parameters
-            ps.setString(1,room.getDescription());
-            ps.setInt(2,room.getMaxOccupancy());
-            ps.setString(3, listToString(room.getMeetingIDList()));
-            ps.setInt(4,room.getRoomNumber());
-
-            // call executeUpdate to execute our sql update statement
-            ps.executeUpdate();
-            ps.close();
-        }
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM ROOMS WHERE ROOM_NUMBER =" + objID);
+                if(rs.next())
+                {
+                   return parseRoom(rs);
+                } 
+        }        
         catch(SQLException err)
         {
             System.out.println(err.getMessage());
         }
+        return null;
     }
+    
 }
 
 

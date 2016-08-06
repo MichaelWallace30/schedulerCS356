@@ -4,13 +4,26 @@
  * and open the template in the editor.
  */
 package schedulercs356;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import static schedulercs356.DataBaseController.listToString;
 /**
  *
  * @author Michael Wallace
+ * 
+ * To convert Java8's java.time.LocalDate to java.sql.Timestamp, just do
+
+Timestamp timestamp = Timestamp.valueOf(localDate.atStartOfDay());
+To convert Java8's java.time.LocalDateTime to java.sql.Timestamp, just do
+
+Timestamp timestamp = Timestamp.valueOf(localDateTime);
  */
-public class Schedule {
+public class Schedule implements DataBaseInterface  {
     
     public final static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
     private LocalDateTime startDateTime;
@@ -39,5 +52,40 @@ public class Schedule {
 
     public void setOwnerID(String ownerID) {
         this.ownerID = ownerID;
+    }
+    @Override
+    public void addObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
+        Schedule schedule = (Schedule)obj;
+        Timestamp startStamp = Timestamp.valueOf(schedule.getStartDateTime());
+        Timestamp endStamp = Timestamp.valueOf(schedule.getEndDateTime());
+        
+        String formatedString = "" + schedule.getOwnerID() + ", '" + startStamp + "', " + endStamp +"'";
+        stmt.executeUpdate("INSERT INTO SCHEDULE " + "VALUES (" + formatedString + ")");
+            
+    }
+                
+    @Override
+    public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
+        Schedule schedule = (Schedule)obj;
+        stmt.executeUpdate("DELETE FROM SCHEDULE " + " WHERE OWNER_ID = " +  schedule.getOwnerID());
+        
+    }  
+    @Override
+    public void updateObject(DataBaseInterface obj,  Connection con)throws SQLException{
+        Schedule schedule = (Schedule)obj;
+        PreparedStatement ps = con.prepareStatement(
+        "UPDATE SCHEDULE SET OWNER_ID = ?, START_TIME = ?, END_TIME = ? WHERE ROOM_NUMBER = ?");
+        
+        Timestamp startStamp = Timestamp.valueOf(schedule.getStartDateTime());
+        Timestamp endStamp = Timestamp.valueOf(schedule.getEndDateTime());
+
+        // set the preparedstatement parameters
+        ps.setString(1,schedule.getOwnerID());        
+        ps.setTimestamp(2,startStamp);
+        ps.setTimestamp(3, endStamp);      
+
+        // call executeUpdate to execute our sql update statement
+        ps.executeUpdate();
+        ps.close();   
     }
 }

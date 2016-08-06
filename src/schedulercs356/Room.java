@@ -27,11 +27,13 @@ public class Room implements DataBaseInterface {
     private LinkedList<String> meetingIDList;
     
     
+    
     public Room(int maxOccupancy, String description, Integer roomNumber, LinkedList<String> meetingIDList){
         this.setMaxOccupancy(maxOccupancy);
         this.setDescription(description);
         this.setRoomNumber(roomNumber);
         this.setMeetingIDList(meetingIDList);
+
     }
     
     public void addMeetingID(String meetingID){
@@ -71,7 +73,13 @@ public class Room implements DataBaseInterface {
     }
 
     public void setMeetingIDList(LinkedList<String> meetingIDList) {
-        this.meetingIDList = meetingIDList;
+         
+        if(meetingIDList == null){
+            this.meetingIDList = new LinkedList<>();
+        }
+        else{            
+            this.meetingIDList = meetingIDList;
+         }
     }
       
   

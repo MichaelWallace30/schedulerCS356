@@ -22,15 +22,17 @@ public class Account {
     private String firstName;
     private String lastName;
     private String userName;
-    private int password;    
-    private Schedule scheduleList;
+    private int password;        
     private String address;
     private int id;
+    private LinkedList<String> meetingIDList;
+
 
     public Account(String firstName, String lastName, String address,
-            int id, String userName, String password,
-            Schedule scheduleList,
-            Boolean employee, Boolean admin){
+            int id, String userName, String password,            
+            Boolean employee, Boolean admin,
+            LinkedList<String> meetingIDList){
+        
         this.setFirstName(firstName);
         this.setLastName(lastName);
         this.setAddress(address);
@@ -38,10 +40,11 @@ public class Account {
         this.setId(id);
         this.setUserName(userName);
         this.hashPassword(password);
-        
-        this.scheduleList = scheduleList;
+                
         this.setEmployee(employee);
         this.setAdmin(admin);
+        
+        this.setMeetingIDList(meetingIDList);
         
     }
          
@@ -109,9 +112,16 @@ public class Account {
         this.id = id;
     }
     
-    
-    
-    
-    
-    
+    public LinkedList<String> getMeetingIDList() {
+        return meetingIDList;
+    }
+
+    public void setMeetingIDList(LinkedList<String> meetingIDList) {         
+        if(meetingIDList == null){
+            this.meetingIDList = new LinkedList<>();
+        }
+        else{            
+            this.meetingIDList = meetingIDList;
+         }
+    }
 }

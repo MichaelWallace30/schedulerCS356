@@ -11,25 +11,27 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
-import static schedulercs356.DataBaseController.listToString;
+
 /**
  *
  * @author Michael Wallace
  * 
  * To convert Java8's java.time.LocalDate to java.sql.Timestamp, just do
-
-Timestamp timestamp = Timestamp.valueOf(localDate.atStartOfDay());
-To convert Java8's java.time.LocalDateTime to java.sql.Timestamp, just do
-
-Timestamp timestamp = Timestamp.valueOf(localDateTime);
  */
 public class Schedule implements DataBaseInterface  {
     
     public final static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    private String ownerID;
+    private String ownerID;// only Meetings own schedules
 
+    
+    public Schedule(String ownerID, LocalDateTime startTime, LocalDateTime endTime){
+        this.ownerID = ownerID;
+        this.startDateTime = startTime;
+        this.endDateTime = endTime;
+    }
+    
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }

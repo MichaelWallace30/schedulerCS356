@@ -10,10 +10,10 @@ import java.util.LinkedList;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 
 /**
  *
@@ -36,8 +36,6 @@ public class DataBaseController {
             System.out.println(err.getMessage());
         }                
     }
-
-
 
     public Boolean login(String userName, String password)
     {
@@ -140,6 +138,9 @@ public class DataBaseController {
      * 
      **********************************************************/
         
+    /**********
+     * ROOMS
+     *********/
     public Room parseRoom(ResultSet rs){        
         try
         {
@@ -161,15 +162,16 @@ public class DataBaseController {
         return null;
     }
     
-    public LinkedList<Room> getAllObjects( Statement stmt){
+    public LinkedList<Room> getAllRooms( Statement stmt){
         try
         {
-            LinkedList<DataBaseInterface> rooms = new LinkedList<>();
+            LinkedList<Room> rooms = new LinkedList<>();
             ResultSet rs = stmt.executeQuery("SELECT * FROM ROOMS");
             while(rs.next())
             {
                rooms.add(parseRoom(rs));
             }
+            return rooms;
         }
         catch(SQLException err)
         {
@@ -179,7 +181,7 @@ public class DataBaseController {
     }
     
     
-    public Room getObject(Integer objID){         
+    public Room getRoom(Integer objID){         
         try
         {
             Statement stmt = con.createStatement();
@@ -196,6 +198,63 @@ public class DataBaseController {
         return null;
     }
     
+    /***************
+     * SCHEDULES
+     ***************/
+    public Schedule parseSchedule(ResultSet rs){        
+        try
+        {
+            String onwerID = rs.getString("OWNER_ID");
+            Timestamp startTime = rs.getTimestamp("START_TIME");
+            Timestamp endTime = rs.getTimestamp("END_TIME");            
+            
+            
+            Schedule schedule = new Schedule(onwerID, startTime.toLocalDateTime(), endTime.toLocalDateTime());
+            return schedule; 
+
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+        return null;
+    }
+    
+    public LinkedList<Schedule> getAllSchedules( Statement stmt){
+        try
+        {
+            LinkedList<Schedule> schedules = new LinkedList<>();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM SCHEDULE");
+            while(rs.next())
+            {
+                schedules.add(parseSchedule(rs));
+            }
+            return schedules;
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+        return null;
+    }
+    
+    
+    public Schedule getSchedule(Integer objID){         
+        try
+        {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM SCHEDULE WHERE OWNER_ID =" + objID);
+                if(rs.next())
+                {
+                   return parseSchedule(rs);
+                } 
+        }        
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+        return null;
+    }
 }
 
 

@@ -5,20 +5,25 @@
  */
 package schedulercs356;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 
 /**
  *
  * @author Micahel Wallace
  * Needs:
- *  getAvailability
- *
- * Not sure if java calendar is too much info to store on data base
+ *  @TODO
+ *  Missing address in employees table
+
  * 
  */
-public class Account {
+public class Account implements DataBaseInterface {
     private Boolean admin;
-    private Boolean employee;
     private String firstName;
     private String lastName;
     private String userName;
@@ -29,7 +34,7 @@ public class Account {
 
     public Account(String firstName, String lastName, String address,
             int id, String userName, String password,            
-            Boolean employee, Boolean admin,
+            Boolean admin,
             LinkedList<String> meetingIDList){
         
         this.setFirstName(firstName);
@@ -39,8 +44,7 @@ public class Account {
         this.setId(id);
         this.setUserName(userName);
         this.hashPassword(password);
-                
-        this.setEmployee(employee);
+
         this.setAdmin(admin);
         
         this.setMeetingIDList(meetingIDList);
@@ -53,14 +57,6 @@ public class Account {
 
     public void setAdmin(Boolean admin) {
         this.admin = admin;
-    }
-
-    public Boolean isEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Boolean employee) {
-        this.employee = employee;
     }
 
     public String getFirstName() {
@@ -123,4 +119,47 @@ public class Account {
             this.meetingIDList = meetingIDList;
          }
     }
+    @Override
+    public void addObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
+        Account account = (Account)obj;        
+        
+        ResultSet rs = stmt.executeQuery("select last_insert_id() as last_id from EMPLOYEES");
+        String lastid = rs.getString("last_id");
+        
+        account.setId(Integer.parseInt(lastid));
+        
+        
+        String formatedString = "" + account.getId() + ", '" + account.getUserName() + "', " +
+                account.getPassword() +", '" + account.getFirstName() + "', '" + account.getLastName() + "', " +
+                account.isAdmin() + ",'"+ DataBaseController.listToString(account.getMeetingIDList()) + "' ";
+        stmt.executeUpdate("INSERT INTO SCHEDULE " + "VALUES (" + formatedString + ")");
+            
+    }
+                
+    @Override
+    public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
+        Account account = (Account)obj; 
+        stmt.executeUpdate("DELETE FROM EMPLOYEES " + " ID = " +  account.getId());
+        
+    }  
+    @Override
+    public void updateObject(DataBaseInterface obj,  Connection con)throws SQLException{
+        Account account = (Account)obj; 
+        PreparedStatement ps = con.prepareStatement(
+        "UPDATE SCHEDULE SET  USER_NAME = ?, PASSWORD = ?, FIRST_NAME = ?, "
+                + "LAST_NAME = ?, ADMIN = ?, MEETING_ID_LIST = ? WHERE ID = ?");
+ 
+
+        // set the preparedstatement parameters
+        ps.setString(1, account.getUserName());
+        ps.setInt(2, account.getPassword());
+        ps.setString(3,account.getFirstName());
+        ps.setString(4,account.getLastName());
+        ps.setBoolean(5, account.isAdmin());
+        ps.setString(6,DataBaseController.listToString(account.getMeetingIDList()));
+
+        // call executeUpdate to execute our sql update statement
+        ps.executeUpdate();
+        ps.close();   
+    }  
 }

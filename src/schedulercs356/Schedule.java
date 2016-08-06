@@ -57,11 +57,11 @@ public class Schedule implements DataBaseInterface  {
     }
     @Override
     public void addObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
-        Schedule schedule = (Schedule)obj;
+        Schedule schedule = (Schedule)obj;        
         Timestamp startStamp = Timestamp.valueOf(schedule.getStartDateTime());
         Timestamp endStamp = Timestamp.valueOf(schedule.getEndDateTime());
         
-        String formatedString = "" + schedule.getOwnerID() + ", '" + startStamp + "', " + endStamp +"'";
+        String formatedString = "" + schedule.getOwnerID() + ", " + startStamp + ", " + endStamp +"";
         stmt.executeUpdate("INSERT INTO SCHEDULE " + "VALUES (" + formatedString + ")");
             
     }

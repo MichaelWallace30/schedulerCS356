@@ -87,7 +87,7 @@ public class Room implements DataBaseInterface {
         Room room = (Room)obj;
     
         String stringArray = DataBaseController.listToString(room.getMeetingIDList());
-        String formatedString = "" + room.getRoomNumber() + ", '" + room.getDescription() + "', " + room.getMaxOccupancy() + ", '" + stringArray +"'";
+        String formatedString = "'" + room.getRoomNumber() + "', '" + room.getDescription() + "', " + room.getMaxOccupancy() + ", '" + stringArray +"'";
         stmt.executeUpdate("INSERT INTO ROOMS " + "VALUES (" + formatedString + ")");
      
     }

@@ -27,7 +27,6 @@ public class Account {
     private int id;
     private LinkedList<String> meetingIDList;
 
-
     public Account(String firstName, String lastName, String address,
             int id, String userName, String password,            
             Boolean employee, Boolean admin,

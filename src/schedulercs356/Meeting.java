@@ -10,9 +10,14 @@ import java.util.UUID;
 /**
  *
  * @author Michael Wallace
+ * 
+ * Meeting ID = 0 is special case for non meeting schedule
+ * 
+ * 
  */
 public class Meeting {
     private String meetingID;
+    private Schedule schedule;
     
     
     public Meeting(){

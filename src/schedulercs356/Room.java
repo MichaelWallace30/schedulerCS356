@@ -16,9 +16,7 @@ import static schedulercs356.DataBaseController.listToString;
 /**
  *
  * @author Michael Wallace
- * 
- * Needs:
- *      Schedule
+ *  
  */
 public class Room implements DataBaseInterface {
     private int maxOccupancy;

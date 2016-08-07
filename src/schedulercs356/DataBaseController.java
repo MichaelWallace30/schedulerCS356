@@ -97,18 +97,21 @@ public class DataBaseController {
      * Object calls for Room, Account, Schedule, Meeting
      * 
      **********************************************************/
-    public void addToDataBase(DataBaseInterface obj){
+    public Boolean addObject(DataBaseInterface obj){
         try
         {            
             obj.addObject(obj, con);
+            
         }
         catch(SQLException err)
         {
             System.out.println(err.getMessage());
+            return false;
         }
+        return true;
     }
     
-    public void removeObject(DataBaseInterface obj){
+    public Boolean removeObject(DataBaseInterface obj){
         try
         {
             Statement stmt = con.createStatement();
@@ -117,10 +120,12 @@ public class DataBaseController {
         catch(SQLException err)
         {
             System.out.println(err.getMessage());
+            return false;
         }
+        return true;
     }
     
-    public void updateObject(DataBaseInterface obj){
+    public Boolean updateObject(DataBaseInterface obj){
         try
         {            
             obj.updateObject(obj, con);
@@ -128,7 +133,9 @@ public class DataBaseController {
         catch(SQLException err)
         {
             System.out.println(err.getMessage());
+            return false;
         }
+        return true;
     }
         
     /*********************************************************
@@ -246,6 +253,71 @@ public class DataBaseController {
                 if(rs.next())
                 {
                    return parseSchedule(rs);
+                } 
+        }        
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+        return null;
+    }
+    
+    
+    /***************
+     * ACCOUNTS
+     ***************/
+    public Account parseAccount(ResultSet rs){        
+        try
+        {
+            Boolean admin = rs.getBoolean("ADMIN");
+            Boolean employee = rs.getBoolean("EMPLOYEE");
+            String firstName = rs.getString("FIRST_NAME");
+            String lastName = rs.getString("LAST_NAME");
+            String userName = rs.getString("USER_NAME");
+            int password = rs.getInt("PASSWORD");
+            String address = rs.getString("ADDRESS");
+            int id = rs.getInt("ID");
+            LinkedList<String> meetingIDList = stringToList(rs.getString("MEETING_ID_LIST"));
+            
+            
+            Account account = new Account(firstName, lastName, address, id, userName, password, employee, admin, meetingIDList);
+            return account; 
+
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+        return null;
+    }
+    
+    public LinkedList<Account> getAllAccounts( Statement stmt){
+        try
+        {
+            LinkedList<Account> accounts = new LinkedList<>();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM EMPLOYEES");
+            while(rs.next())
+            {
+                accounts.add(parseAccount(rs));
+            }
+            return accounts;
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+        return null;
+    }
+    
+    
+    public Account getAccount(Integer objID){         
+        try
+        {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM EMPLOYESS WHERE ID =" + objID);
+                if(rs.next())
+                {
+                   return parseAccount(rs);
                 } 
         }        
         catch(SQLException err)

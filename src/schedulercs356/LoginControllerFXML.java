@@ -51,9 +51,9 @@ public class LoginControllerFXML implements Initializable {
             Room room = new Room(0,"hellO",12,null);
             Account account = new Account("Mihcael", "Wallace", "777", 1,"Bender", "toor", true, true,null);
             DataBaseController newDB = new DataBaseController();
-            newDB.addToDataBase(schedule);
-            newDB.addToDataBase(room);
-            newDB.addToDataBase(account);
+            newDB.addObject(schedule);
+            newDB.addObject(room);
+            newDB.addObject(account);
         }
         else
         {

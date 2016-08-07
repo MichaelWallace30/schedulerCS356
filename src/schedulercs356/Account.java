@@ -153,8 +153,8 @@ public class Account implements DataBaseInterface {
 Account account = (Account)obj; 
         PreparedStatement ps = con.prepareStatement(
         "INSERT INTO EMPLOYEES" 
-            +"(ID, USER_NAME, PASSWORD, FIRST_NAME, LAST_NAME, ADMIN, MEETING_ID_LIST, EMPLOYEE) VALUES"
-            + "(?,?,?,?,?,?,?,?)");
+            +"(ID, USER_NAME, PASSWORD, FIRST_NAME, LAST_NAME, ADMIN, MEETING_ID_LIST, EMPLOYEE, ADDRESS) VALUES"
+            + "(?,?,?,?,?,?,?,?, ?)");
  
         // set the preparedstatement parameters
         ps.setInt(1,account.getId());
@@ -165,6 +165,7 @@ Account account = (Account)obj;
         ps.setBoolean(6, account.isAdmin());
         ps.setString(7,DataBaseController.listToString(account.getMeetingIDList()));
         ps.setBoolean(8, account.isEmployee());
+        ps.setString(9, account.getAddress());
 
         // call executeUpdate to execute our sql update statement
         ps.executeUpdate();
@@ -183,7 +184,7 @@ Account account = (Account)obj;
         Account account = (Account)obj; 
         PreparedStatement ps = con.prepareStatement(
         "UPDATE EMPLOYEES SET  USER_NAME = ?, PASSWORD = ?, FIRST_NAME = ?, "
-                + "LAST_NAME = ?, ADMIN = ?, MEETING_ID_LIST = ?, EMPLOYEE = ? WHERE ID = ?");
+                + "LAST_NAME = ?, ADMIN = ?, MEETING_ID_LIST = ?, EMPLOYEE = ?, ADDRESS = ? WHERE ID = ?");
  
 
         // set the preparedstatement parameters
@@ -194,7 +195,8 @@ Account account = (Account)obj;
         ps.setBoolean(5, account.isAdmin());
         ps.setString(6,DataBaseController.listToString(account.getMeetingIDList()));
         ps.setBoolean(7, account.isEmployee());
-        ps.setInt(8, account.getId());
+        ps.setString(8, account.getAddress());
+        ps.setInt(9, account.getId());
 
         // call executeUpdate to execute our sql update statement
         ps.executeUpdate();

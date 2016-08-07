@@ -128,7 +128,8 @@ public class DataBaseController {
     public Boolean updateObject(DataBaseInterface obj){
         try
         {            
-            obj.updateObject(obj, con);
+            Boolean addSuccess = obj.updateObject(obj, con);
+            if(!addSuccess)return false;//no object to update
         }
         catch(SQLException err)
         {

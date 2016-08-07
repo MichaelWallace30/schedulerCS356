@@ -5,6 +5,7 @@
  */
 package schedulercs356;
 
+import java.util.LinkedList;
 import java.util.UUID;
 
 /**
@@ -15,9 +16,22 @@ import java.util.UUID;
  * 
  * 
  */
-public class Meeting {
+public class Meeting {    
     private String meetingID;
+    
+    //Object variables
     private Schedule schedule;
+    private Room room;
+    private LinkedList<Account> invitedList;
+    private LinkedList<Account> acceptedList;
+    private LinkedList<Account> rejectedList;
+    
+    //Database variables
+    //private String scheduleID;//same as meetingID
+    private Integer roomNumber;
+    ///private LinkedList<Account> invitedList;
+    //private LinkedList<Account> acceptedList;
+    //private LinkedList<Account> rejectedList;
     
     
     public Meeting(){

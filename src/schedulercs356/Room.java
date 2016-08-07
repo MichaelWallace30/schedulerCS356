@@ -109,7 +109,7 @@ public class Room implements DataBaseInterface {
     }
     
     @Override
-    public void updateObject(DataBaseInterface obj, Connection con)throws SQLException{
+    public Boolean updateObject(DataBaseInterface obj, Connection con)throws SQLException{
         Room room = (Room)obj;
         PreparedStatement ps = con.prepareStatement(
         "UPDATE ROOMS SET DESCRIPTION = ?, MAX_OCCUPANCY = ?, MEETING_ID_LIST = ? WHERE ROOM_NUMBER = ?");
@@ -121,9 +121,14 @@ public class Room implements DataBaseInterface {
         ps.setInt(4,room.getRoomNumber());
 
         // call executeUpdate to execute our sql update statement
-        ps.executeUpdate();
-        ps.close();
-
+        // call executeUpdate to execute our sql update statement
+        int i = ps.executeUpdate();
+        ps.close();   
+        
+        if(i <= 0){
+        return false;
+        }
+        return true;
     }
     
 }

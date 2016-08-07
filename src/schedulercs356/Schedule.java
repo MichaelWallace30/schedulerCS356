@@ -16,14 +16,14 @@ import java.time.LocalDateTime;
  *
  * @author Michael Wallace
  * 
- * To convert Java8's java.time.LocalDate to java.sql.Timestamp, just do
+ * All schedules belong to a meeting and should have the same UUID while all other entities own a meeting id list which is also a schedule id list
  */
 public class Schedule implements DataBaseInterface  {
     
     public final static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    private String ownerID;// only Meetings own schedules
+    private String ownerID;// only Meetings own schedules a schedule id is the same as a meeting id
 
     
     public Schedule(String ownerID, LocalDateTime startTime, LocalDateTime endTime){
@@ -84,7 +84,7 @@ public class Schedule implements DataBaseInterface  {
         
     }  
     @Override
-    public void updateObject(DataBaseInterface obj,  Connection con)throws SQLException{
+    public Boolean updateObject(DataBaseInterface obj,  Connection con)throws SQLException{
         Schedule schedule = (Schedule)obj;
         PreparedStatement ps = con.prepareStatement(
         "UPDATE SCHEDULE SET START_TIME = ?, END_TIME = ? WHERE OWNER_ID= ?");
@@ -98,7 +98,13 @@ public class Schedule implements DataBaseInterface  {
         ps.setString(3,schedule.getOwnerID()); 
         
         // call executeUpdate to execute our sql update statement
-        ps.executeUpdate();
+        // call executeUpdate to execute our sql update statement
+        int i = ps.executeUpdate();
         ps.close();   
+        
+        if(i <= 0){
+        return false;
+        }
+        return true;
     }
 }

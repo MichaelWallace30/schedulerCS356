@@ -7,6 +7,7 @@ package schedulercs356;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
@@ -150,12 +151,30 @@ public class Account implements DataBaseInterface {
     }
     @Override
     public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{
-Account account = (Account)obj; 
+        Account account = (Account)obj; 
+        
+        //get last id of insertion to db
+        Statement stmt = con.createStatement();
+        String SQL = "SELECT * FROM EMPLOYEES";
+        ResultSet rs = stmt.executeQuery(SQL);
+
+        int lastID = 0;
+        while(rs.next()){
+            lastID = rs.getInt(1);
+        }
+        lastID++;
+        
+        account.setId(lastID);
+        
+        
         PreparedStatement ps = con.prepareStatement(
         "INSERT INTO EMPLOYEES" 
             +"(ID, USER_NAME, PASSWORD, FIRST_NAME, LAST_NAME, ADMIN, MEETING_ID_LIST, EMPLOYEE, ADDRESS) VALUES"
             + "(?,?,?,?,?,?,?,?, ?)");
  
+
+        
+        
         // set the preparedstatement parameters
         ps.setInt(1,account.getId());
         ps.setString(2, account.getUserName());
@@ -180,7 +199,7 @@ Account account = (Account)obj;
         
     }  
     @Override
-    public void updateObject(DataBaseInterface obj,  Connection con)throws SQLException{
+    public Boolean updateObject(DataBaseInterface obj,  Connection con)throws SQLException{
         Account account = (Account)obj; 
         PreparedStatement ps = con.prepareStatement(
         "UPDATE EMPLOYEES SET  USER_NAME = ?, PASSWORD = ?, FIRST_NAME = ?, "
@@ -199,8 +218,13 @@ Account account = (Account)obj;
         ps.setInt(9, account.getId());
 
         // call executeUpdate to execute our sql update statement
-        ps.executeUpdate();
+        int i = ps.executeUpdate();
         ps.close();   
+        
+        if(i <= 0){
+        return false;
+        }
+        return true;
     }  
 
     public void setPassword(int password) {

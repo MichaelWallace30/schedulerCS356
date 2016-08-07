@@ -46,14 +46,10 @@ public class LoginControllerFXML implements Initializable {
         if(dbController.login(inputNameTextField.getText(), inputPasswordField.getText()))
         {
             //if login succeded
-            invalidLabel.setVisible(false);   
-            Schedule schedule = new Schedule("0000",LocalDateTime.now(), LocalDateTime.now());
-            Room room = new Room(0,"hellO",12,null);
-            Account account = new Account("Mihcael", "Wallace", "777", 1,"Bender", "toor", true, true,null);
-            DataBaseController newDB = new DataBaseController();
-            newDB.addObject(schedule);
-            newDB.addObject(room);
-            newDB.addObject(account);
+            invalidLabel.setVisible(false);               
+            Account account = new Account("Mihcael", "Wallace", "777", 111,"Bender", "toor", true, true,null);
+            DataBaseController newDB = new DataBaseController();            
+            newDB.updateObject(account);
         }
         else
         {

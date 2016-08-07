@@ -23,6 +23,6 @@ public interface DataBaseInterface {
     
     public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException;       
     
-    public void updateObject(DataBaseInterface obj,  Connection con)throws SQLException;      
+    public Boolean updateObject(DataBaseInterface obj,  Connection con)throws SQLException;      
     
 }

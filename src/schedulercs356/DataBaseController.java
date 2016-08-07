@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.ListIterator;
 
 /**
  *
@@ -37,7 +38,7 @@ public class DataBaseController {
         }                
     }
 
-    public Boolean login(String userName, String password)
+    public Integer login(String userName, String password)
     {
         try
         {
@@ -48,9 +49,10 @@ public class DataBaseController {
             if(rs.next())
             {
                 int recievedPass = rs.getInt("PASSWORD");
+                int accountID = rs.getInt("ID");
                 if(recievedPass == password.hashCode())
                 {
-                    return true;
+                    return accountID;
                 }
             }
         }
@@ -58,7 +60,7 @@ public class DataBaseController {
         {
             System.out.println(err.getMessage());
         }
-        return false;
+        return -1;
     }    
     
     
@@ -70,7 +72,8 @@ public class DataBaseController {
     static public String listToString(LinkedList<String> list){
         String newString = new String();
         
-        while(!list.isEmpty())
+        
+        while(list != null && !list.isEmpty())
         {
             newString += list.remove();
             if(!list.isEmpty())newString += ":;:";
@@ -81,12 +84,15 @@ public class DataBaseController {
     static public LinkedList<String> stringToList(String stringArray){
         String newString = "";
         
-        String strArr[] = stringArray.split(":;:");
-        LinkedList<String> newList = new LinkedList<>();        
+        LinkedList<String> newList = new LinkedList<>();  
         
-        for(int x = 0; x < Array.getLength(strArr); x++)
-        {
-            newList.add(strArr[x]);
+        if(stringArray != null){
+            String strArr[] = stringArray.split(":;:");
+
+            for(int x = 0; x < Array.getLength(strArr); x++)
+            {
+                newList.add(strArr[x]);
+            }
         }
         
         return newList;
@@ -169,9 +175,10 @@ public class DataBaseController {
         return null;
     }
     
-    public LinkedList<Room> getAllRooms( Statement stmt){
+    public LinkedList<Room> getAllRooms(){
         try
         {
+            Statement stmt = con.createStatement();
             LinkedList<Room> rooms = new LinkedList<>();
             ResultSet rs = stmt.executeQuery("SELECT * FROM ROOMS");
             while(rs.next())
@@ -227,9 +234,10 @@ public class DataBaseController {
         return null;
     }
     
-    public LinkedList<Schedule> getAllSchedules( Statement stmt){
+    public LinkedList<Schedule> getAllSchedules(){
         try
         {
+            Statement stmt = con.createStatement();
             LinkedList<Schedule> schedules = new LinkedList<>();
             ResultSet rs = stmt.executeQuery("SELECT * FROM SCHEDULE");
             while(rs.next())
@@ -246,7 +254,7 @@ public class DataBaseController {
     }
     
     
-    public Schedule getSchedule(Integer objID){         
+    public Schedule getSchedule(String objID){         
         try
         {
             Statement stmt = con.createStatement();
@@ -292,9 +300,10 @@ public class DataBaseController {
         return null;
     }
     
-    public LinkedList<Account> getAllAccounts( Statement stmt){
+    public LinkedList<Account> getAllAccounts(){
         try
         {
+            Statement stmt = con.createStatement();
             LinkedList<Account> accounts = new LinkedList<>();
             ResultSet rs = stmt.executeQuery("SELECT * FROM EMPLOYEES");
             while(rs.next())
@@ -327,7 +336,96 @@ public class DataBaseController {
         }
         return null;
     }
+    
+    /************
+     * Meetings
+     ***********/
+public Meeting parseMeeting(ResultSet rs){        
+        try
+        {
+            String meetingID = rs.getString("ID");
+            Integer roomID = rs.getInt("ROOM_ID");
+            String invitedString = rs.getString("INVITED_LIST");
+            String acceptedString = rs.getString("ACCEPTED_LIST");
+            String rejectedString = rs.getString("REJECTED_LIST");
+            Integer ownerID = rs.getInt("OWNER_ID");
+                        
+            LinkedList<String> invitedStringList = stringToList(invitedString);
+            LinkedList<String> acceptedStringList = stringToList(acceptedString);
+            LinkedList<String> rejectedStringList = stringToList(rejectedString);
+            
+            LinkedList<Account> invitedList = new LinkedList<>();
+            LinkedList<Account> acceptedList = new LinkedList<>();
+            LinkedList<Account> rejectedList = new LinkedList<>();
+                               
+            ListIterator<String> it;
+            
+            it = invitedStringList.listIterator();
+            while(it.hasNext()){
+                invitedList.add(getAccount(Integer.parseInt(it.next())));
+            }
 
+            it = acceptedStringList.listIterator();
+            while(it.hasNext()){
+                acceptedList.add(getAccount(Integer.parseInt(it.next())));
+            }
+            
+            it = rejectedStringList.listIterator();
+            while(it.hasNext()){
+                rejectedList.add(getAccount(Integer.parseInt(it.next())));
+            }
+            
+            Room room = getRoom(roomID);
+            
+            Schedule schedule = getSchedule(meetingID);
+            
+            Meeting meeting = new Meeting(meetingID, schedule, room, invitedList, acceptedList, rejectedList);
+            return meeting; 
+
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+        return null;
+    }
+    
+    public LinkedList<Meeting> getAllMeetings(){
+        try
+        {
+            Statement stmt = con.createStatement();
+            LinkedList<Meeting> meetings = new LinkedList<>();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM MEETING");
+            while(rs.next())
+            {
+                meetings.add(parseMeeting(rs));
+            }
+            return meetings;
+        }
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+        return null;
+    }
+    
+    
+    public Meeting getMeeting(String objID){         
+        try
+        {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM MEETING WHERE ID =" + objID);
+                if(rs.next())
+                {
+                   return parseMeeting(rs);
+                } 
+        }        
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+        return null;
+    }
 }
 
 

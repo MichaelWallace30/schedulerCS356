@@ -42,13 +42,15 @@ public class LoginControllerFXML implements Initializable {
     
     private void login(){
         
-        if(dbController.login(inputNameTextField.getText(), inputPasswordField.getText()))
+        int accountID = dbController.login(inputNameTextField.getText(), inputPasswordField.getText());
+                
+        if(accountID != -1)
         {
             //if login succeded
             invalidLabel.setVisible(false);               
-            Account account = new Account("Mihcael", "Wallace", "777", 111,"Bender", "toor", true, true,null);
-            DataBaseController newDB = new DataBaseController();            
-            newDB.updateObject(account);
+            Account account = dbController.getAccount(accountID);
+            
+            //call account gui with account
         }
         else
         {

@@ -12,8 +12,8 @@ import java.util.UUID;
  *
  * @author Michael Wallace
  * 
- * Meeting ID = 0 is special case for non meeting schedule
- * 
+ * Meeting ID = 0 + onwer id + dateMonth + dateDay + dateTime is special case for non meeting schedule
+ * New meetings will auto generate id
  * 
  */
 public class Meeting {    
@@ -25,17 +25,10 @@ public class Meeting {
     private LinkedList<Account> invitedList;
     private LinkedList<Account> acceptedList;
     private LinkedList<Account> rejectedList;
-    
-    //Database variables
-    //private String scheduleID;//same as meetingID
-    private Integer roomNumber;
-    ///private LinkedList<Account> invitedList;
-    //private LinkedList<Account> acceptedList;
-    //private LinkedList<Account> rejectedList;
-    
+    private Integer ownerID;
     
     public Meeting(){
-        meetingID = UUID.randomUUID().toString();
+        setMeetingID(UUID.randomUUID().toString());
     }
     
     public Meeting(String meetingID){
@@ -48,6 +41,54 @@ public class Meeting {
 
     public void setMeetingID(String meetingID) {
         this.meetingID = meetingID;
+    }
+
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public LinkedList<Account> getInvitedList() {
+        return invitedList;
+    }
+
+    public void setInvitedList(LinkedList<Account> invitedList) {
+        this.invitedList = invitedList;
+    }
+
+    public LinkedList<Account> getAcceptedList() {
+        return acceptedList;
+    }
+
+    public void setAcceptedList(LinkedList<Account> acceptedList) {
+        this.acceptedList = acceptedList;
+    }
+
+    public LinkedList<Account> getRejectedList() {
+        return rejectedList;
+    }
+
+    public void setRejectedList(LinkedList<Account> rejectedList) {
+        this.rejectedList = rejectedList;
+    }
+
+    public Integer getOwnerID() {
+        return ownerID;
+    }
+
+    public void setOwnerID(Integer ownerID) {
+        this.ownerID = ownerID;
     }
     
 }

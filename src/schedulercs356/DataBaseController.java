@@ -362,6 +362,41 @@ public class DataBaseController {
         return null;
     }
     
+    
+    public void updateAccountMeetingAttendenceStatus(Account account, Meeting meeting, Boolean attedningMeetingBoolean){
+        
+        LinkedList<Meeting> invitedMeetingListAccount = account.getInvitedMeetingList();
+        LinkedList<Account> invitedMeetingListMeeting = meeting.getInvitedList();    
+        
+        invitedMeetingListAccount.removeFirstOccurrence(account);
+        invitedMeetingListMeeting.removeFirstOccurrence(meeting);
+        
+        if(attedningMeetingBoolean){//meeting accepted
+            LinkedList<Meeting> acceptedMeetingListAccount = account.getMeetingList();
+            LinkedList<Account> acceptedMeetingListMeeting = meeting.getAcceptedList();
+            
+            acceptedMeetingListAccount.add(meeting);
+            acceptedMeetingListMeeting.add(account);
+            
+            account.setInvitedMeetingList(acceptedMeetingListAccount);
+            meeting.setAcceptedList(acceptedMeetingListMeeting);
+            
+        }
+        else{//meeting rejected            
+            LinkedList<Account> rejectedMeetingListMeeting = meeting.getRejectedList();
+            rejectedMeetingListMeeting.add(account);
+            meeting.setRejectedList(rejectedMeetingListMeeting);
+            
+        }
+        
+        account.setInvitedMeetingList(invitedMeetingListAccount);
+        meeting.setInvitedList(invitedMeetingListMeeting);
+        
+        this.updateObject(account);
+        this.updateObject(meeting);       
+            
+    }
+    
     /************
      * Meetings
      ***********/

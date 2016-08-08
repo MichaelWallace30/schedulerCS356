@@ -6,17 +6,21 @@
 package schedulercs356;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
-import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -25,11 +29,14 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  * FXML Controller class
@@ -44,68 +51,114 @@ public class UserGUIController implements Initializable {
   private Tab linkedOutAdminTab;
   // References EditRoom tab.
   private Tab linkedOutEditRoomTab;
+  // Our databaseController.
+  private DataBaseController dbController;
   
   private Account account;
-  @FXML
-  private Text sidebarName;
-  @FXML
-  private Text sidebarEmployeeStatus;
-  @FXML
-  private Text sidebarDate;
-  @FXML
-  private Button sidebarCreateMeeting;
-  @FXML
-  private Text sidebarUpcomingMeetings;
-  @FXML
-  private TextFlow sidebarUpcomingMeetingsDisplay;
-  @FXML
-  private Text sidebarNews;
-  @FXML
-  private TextFlow sidebarNewsDisplay;
-  @FXML
-  private Tab tabProfile;
+  
+  private List<Meeting> accountMeetings;
+  private List<Account> accountReferences;
+  private List<Schedule> accountSchedules;
+  
+  private ObservableList<MeetingTableCell> meetingData;
+  private ObservableList<AccountTableCell> accounts;
+  private ObservableList<Schedule> schedules;
+  
   @FXML
   private Text profileName;
   @FXML
+  private Button searchButton;
+  @FXML
+  private Button meetingDetailsButton;
+  @FXML
+  private Text sidebarName;
+  @FXML
+  private Button attendMeetingButton;
+  @FXML
+  private MenuItem menuAboutButton;
+  @FXML
+  private Tab tabSearch;
+  @FXML
+  private Text sidebarNews;
+  @FXML
+  private TextFlow sidebarUpcomingMeetingsDisplay;
+  @FXML
+  private Tab tablMeetings;
+  @FXML
+  private Tab tabRoomDetails;
+  @FXML
+  private Tab tabEditMeeting;
+  @FXML
+  private MenuBar menuBar;
+  @FXML
   private Text profileEmployeeStatus;
+  @FXML
+  private TableColumn<AccountTableCell, String> nameColumn;
+  @FXML
+  private Tab tabRooms;
+  @FXML
+  private TextFlow sidebarNewsDisplay;
+  @FXML
+  private Text sidebarDate;
+  @FXML
+  private TableColumn<AccountTableCell, String> inviteStatusColumn;
+  @FXML
+  private Button editMeetingButton;
+  @FXML
+  private MenuItem menuCloseButton;
+  @FXML
+  private Button cancelMeetingButton;
+  @FXML
+  private Menu fileMenu;
+  @FXML
+  private TableColumn<AccountTableCell, String> contactNumberColumn;
+  @FXML
+  private TableView<MeetingTableCell> meetingTable;
+  @FXML
+  private TableView<Room> roomsTable;
+  @FXML
+  private Button sidebarCreateMeeting;
+  @FXML
+  private TableColumn<MeetingTableCell, String> meetingIdColumn;
   @FXML
   private Text profileAddress;
   @FXML
   private Text profileUserName;
   @FXML
-  private Tab tablMeetings;
+  private Menu helpMenu;
   @FXML
-  private Tab tabEditMeeting;
-  @FXML
-  private Tab tabEditRooms;
-  @FXML
-  private Tab tabRooms;
-  @FXML
-  private Tab tabSearch;
-  @FXML
-  private Tab tabAdmin;
-  @FXML
-  private Tab tabRoomDetails;
-  @FXML
-  private Tab tabMeetingDetails;
+  private TableColumn<MeetingTableCell, Boolean> hostingColumn;
   @FXML
   private TextField searchbarText;
   @FXML
-  private Button searchButton;
+  private TableColumn<MeetingTableCell, Integer> numberAttendingColumn;
   @FXML
-  private MenuBar menuBar;
+  private TableColumn<AccountTableCell, String> usernameColumn;
   @FXML
-  private Menu fileMenu;
-  @FXML
-  private MenuItem menuCloseButton;
+  private Tab tabMeetingDetails;
   @FXML
   private Menu editMenu;
   @FXML
-  private Menu helpMenu;
+  private Text sidebarEmployeeStatus;
   @FXML
-  private MenuItem menuAboutButton;
+  private Text sidebarUpcomingMeetings;
+  @FXML
+  private Tab tabAdmin;
+  @FXML
+  private Tab tabEditRooms;
+  @FXML
+  private Tab tabProfile;
+  @FXML
+  private TableColumn<MeetingTableCell, String> dateColumn;
+  @FXML
+  private TableView<AccountTableCell> usersInMeetingTable;
   @FXML
   private TabPane tabPane;
+
+  @FXML
+  void Attending(ActionEvent event) {
+
+  }
   /**
    * Initializes the controller class.
    * @param url
@@ -113,11 +166,17 @@ public class UserGUIController implements Initializable {
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    
-    // TODO
+    accountMeetings = new LinkedList<>();
+    accountReferences = new LinkedList<>();
+    accountSchedules = new LinkedList<>();
+    dbController = new DataBaseController();
+ 
     account = (Account)rb.getObject("data"); 
     
     if (account != null) {
+      initializeMeetingTable();
+      initializeUsersInMeetingTable();
+      
       sidebarName.setText(account.getFirstName() + " " + account.getLastName());
       profileName.setText(account.getFirstName() + " " + account.getLastName());
       
@@ -146,11 +205,10 @@ public class UserGUIController implements Initializable {
       profileAddress.setText("Address: " + account.getAddress());
       sidebarDate.setText(new Date().toString());
       runOnThread();
-      
+      addMeetingsToTables();      
     } else {
       throw new RuntimeException("Null account value was passed!");
     }
-  
   }
   
   // Run this little guy on the thread...
@@ -164,4 +222,70 @@ public class UserGUIController implements Initializable {
     timeline.play();
   }
   
+  private void addMeetingsToTables() {
+    List<String> meetings = account.getMeetingIDList();
+    
+    for (String str : meetings) {
+      Meeting meeting = dbController.getMeeting(str);
+      
+      if (meeting != null) {
+        accountMeetings.add(meeting);
+        meetingData.add(new MeetingTableCell(meeting, account));
+        
+        for (Account ref : meeting.getAcceptedList()) {
+          accountReferences.add(ref);
+        }
+        
+        for (Account ref : meeting.getInvitedList()) {
+          accountReferences.add(ref);
+        }
+        
+         for (Account ref : meeting.getRejectedList()) {
+           accountReferences.add(ref);
+         }
+      }
+    }
+  }
+  
+  private void initializeMeetingTable() {
+    meetingData = FXCollections.observableArrayList();
+    meetingTable = new TableView<>();
+    meetingIdColumn = new TableColumn<>("Meeting ID");
+    dateColumn = new TableColumn<>("Date");
+    numberAttendingColumn = new TableColumn<>("# Attending");
+    hostingColumn = new TableColumn<>("Hosting");
+    
+    meetingIdColumn.setCellValueFactory(new PropertyValueFactory("meetingID"));
+    dateColumn.setCellFactory(new PropertyValueFactory("date"));
+    numberAttendingColumn.setCellFactory(new PropertyValueFactory("numberOfAttendees"));
+    hostingColumn.setCellFactory(new PropertyValueFactory("isHosting"));
+    
+    meetingTable.setItems(meetingData);
+    meetingTable.getColumns().addAll(meetingIdColumn, dateColumn, numberAttendingColumn, hostingColumn);
+  }
+  
+  private void initializeUsersInMeetingTable() {
+    accounts = FXCollections.observableArrayList();
+    schedules = FXCollections.observableArrayList();
+    
+    usersInMeetingTable = new TableView<>();
+    usernameColumn = new TableColumn<>("Username");
+    nameColumn = new TableColumn<>("Name");
+    inviteStatusColumn = new TableColumn<>("Invite Status");
+    contactNumberColumn = new TableColumn<>("Contact");
+    
+    usernameColumn.setCellFactory(new PropertyValueFactory("username"));
+    nameColumn.setCellFactory(new PropertyValueFactory("fullname"));
+    inviteStatusColumn.setCellFactory(new PropertyValueFactory("inviteStatus"));
+    contactNumberColumn.setCellFactory(new PropertyValueFactory("contact"));
+    
+    usersInMeetingTable.setItems(accounts);
+    usersInMeetingTable.getColumns().addAll(usernameColumn, nameColumn, inviteStatusColumn, contactNumberColumn);
+  }
+  
+  
+    @FXML
+    void onCreateMeeting(ActionEvent event) {
+      tabEditMeeting.getTabPane().getSelectionModel().select(tabEditMeeting);
+    }
 }

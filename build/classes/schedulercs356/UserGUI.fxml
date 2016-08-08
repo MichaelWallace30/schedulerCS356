@@ -28,7 +28,7 @@
                      </font>
                   </Text>
                   <Text fx:id="sidebarDate" layoutX="14.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MM/DD/YYYY" AnchorPane.bottomAnchor="597.98828125" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="227.73828125" AnchorPane.topAnchor="66.05078125" />
-                  <Button fx:id="sidebarCreateMeeting" layoutX="13.0" layoutY="641.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="292.0" text="Create Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="11.0" />
+                  <Button fx:id="sidebarCreateMeeting" layoutX="13.0" layoutY="641.0" mnemonicParsing="false" onAction="#onCreateMeeting" prefHeight="25.0" prefWidth="292.0" text="Create Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="11.0" />
                   <Text fx:id="sidebarUpcomingMeetings" layoutX="14.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Upcoming Meetings" underline="true" AnchorPane.bottomAnchor="532.486328125" AnchorPane.leftAnchor="13.42578125" AnchorPane.rightAnchor="176.57421875" AnchorPane.topAnchor="128.892578125">
                      <font>
                         <Font size="14.0" />
@@ -71,34 +71,34 @@
                                       <items>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                              <children>
-                                                <TableView layoutX="-3.0" layoutY="-1.0" prefHeight="470.0" prefWidth="306.0" AnchorPane.bottomAnchor="-4.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+                                                <TableView fx:id="meetingTable" layoutX="-3.0" layoutY="-1.0" prefHeight="470.0" prefWidth="306.0" AnchorPane.bottomAnchor="-4.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
                                                   <columns>
-                                                    <TableColumn prefWidth="75.0" text="Meeting ID" />
-                                                    <TableColumn prefWidth="75.0" text="Date" />
-                                                      <TableColumn prefWidth="75.0" text="# Attending" />
-                                                      <TableColumn prefWidth="75.0" text="Hosting" />
+                                                    <TableColumn fx:id="meetingIdColumn" prefWidth="75.0" text="Meeting ID" />
+                                                    <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Date" />
+                                                      <TableColumn fx:id="numberAttendingColumn" prefWidth="75.0" text="# Attending" />
+                                                      <TableColumn fx:id="hostingColumn" prefWidth="75.0" text="Hosting" />
                                                   </columns>
                                                 </TableView>
                                              </children>
                                           </AnchorPane>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                              <children>
-                                                <TableView layoutX="-1.0" layoutY="-1.0" prefHeight="470.0" prefWidth="433.0" AnchorPane.bottomAnchor="-4.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+                                                <TableView fx:id="usersInMeetingTable" layoutX="-1.0" layoutY="-1.0" prefHeight="470.0" prefWidth="433.0" AnchorPane.bottomAnchor="-4.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
                                                   <columns>
-                                                    <TableColumn prefWidth="103.0" text="Username" />
-                                                    <TableColumn prefWidth="106.0" text="Name" />
-                                                      <TableColumn prefWidth="95.0" text="Invite Status" />
-                                                      <TableColumn prefWidth="125.0" text="Contact #" />
+                                                    <TableColumn fx:id="usernameColumn" prefWidth="103.0" text="Username" />
+                                                    <TableColumn fx:id="nameColumn" prefWidth="106.0" text="Name" />
+                                                      <TableColumn fx:id="inviteStatusColumn" prefWidth="95.0" text="Invite Status" />
+                                                      <TableColumn fx:id="contactNumberColumn" prefWidth="125.0" text="Contact #" />
                                                   </columns>
                                                 </TableView>
                                              </children>
                                           </AnchorPane>
                                       </items>
                                     </SplitPane>
-                                    <Button layoutX="338.0" layoutY="424.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="Edit Meeting" AnchorPane.bottomAnchor="14.0" />
-                                    <Button layoutX="649.0" layoutY="424.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Cancel Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-                                    <Button layoutX="14.0" layoutY="424.0" mnemonicParsing="false" text="Attend Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
-                                    <Button layoutX="540.0" layoutY="424.0" mnemonicParsing="false" text="Meeting Details" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="138.0" />
+                                    <Button fx:id="editMeetingButton" layoutX="338.0" layoutY="424.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="Edit Meeting" AnchorPane.bottomAnchor="14.0" />
+                                    <Button fx:id="cancelMeetingButton" layoutX="649.0" layoutY="424.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Cancel Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                                    <Button fx:id="attendMeetingButton" layoutX="14.0" layoutY="424.0" mnemonicParsing="false" text="Attend Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
+                                    <Button fx:id="meetingDetailsButton" layoutX="540.0" layoutY="424.0" mnemonicParsing="false" text="Meeting Details" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="138.0" />
                                  </children>
                               </AnchorPane>
                         </content>
@@ -110,7 +110,15 @@
                         </Tab>
                         <Tab fx:id="tabRooms" text="Rooms">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TableView fx:id="roomsTable" layoutX="2.0" layoutY="1.0" prefHeight="331.0" prefWidth="778.0">
+                                      <columns>
+                                        <TableColumn prefWidth="75.0" text="C1" />
+                                        <TableColumn prefWidth="75.0" text="C2" />
+                                      </columns>
+                                    </TableView>
+                                 </children></AnchorPane>
                           </content>
                         </Tab>
                         <Tab fx:id="tabSearch" text="Search">
@@ -135,7 +143,34 @@
                         </Tab>
                         <Tab fx:id="tabEditMeeting" text="Edit Meeting">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.29797979797979796" layoutX="1.0" layoutY="-1.0" prefHeight="466.0" prefWidth="778.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+                                      <items>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <Text fx:id="editMeetingText" layoutX="46.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Meeting" AnchorPane.leftAnchor="45.3291015625" AnchorPane.rightAnchor="80.6708984375">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                                <DatePicker fx:id="editMeetingDatePicker" layoutX="9.0" layoutY="64.0" promptText="Select Date" />
+                                                <TextField layoutX="9.0" layoutY="104.0" prefHeight="25.0" prefWidth="22.0" />
+                                             </children>
+                                          </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <TableView fx:id="editMeetingUsersTable" layoutX="-3.0" prefHeight="395.0" prefWidth="548.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="editMeetingUsernameColumn" prefWidth="106.0" text="Username" />
+                                                    <TableColumn fx:id="editMeetingNameColumn" prefWidth="89.0" text="Name" />
+                                                  </columns>
+                                                </TableView>
+                                             </children>
+                                          </AnchorPane>
+                                      </items>
+                                    </SplitPane>
+                                 </children></AnchorPane>
                           </content>
                         </Tab>
                     </tabs>

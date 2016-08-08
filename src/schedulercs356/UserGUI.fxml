@@ -128,7 +128,32 @@
                         </Tab>
                         <Tab fx:id="tabAdmin" text="Admin">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TableView layoutY="-1.0" prefHeight="162.0" prefWidth="778.0" AnchorPane.bottomAnchor="302.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+                                      <columns>
+                                        <TableColumn prefWidth="75.0" text="AccountId" />
+                                        <TableColumn prefWidth="155.0" text="Username" />
+                                          <TableColumn prefWidth="118.0" text="Full Name" />
+                                          <TableColumn prefWidth="191.0" text="Password" />
+                                          <TableColumn prefWidth="144.0" text="Address" />
+                                          <TableColumn prefWidth="94.0" text="Employee" />
+                                      </columns>
+                                    </TableView>
+                                    <Button layoutX="14.0" layoutY="167.0" mnemonicParsing="false" text="Create New Employee" AnchorPane.bottomAnchor="271.0" AnchorPane.leftAnchor="14.0" />
+                                    <Button layoutX="313.0" layoutY="167.0" mnemonicParsing="false" text="Reset Employee Password" AnchorPane.bottomAnchor="271.0" AnchorPane.rightAnchor="311.0" />
+                                    <Button layoutX="650.0" layoutY="167.0" mnemonicParsing="false" text="Remove Employee" AnchorPane.bottomAnchor="271.0" AnchorPane.rightAnchor="14.0" />
+                                    <TableView layoutY="198.0" prefHeight="200.0" prefWidth="778.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                      <columns>
+                                        <TableColumn prefWidth="75.0" text="Room #" />
+                                        <TableColumn prefWidth="126.0" text="Max Occupancy" />
+                                          <TableColumn prefWidth="576.0" text="Description" />
+                                      </columns>
+                                    </TableView>
+                                    <Button layoutX="14.0" layoutY="424.0" mnemonicParsing="false" text="Create New Room" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
+                                    <Button layoutX="354.0" layoutY="424.0" mnemonicParsing="false" text="Edit Room" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="353.0" />
+                                    <Button layoutX="670.0" layoutY="424.0" mnemonicParsing="false" text="Remove Room" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                                 </children></AnchorPane>
                           </content>
                         </Tab>
                         <Tab fx:id="tabRoomDetails" disable="true" text="Room Details">

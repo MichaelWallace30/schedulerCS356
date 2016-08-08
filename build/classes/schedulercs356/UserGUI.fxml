@@ -140,8 +140,8 @@
                         </Tab>
                     </tabs>
                   </TabPane>
-                  <TextArea fx:id="searchbarText" layoutX="14.0" layoutY="107.0" prefHeight="25.0" prefWidth="249.0" promptText="Search..." />
                   <Button fx:id="searchButton" layoutX="263.0" layoutY="107.0" mnemonicParsing="false" text="Search" />
+                  <TextField fx:id="searchbarText" layoutX="14.0" layoutY="107.0" prefHeight="25.0" prefWidth="253.0" promptText="Search..." />
                </children>
             </AnchorPane>
         </items>

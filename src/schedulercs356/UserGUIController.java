@@ -26,6 +26,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -88,7 +89,7 @@ public class UserGUIController implements Initializable {
   @FXML
   private Tab tabMeetingDetails;
   @FXML
-  private TextArea searchbarText;
+  private TextField searchbarText;
   @FXML
   private Button searchButton;
   @FXML
@@ -158,20 +159,9 @@ public class UserGUIController implements Initializable {
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
       sidebarDate.setText(new Date().toString());
     }));
+    
     timeline.setCycleCount(Animation.INDEFINITE);
     timeline.play();
-    
-//      Timer timer = new Timer();
-//      
-//      timer.scheduleAtFixedRate(new TimerTask() {
-//        
-//        @Override
-//        public void run() {
-//          Platform.runLater(() -> {
-//            sidebarDate.setText(new Date().toString());
-//          });
-//      }
-//    }, 0, 1000);
   }
   
 }

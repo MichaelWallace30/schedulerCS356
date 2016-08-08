@@ -12,6 +12,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,6 +28,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -138,8 +143,9 @@ public class UserGUIController implements Initializable {
       //sidebarDate.setText(new Date().toString());
       profileUserName.setText(account.getUserName());
       profileAddress.setText("Address: " + account.getAddress());
-     
+      sidebarDate.setText(new Date().toString());
       runOnThread();
+      
     } else {
       throw new RuntimeException("Null account value was passed!");
     }
@@ -149,17 +155,23 @@ public class UserGUIController implements Initializable {
   // Run this little guy on the thread...
   // Houses the timer for the date.
   private void runOnThread() {
-      Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-
-          @Override
-          public void run() {
-            Platform.runLater(() -> {
-              sidebarDate.setText(new Date().toString());
-            });
-          }
-         
-        }, 0, 1000);
+    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
+      sidebarDate.setText(new Date().toString());
+    }));
+    timeline.setCycleCount(Animation.INDEFINITE);
+    timeline.play();
+    
+//      Timer timer = new Timer();
+//      
+//      timer.scheduleAtFixedRate(new TimerTask() {
+//        
+//        @Override
+//        public void run() {
+//          Platform.runLater(() -> {
+//            sidebarDate.setText(new Date().toString());
+//          });
+//      }
+//    }, 0, 1000);
   }
   
 }

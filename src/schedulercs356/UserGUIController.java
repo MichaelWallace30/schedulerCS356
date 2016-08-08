@@ -320,7 +320,13 @@ public class UserGUIController implements Initializable {
    */
   @FXML
   void onCreateMeeting(ActionEvent event) {
+    if (tabEditMeeting.isDisabled()) {
+      tabEditMeeting.setDisable(false);
+    }
+    
     tabEditMeeting.getTabPane().getSelectionModel().select(tabEditMeeting);
+    
+    
   }
   
   @FXML

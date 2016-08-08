@@ -110,6 +110,25 @@ public class Meeting implements DataBaseInterface{
      @Override
     public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{   
         Meeting meeting = (Meeting)obj;
+        
+        
+        //update invited list for each account
+        ListIterator<Account> itAccount;
+        
+        itAccount = invitedList.listIterator();
+        while(itAccount.hasNext()){
+            //ad meeting to invited list
+            Account tempAccount = itAccount.next();
+            
+            LinkedList<Meeting> meetingInviteList  = tempAccount.getInvitedMeetingList();
+            meetingInviteList.add(this);    
+            
+            tempAccount.setInvitedMeetingList(meetingInviteList);
+            
+            //update account
+            DataBaseController dbController = new DataBaseController();
+            dbController.updateObject(tempAccount);            
+        }
 
         LinkedList<String> invitedStringList = new LinkedList<>();
         LinkedList<String> acceptedStringList = new LinkedList<>();

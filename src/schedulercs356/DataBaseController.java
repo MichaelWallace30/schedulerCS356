@@ -157,14 +157,24 @@ public class DataBaseController {
     public Room parseRoom(ResultSet rs){        
         try
         {
+            
             Integer roomid = rs.getInt("ROOM_NUMBER");
             String description = rs.getString("DESCRIPTION");
             Integer max = rs.getInt("MAX_OCCUPANCY");
-            String meetingList = rs.getString("MEETING_ID_LIST");
+            String meetingStringList = rs.getString("MEETING_ID_LIST");
 
             LinkedList<String> lls = new LinkedList<>();
-            lls = stringToList(meetingList);
-            Room newRoom = new Room(max,description,roomid,lls);
+            lls = stringToList(meetingStringList);
+            
+            ListIterator<String> it;
+            
+            LinkedList<Meeting> meetingList = new LinkedList<>();
+            it = lls.listIterator();
+            while(it.hasNext()){
+                meetingList.add(getMeeting(it.next()));
+            }
+            
+            Room newRoom = new Room(max,description,roomid,meetingList);
             return newRoom; 
 
         }

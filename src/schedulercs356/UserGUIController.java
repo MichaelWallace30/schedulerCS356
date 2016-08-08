@@ -251,12 +251,17 @@ public class UserGUIController implements Initializable {
       @TODO
       I changed list id to objects this code is probably now not needed
       I put this in to no break any thing
+      if not meeting list this breaks the code
       */
+    
     ListIterator<Meeting> it;  
     LinkedList<String> meetings = new LinkedList<>();
     it = account.getMeetingList().listIterator();
     while(it.hasNext()){
-        meetings.add(it.next().getMeetingID());
+        String id = it.next().getMeetingID();
+        if(id != null){
+            meetings.add(id);
+        }
     }
     //List<String> meetings = account.getMeetingList();
     

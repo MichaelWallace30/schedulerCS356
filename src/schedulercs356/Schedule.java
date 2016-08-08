@@ -23,11 +23,11 @@ public class Schedule implements DataBaseInterface  {
     public final static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    private String ownerID;// only Meetings own schedules a schedule id is the same as a meeting id
+    private String meetingID;// only Meetings own schedules a schedule id is the same as a meeting id
 
     
-    public Schedule(String ownerID, LocalDateTime startTime, LocalDateTime endTime){
-        this.ownerID = ownerID;
+    public Schedule(String meetingID, LocalDateTime startTime, LocalDateTime endTime){
+        this.meetingID = meetingID;
         this.startDateTime = startTime;
         this.endDateTime = endTime;
     }
@@ -48,12 +48,12 @@ public class Schedule implements DataBaseInterface  {
         this.endDateTime = endDateTime;
     }
 
-    public String getOwnerID() {
-        return ownerID;
+    public String getMeetingID() {
+        return meetingID;
     }
 
-    public void setOwnerID(String ownerID) {
-        this.ownerID = ownerID;
+    public void setMeetingID(String meetingID) {
+        this.meetingID = meetingID;
     }
     @Override
     public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{
@@ -68,7 +68,7 @@ public class Schedule implements DataBaseInterface  {
         Timestamp endStamp = Timestamp.valueOf(schedule.getEndDateTime());
 
         // set the preparedstatement parameters
-        ps.setString(1,schedule.getOwnerID());        
+        ps.setString(1,schedule.getMeetingID());        
         ps.setTimestamp(2,startStamp);
         ps.setTimestamp(3, endStamp);      
 
@@ -80,7 +80,7 @@ public class Schedule implements DataBaseInterface  {
     @Override
     public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
         Schedule schedule = (Schedule)obj;
-        stmt.executeUpdate("DELETE FROM SCHEDULE " + " WHERE OWNER_ID = " +  schedule.getOwnerID());
+        stmt.executeUpdate("DELETE FROM SCHEDULE " + " WHERE OWNER_ID = " +  schedule.getMeetingID());
         
     }  
     @Override
@@ -95,7 +95,7 @@ public class Schedule implements DataBaseInterface  {
         // set the preparedstatement parameters
         ps.setTimestamp(1,startStamp);
         ps.setTimestamp(2, endStamp);      
-        ps.setString(3,schedule.getOwnerID()); 
+        ps.setString(3,schedule.getMeetingID()); 
         
         // call executeUpdate to execute our sql update statement
         // call executeUpdate to execute our sql update statement

@@ -262,9 +262,9 @@ public class UserGUIController implements Initializable {
           accountReferences.add(ref);
         }
         
-         for (Account ref : meeting.getRejectedList()) {
-           accountReferences.add(ref);
-         }
+        for (Account ref : meeting.getRejectedList()) {
+          accountReferences.add(ref);
+        }
       }
     }
   }

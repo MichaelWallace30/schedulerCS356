@@ -53,10 +53,6 @@ public class UserGUIController implements Initializable {
   private static final String EMPLOYEE = "Employee";
   private static final String ADMINISTRATOR = "Administrator";
   
-  // References admin tab.
-  private Tab linkedOutAdminTab;
-  // References EditRoom tab.
-  private Tab linkedOutEditRoomTab;
   // Our databaseController.
   private DataBaseController dbController;
   
@@ -202,6 +198,10 @@ public class UserGUIController implements Initializable {
         
         if (account.isEmployee()) {
           status = EMPLOYEE + " " + status;
+        } else {
+          tabPane.getTabs().remove(tabEditMeeting);
+          tabPane.getTabs().remove(tabMeetingDetails);
+          tabPane.getTabs().remove(tablMeetings);
         }
         
         sidebarEmployeeStatus.setText(status);
@@ -212,8 +212,8 @@ public class UserGUIController implements Initializable {
         profileEmployeeStatus.setText(EMPLOYEE);
         
         // Remove our admin and edit room tabs.
-        linkedOutAdminTab = tabPane.getTabs().remove(5);
-        linkedOutEditRoomTab = tabPane.getTabs().remove(2);
+        tabPane.getTabs().remove(tabAdmin);
+        tabPane.getTabs().remove(tabEditRooms);
         
       } 
       

@@ -6,17 +6,22 @@
 package schedulercs356;
 
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 /**
  *
@@ -25,6 +30,7 @@ import javafx.scene.input.KeyCode;
 public class LoginControllerFXML implements Initializable {
     
     DataBaseController dbController;
+    private Stage primaryStage;
     
     @FXML
     private TextField inputNameTextField;
@@ -40,17 +46,34 @@ public class LoginControllerFXML implements Initializable {
         inputPasswordField.setText("");
     }
     
-    private void login(){
+    private void login() {
         
         int accountID = dbController.login(inputNameTextField.getText(), inputPasswordField.getText());
                 
         if(accountID != -1)
         {
             //if login succeded
-            invalidLabel.setVisible(false);               
+            invalidLabel.setVisible(false);   
+            LoginAccountParser parser = new LoginAccountParser();
             Account account = dbController.getAccount(accountID);
+            parser.setAccount(account);
             
-            //call account gui with account
+            try {
+              //call account gui with account1
+              FXMLLoader loader = new FXMLLoader(getClass().getResource("UserGUI.fxml"), parser);
+              AnchorPane pane = (AnchorPane)loader.load();
+              Scene scene = new Scene(pane);
+            
+              Stage stage = (Stage)loginButton.getScene().getWindow();
+              stage.close();
+              stage.setScene(scene);
+              stage.setTitle("SchedulerCS356");
+              stage.show();
+            } catch (IOException e) {
+              System.out.println("Didn't work");
+              e.printStackTrace();
+              System.out.println(e.getMessage());
+            }
         }
         else
         {

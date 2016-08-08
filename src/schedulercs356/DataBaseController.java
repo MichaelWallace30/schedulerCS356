@@ -324,7 +324,7 @@ public class DataBaseController {
         try
         {
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM EMPLOYESS WHERE ID =" + objID);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM EMPLOYEES WHERE ID =" + objID);
                 if(rs.next())
                 {
                    return parseAccount(rs);

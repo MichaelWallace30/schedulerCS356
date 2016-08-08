@@ -31,6 +31,7 @@ public class Account implements DataBaseInterface {
     private String address;
     private int id;
     private LinkedList<String> meetingIDList;
+    private LinkedList<String> invitedMeetingIDList;
 
     
     //non hashed password as string
@@ -149,6 +150,18 @@ public class Account implements DataBaseInterface {
             this.meetingIDList = meetingIDList;
          }
     }
+    
+    public void setPassword(int password) {
+        this.password = password;
+    }
+
+    public LinkedList<String> getInvitedMeetingIDList() {
+        return invitedMeetingIDList;
+    }
+
+    public void setInvitedMeetingIDList(LinkedList<String> invitedMeetingIDList) {
+        this.invitedMeetingIDList = invitedMeetingIDList;
+    }
     @Override
     public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{
         Account account = (Account)obj; 
@@ -169,8 +182,8 @@ public class Account implements DataBaseInterface {
         
         PreparedStatement ps = con.prepareStatement(
         "INSERT INTO EMPLOYEES" 
-            +"(ID, USER_NAME, PASSWORD, FIRST_NAME, LAST_NAME, ADMIN, MEETING_ID_LIST, EMPLOYEE, ADDRESS) VALUES"
-            + "(?,?,?,?,?,?,?,?, ?)");
+            +"(ID, USER_NAME, PASSWORD, FIRST_NAME, LAST_NAME, ADMIN, MEETING_ID_LIST, EMPLOYEE, ADDRESS, INVITED_MEETING_ID_LIST) VALUES"
+            + "(?,?,?,?,?,?,?,?, ?,?)");
  
 
         
@@ -185,6 +198,7 @@ public class Account implements DataBaseInterface {
         ps.setString(7,DataBaseController.listToString(account.getMeetingIDList()));
         ps.setBoolean(8, account.isEmployee());
         ps.setString(9, account.getAddress());
+        ps.setString(10, DataBaseController.listToString(account.getInvitedMeetingIDList()));
 
         // call executeUpdate to execute our sql update statement
         ps.executeUpdate();
@@ -203,7 +217,7 @@ public class Account implements DataBaseInterface {
         Account account = (Account)obj; 
         PreparedStatement ps = con.prepareStatement(
         "UPDATE EMPLOYEES SET  USER_NAME = ?, PASSWORD = ?, FIRST_NAME = ?, "
-                + "LAST_NAME = ?, ADMIN = ?, MEETING_ID_LIST = ?, EMPLOYEE = ?, ADDRESS = ? WHERE ID = ?");
+                + "LAST_NAME = ?, ADMIN = ?, MEETING_ID_LIST = ?, EMPLOYEE = ?, ADDRESS = ?,INVITED_MEETING_ID_LIST =? WHERE ID = ?");
  
 
         // set the preparedstatement parameters
@@ -215,7 +229,8 @@ public class Account implements DataBaseInterface {
         ps.setString(6,DataBaseController.listToString(account.getMeetingIDList()));
         ps.setBoolean(7, account.isEmployee());
         ps.setString(8, account.getAddress());
-        ps.setInt(9, account.getId());
+        ps.setString(9, DataBaseController.listToString(account.getInvitedMeetingIDList()));
+        ps.setInt(10, account.getId());
 
         // call executeUpdate to execute our sql update statement
         int i = ps.executeUpdate();
@@ -227,8 +242,5 @@ public class Account implements DataBaseInterface {
         return true;
     }  
 
-    public void setPassword(int password) {
-        this.password = password;
-    }
 
 }

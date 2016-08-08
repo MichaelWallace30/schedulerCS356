@@ -5,6 +5,7 @@
  */
 package schedulercs356;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -22,8 +24,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -33,6 +38,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -154,11 +160,22 @@ public class UserGUIController implements Initializable {
   private TableView<AccountTableCell> usersInMeetingTable;
   @FXML
   private TabPane tabPane;
-
   @FXML
+  private Text editMeetingText;
+  @FXML
+  private DatePicker editMeetingDatePicker;
+  @FXML
+  private TableView<?> editMeetingUsersTable;
+  @FXML
+  private TableColumn<?, ?> editMeetingUsernameColumn;
+  @FXML
+  private TableColumn<?, ?> editMeetingNameColumn;
+
   void Attending(ActionEvent event) {
 
   }
+  
+  
   /**
    * Initializes the controller class.
    * @param url
@@ -211,6 +228,7 @@ public class UserGUIController implements Initializable {
     }
   }
   
+  
   // Run this little guy on the thread...
   // Houses the timer for the date.
   private void runOnThread() {
@@ -222,6 +240,10 @@ public class UserGUIController implements Initializable {
     timeline.play();
   }
   
+  
+  /**
+   * 
+   */
   private void addMeetingsToTables() {
     List<String> meetings = account.getMeetingIDList();
     
@@ -247,6 +269,10 @@ public class UserGUIController implements Initializable {
     }
   }
   
+  
+  /**
+   * 
+   */
   private void initializeMeetingTable() {
     meetingData = FXCollections.observableArrayList();
     meetingTable = new TableView<>();
@@ -264,6 +290,10 @@ public class UserGUIController implements Initializable {
     meetingTable.getColumns().addAll(meetingIdColumn, dateColumn, numberAttendingColumn, hostingColumn);
   }
   
+  
+  /**
+   * 
+   */
   private void initializeUsersInMeetingTable() {
     accounts = FXCollections.observableArrayList();
     schedules = FXCollections.observableArrayList();
@@ -284,8 +314,39 @@ public class UserGUIController implements Initializable {
   }
   
   
-    @FXML
-    void onCreateMeeting(ActionEvent event) {
-      tabEditMeeting.getTabPane().getSelectionModel().select(tabEditMeeting);
+  /**
+   * Create Meeting Button Action.
+   * @param event 
+   */
+  @FXML
+  void onCreateMeeting(ActionEvent event) {
+    tabEditMeeting.getTabPane().getSelectionModel().select(tabEditMeeting);
+  }
+  
+  @FXML
+  void onCloseMenuItem(ActionEvent event) {
+    if (Platform.isImplicitExit()) {
+      Platform.exit();
     }
+  }
+  
+  
+  @FXML
+  void onLogoutMenuItem(ActionEvent event) {
+    account = null;
+    
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginFXML.fxml"));
+      AnchorPane pane = (AnchorPane)loader.load();
+      Scene scene = new Scene(pane);
+      Stage stage = (Stage)tabPane.getScene().getWindow();
+    
+      stage.close();
+      stage.setScene(scene);
+      stage.setTitle("Login");
+      stage.show();
+    } catch (IOException e) {
+      
+    }
+  }
 }

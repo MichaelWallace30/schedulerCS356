@@ -287,9 +287,24 @@ public class DataBaseController {
             String address = rs.getString("ADDRESS");
             int id = rs.getInt("ID");
             LinkedList<String> meetingIDList = stringToList(rs.getString("MEETING_ID_LIST"));
+            LinkedList<String> invitedMeetingIDList = stringToList(rs.getString("INVITED_MEETING_ID_LIST"));
             
             
-            Account account = new Account(firstName, lastName, address, id, userName, password, employee, admin, meetingIDList);
+            ListIterator<String> it;
+            
+            LinkedList<Meeting> meetingList = new LinkedList<>();
+            it = meetingIDList.listIterator();
+            while(it.hasNext()){
+                meetingList.add(getMeeting(it.next()));
+            }
+        
+            LinkedList<Meeting> invitedMeetingList = new LinkedList<>();
+            it = invitedMeetingIDList.listIterator();
+            while(it.hasNext()){
+                invitedMeetingList.add(getMeeting(it.next()));
+            }
+            
+            Account account = new Account(firstName, lastName, address, id, userName, password, employee, admin, meetingList, invitedMeetingList);
             return account; 
 
         }

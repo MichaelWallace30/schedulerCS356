@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -245,7 +246,19 @@ public class UserGUIController implements Initializable {
    * 
    */
   private void addMeetingsToTables() {
-    List<String> meetings = account.getMeetingIDList();
+      
+    /*
+      @TODO
+      I changed list id to objects this code is probably now not needed
+      I put this in to no break any thing
+      */
+    ListIterator<Meeting> it;  
+    LinkedList<String> meetings = new LinkedList<>();
+    it = account.getMeetingList().listIterator();
+    while(it.hasNext()){
+        meetings.add(it.next().getMeetingID());
+    }
+    //List<String> meetings = account.getMeetingList();
     
     for (String str : meetings) {
       Meeting meeting = dbController.getMeeting(str);

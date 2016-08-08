@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 /**
  *
@@ -30,15 +31,15 @@ public class Account implements DataBaseInterface {
     private int password;        
     private String address;
     private int id;
-    private LinkedList<String> meetingIDList;
-    private LinkedList<String> invitedMeetingIDList;
+    private LinkedList<Meeting> meetingList;
+    private LinkedList<Meeting> invitedMeetingList;
 
     
     //non hashed password as string
     public Account(String firstName, String lastName, String address,
             int id, String userName, String password,            
             Boolean employee, Boolean admin,
-            LinkedList<String> meetingIDList){
+            LinkedList<Meeting> meetingList, LinkedList<Meeting> invitedMeetingList){
         
         this.setFirstName(firstName);
         this.setLastName(lastName);
@@ -51,7 +52,8 @@ public class Account implements DataBaseInterface {
         this.setEmployee(employee);
         this.setAdmin(admin);
         
-        this.setMeetingIDList(meetingIDList);
+        this.setMeetingList(meetingList);
+        this.setInvitedMeetingList(invitedMeetingList);
         
     }
 
@@ -59,7 +61,7 @@ public class Account implements DataBaseInterface {
     public Account(String firstName, String lastName, String address,
             int id, String userName, int password,            
             Boolean employee, Boolean admin,
-            LinkedList<String> meetingIDList){
+            LinkedList<Meeting> meetingList, LinkedList<Meeting> invitedMeetingList){
         
         this.setFirstName(firstName);
         this.setLastName(lastName);
@@ -72,7 +74,8 @@ public class Account implements DataBaseInterface {
         this.setEmployee(employee);
         this.setAdmin(admin);
         
-        this.setMeetingIDList(meetingIDList);
+        this.setMeetingList(meetingList);
+        this.setInvitedMeetingList(invitedMeetingList);
         
     }
     public Boolean isAdmin() {
@@ -138,16 +141,16 @@ public class Account implements DataBaseInterface {
     public void setEmployee(Boolean employee) {
         this.employee = employee;
     }    
-    public LinkedList<String> getMeetingIDList() {
-        return meetingIDList;
+    public LinkedList<Meeting> getMeetingList() {
+        return meetingList;
     }
 
-    public void setMeetingIDList(LinkedList<String> meetingIDList) {         
-        if(meetingIDList == null){
-            this.meetingIDList = new LinkedList<>();
+    public void setMeetingList(LinkedList<Meeting> meetingList) {         
+        if(meetingList == null){
+            this.meetingList = new LinkedList<>();
         }
         else{            
-            this.meetingIDList = meetingIDList;
+            this.meetingList = meetingList;
          }
     }
     
@@ -155,12 +158,12 @@ public class Account implements DataBaseInterface {
         this.password = password;
     }
 
-    public LinkedList<String> getInvitedMeetingIDList() {
-        return invitedMeetingIDList;
+    public LinkedList<Meeting> getInvitedMeetingList() {
+        return invitedMeetingList;
     }
 
-    public void setInvitedMeetingIDList(LinkedList<String> invitedMeetingIDList) {
-        this.invitedMeetingIDList = invitedMeetingIDList;
+    public void setInvitedMeetingList(LinkedList<Meeting> invitedMeetingList) {
+        this.invitedMeetingList = invitedMeetingList;
     }
     @Override
     public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{
@@ -186,7 +189,19 @@ public class Account implements DataBaseInterface {
             + "(?,?,?,?,?,?,?,?, ?,?)");
  
 
+        ListIterator<Meeting> it;
+            
+        LinkedList<String> meetingIDList = new LinkedList<>();
+        it = meetingList.listIterator();
+        while(it.hasNext()){
+            meetingIDList.add(it.next().getMeetingID());
+        }
         
+        LinkedList<String> invitedMeetingIDList = new LinkedList<>();
+        it = invitedMeetingList.listIterator();
+        while(it.hasNext()){
+            invitedMeetingIDList.add(it.next().getMeetingID());
+        }
         
         // set the preparedstatement parameters
         ps.setInt(1,account.getId());
@@ -195,10 +210,10 @@ public class Account implements DataBaseInterface {
         ps.setString(4,account.getFirstName());
         ps.setString(5,account.getLastName());
         ps.setBoolean(6, account.isAdmin());
-        ps.setString(7,DataBaseController.listToString(account.getMeetingIDList()));
+        ps.setString(7,DataBaseController.listToString(meetingIDList));
         ps.setBoolean(8, account.isEmployee());
         ps.setString(9, account.getAddress());
-        ps.setString(10, DataBaseController.listToString(account.getInvitedMeetingIDList()));
+        ps.setString(10, DataBaseController.listToString(invitedMeetingIDList));
 
         // call executeUpdate to execute our sql update statement
         ps.executeUpdate();
@@ -218,7 +233,20 @@ public class Account implements DataBaseInterface {
         PreparedStatement ps = con.prepareStatement(
         "UPDATE EMPLOYEES SET  USER_NAME = ?, PASSWORD = ?, FIRST_NAME = ?, "
                 + "LAST_NAME = ?, ADMIN = ?, MEETING_ID_LIST = ?, EMPLOYEE = ?, ADDRESS = ?,INVITED_MEETING_ID_LIST =? WHERE ID = ?");
- 
+        
+        ListIterator<Meeting> it;
+            
+        LinkedList<String> meetingIDList = new LinkedList<>();
+        it = meetingList.listIterator();
+        while(it.hasNext()){
+            meetingIDList.add(it.next().getMeetingID());
+        }
+        
+        LinkedList<String> invitedMeetingIDList = new LinkedList<>();
+        it = invitedMeetingList.listIterator();
+        while(it.hasNext()){
+            invitedMeetingIDList.add(it.next().getMeetingID());
+        }
 
         // set the preparedstatement parameters
         ps.setString(1, account.getUserName());
@@ -226,10 +254,10 @@ public class Account implements DataBaseInterface {
         ps.setString(3,account.getFirstName());
         ps.setString(4,account.getLastName());
         ps.setBoolean(5, account.isAdmin());
-        ps.setString(6,DataBaseController.listToString(account.getMeetingIDList()));
+        ps.setString(6,DataBaseController.listToString(meetingIDList));
         ps.setBoolean(7, account.isEmployee());
         ps.setString(8, account.getAddress());
-        ps.setString(9, DataBaseController.listToString(account.getInvitedMeetingIDList()));
+        ps.setString(9, DataBaseController.listToString(invitedMeetingIDList));
         ps.setInt(10, account.getId());
 
         // call executeUpdate to execute our sql update statement

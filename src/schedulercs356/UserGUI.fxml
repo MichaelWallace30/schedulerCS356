@@ -112,7 +112,7 @@
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <TableView fx:id="roomsTable" layoutX="2.0" layoutY="1.0" prefHeight="331.0" prefWidth="778.0">
+                                    <TableView fx:id="roomsTable" layoutX="2.0" layoutY="1.0" prefHeight="331.0" prefWidth="778.0" AnchorPane.bottomAnchor="131.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="1.0">
                                       <columns>
                                         <TableColumn prefWidth="75.0" text="C1" />
                                         <TableColumn prefWidth="75.0" text="C2" />

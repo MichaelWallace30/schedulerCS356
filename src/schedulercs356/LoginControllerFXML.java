@@ -54,7 +54,7 @@ public class LoginControllerFXML implements Initializable {
         {
             //if login succeded
             invalidLabel.setVisible(false);   
-            LoginAccountParser parser = new LoginAccountParser();
+            LoginAccountBundle parser = new LoginAccountBundle();
             Account account = dbController.getAccount(accountID);
             parser.setAccount(account);
             

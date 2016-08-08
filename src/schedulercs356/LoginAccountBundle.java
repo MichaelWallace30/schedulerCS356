@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
  *
  * @author MAGarcia
  */
-public class LoginAccountParser extends ResourceBundle {
+public class LoginAccountBundle extends ResourceBundle {
 
   private Account account;
   @Override

@@ -6,7 +6,13 @@
 package schedulercs356;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -14,6 +20,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -24,6 +31,14 @@ import javafx.scene.text.TextFlow;
  * @author MAGarcia
  */
 public class UserGUIController implements Initializable {
+  private static final String EMPLOYEE = "Employee";
+  private static final String ADMINISTRATOR = "Administrator";
+  
+  // References admin tab.
+  private Tab linkedOutAdminTab;
+  // References EditRoom tab.
+  private Tab linkedOutEditRoomTab;
+  
   private Account account;
   @FXML
   private Text sidebarName;
@@ -83,7 +98,8 @@ public class UserGUIController implements Initializable {
   private Menu helpMenu;
   @FXML
   private MenuItem menuAboutButton;
-
+  @FXML
+  private TabPane tabPane;
   /**
    * Initializes the controller class.
    * @param url
@@ -91,13 +107,59 @@ public class UserGUIController implements Initializable {
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
+    
     // TODO
     account = (Account)rb.getObject("data"); 
     
     if (account != null) {
-      sidebarName.setText(account.getFirstName() + account.getLastName());
-      profileName.setText(account.getFirstName() + account.getLastName());
+      sidebarName.setText(account.getFirstName() + " " + account.getLastName());
+      profileName.setText(account.getFirstName() + " " + account.getLastName());
+      
+      if (account.isAdmin()) {
+        String status = ADMINISTRATOR;
+        
+        if (account.isEmployee()) {
+          status = EMPLOYEE + " " + status;
+        }
+        
+        sidebarEmployeeStatus.setText(status);
+        profileEmployeeStatus.setText(status);
+        
+      } else {
+        sidebarEmployeeStatus.setText(EMPLOYEE);
+        profileEmployeeStatus.setText(EMPLOYEE);
+        
+        // Remove our admin and edit room tabs.
+        linkedOutAdminTab = tabPane.getTabs().remove(5);
+        linkedOutEditRoomTab = tabPane.getTabs().remove(2);
+        
+      } 
+      
+      //sidebarDate.setText(new Date().toString());
+      profileUserName.setText(account.getUserName());
+      profileAddress.setText("Address: " + account.getAddress());
+     
+      runOnThread();
+    } else {
+      throw new RuntimeException("Null account value was passed!");
     }
-  }  
+  
+  }
+  
+  // Run this little guy on the thread...
+  // Houses the timer for the date.
+  private void runOnThread() {
+      Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+          @Override
+          public void run() {
+            Platform.runLater(() -> {
+              sidebarDate.setText(new Date().toString());
+            });
+          }
+         
+        }, 0, 1000);
+  }
   
 }

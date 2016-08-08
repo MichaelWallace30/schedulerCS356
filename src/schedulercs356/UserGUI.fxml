@@ -45,7 +45,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="654.0" prefWidth="708.0">
                <children>
-                  <TabPane layoutY="159.0" prefHeight="521.0" prefWidth="750.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="159.0">
+                  <TabPane fx:id="tabPane" layoutY="159.0" prefHeight="521.0" prefWidth="750.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="159.0">
                     <tabs>
                       <Tab fx:id="tabProfile" text="Profle">
                         <content>
@@ -103,11 +103,6 @@
                               </AnchorPane>
                         </content>
                       </Tab>
-                        <Tab fx:id="tabEditMeeting" text="Edit Meeting">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                          </content>
-                        </Tab>
                         <Tab fx:id="tabEditRooms" text="Edit Rooms">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
@@ -134,6 +129,11 @@
                           </content>
                         </Tab>
                         <Tab fx:id="tabMeetingDetails" text="Meeting Details">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabEditMeeting" text="Edit Meeting">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                           </content>

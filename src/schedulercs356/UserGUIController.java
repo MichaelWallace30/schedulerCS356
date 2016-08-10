@@ -29,6 +29,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -37,6 +38,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -66,6 +68,7 @@ public class UserGUIController implements Initializable {
   private ObservableList<MeetingTableCell> meetingData;
   private ObservableList<AccountTableCell> accounts;
   private ObservableList<Schedule> schedules;
+  private ObservableList<AccountAdminTableCell> adminEnabledAccounts;
   
   @FXML
   private Text profileName;
@@ -134,7 +137,7 @@ public class UserGUIController implements Initializable {
   @FXML
   private TextField searchbarText;
   @FXML
-  private TableColumn<MeetingTableCell, Integer> numberAttendingColumn;
+  private TableColumn<MeetingTableCell, Number> numberAttendingColumn;
   @FXML
   private TableColumn<AccountTableCell, String> usernameColumn;
   @FXML
@@ -167,6 +170,50 @@ public class UserGUIController implements Initializable {
   private TableColumn<?, ?> editMeetingUsernameColumn;
   @FXML
   private TableColumn<?, ?> editMeetingNameColumn;
+  @FXML
+  private MenuItem logoutMenuItem;
+  @FXML
+  private TableView<AccountAdminTableCell> adminAccountsTable;
+  @FXML
+  private TableColumn<AccountAdminTableCell, Number> adminAccountIdColumn;
+  @FXML
+  private TableColumn<AccountAdminTableCell, String> adminUsernameColumn;
+  @FXML
+  private TableColumn<AccountAdminTableCell, String> adminFullnameColumn;
+  @FXML
+  private TableColumn<AccountAdminTableCell, Number> adminPasswordColumn;
+  @FXML
+  private TableColumn<AccountAdminTableCell, String> adminAddressColumn;
+  @FXML
+  private TableColumn<AccountAdminTableCell, Boolean> adminEmployeeColumn;
+  @FXML
+  private TableView<?> adminRoomsTable;
+  @FXML
+  private TableColumn<?, ?> adminRoomNumberColumn;
+  @FXML
+  private TableColumn<?, ?> adminMaxOccupancyColumn;
+  @FXML
+  private TableColumn<?, ?> adminDescriptionColumn;
+  @FXML
+  private Button adminCreateRoomButton;
+  @FXML
+  private Button adminEditRoomButton;
+  @FXML
+  private Button adminRemoveRoomButton;
+  @FXML
+  private Button editMeetingUpdateButton;
+  @FXML
+  private Text editMeetingIdText;
+  @FXML
+  private ChoiceBox<?> editMeetingStartTimeChooserHour;
+  @FXML
+  private ChoiceBox<?> editMeetingStartTimeMinuteChooser;
+  @FXML
+  private ChoiceBox<?> editMeetingEndTimeChooserHour1;
+  @FXML
+  private ChoiceBox<?> editMeetingEndTimeMinuteChooser1;
+  @FXML
+  private TextArea editMeetingDescription;
 
   void Attending(ActionEvent event) {
 
@@ -184,6 +231,10 @@ public class UserGUIController implements Initializable {
     accountReferences = new LinkedList<>();
     accountSchedules = new LinkedList<>();
     dbController = new DataBaseController();
+    
+    accounts = FXCollections.observableArrayList();
+    schedules = FXCollections.observableArrayList();
+    meetingData = FXCollections.observableArrayList();
  
     account = (Account)rb.getObject("data"); 
     
@@ -195,6 +246,8 @@ public class UserGUIController implements Initializable {
       profileName.setText(account.getFirstName() + " " + account.getLastName());
       
       if (account.isAdmin()) {
+        adminEnabledAccounts = FXCollections.observableArrayList();
+        
         String status = ADMINISTRATOR;
         
         if (account.isEmployee()) {
@@ -203,10 +256,13 @@ public class UserGUIController implements Initializable {
           tabPane.getTabs().remove(tabEditMeeting);
           tabPane.getTabs().remove(tabMeetingDetails);
           tabPane.getTabs().remove(tablMeetings);
+          sidebarCreateMeeting.setVisible(false);
+          sidebarUpcomingMeetings.setText("No meetings for Administrator!");
         }
         
         sidebarEmployeeStatus.setText(status);
         profileEmployeeStatus.setText(status);
+        initializeAdminTables();
         
       } else {
         sidebarEmployeeStatus.setText(EMPLOYEE);
@@ -271,18 +327,6 @@ public class UserGUIController implements Initializable {
       if (meeting != null) {
         accountMeetings.add(meeting);
         meetingData.add(new MeetingTableCell(meeting, account));
-        
-        for (Account ref : meeting.getAcceptedList()) {
-          accountReferences.add(ref);
-        }
-        
-        for (Account ref : meeting.getInvitedList()) {
-          accountReferences.add(ref);
-        }
-        
-        for (Account ref : meeting.getRejectedList()) {
-          accountReferences.add(ref);
-        }
       }
     }
   }
@@ -292,20 +336,12 @@ public class UserGUIController implements Initializable {
    * 
    */
   private void initializeMeetingTable() {
-    meetingData = FXCollections.observableArrayList();
-    meetingTable = new TableView<>();
-    meetingIdColumn = new TableColumn<>("Meeting ID");
-    dateColumn = new TableColumn<>("Date");
-    numberAttendingColumn = new TableColumn<>("# Attending");
-    hostingColumn = new TableColumn<>("Hosting");
-    
-    meetingIdColumn.setCellValueFactory(new PropertyValueFactory("meetingID"));
-    dateColumn.setCellFactory(new PropertyValueFactory("date"));
-    numberAttendingColumn.setCellFactory(new PropertyValueFactory("numberOfAttendees"));
-    hostingColumn.setCellFactory(new PropertyValueFactory("isHosting"));
+    meetingIdColumn.setCellValueFactory(cellData -> cellData.getValue().meetingID);
+    dateColumn.setCellValueFactory(cellData -> cellData.getValue().date);
+    numberAttendingColumn.setCellValueFactory(cellData -> cellData.getValue().numberOfAttendees);
+    hostingColumn.setCellValueFactory(cellData -> cellData.getValue().isHosting);
     
     meetingTable.setItems(meetingData);
-    meetingTable.getColumns().addAll(meetingIdColumn, dateColumn, numberAttendingColumn, hostingColumn);
   }
   
   
@@ -313,22 +349,45 @@ public class UserGUIController implements Initializable {
    * 
    */
   private void initializeUsersInMeetingTable() {
-    accounts = FXCollections.observableArrayList();
-    schedules = FXCollections.observableArrayList();
-    
-    usersInMeetingTable = new TableView<>();
-    usernameColumn = new TableColumn<>("Username");
-    nameColumn = new TableColumn<>("Name");
-    inviteStatusColumn = new TableColumn<>("Invite Status");
-    contactNumberColumn = new TableColumn<>("Contact");
-    
-    usernameColumn.setCellFactory(new PropertyValueFactory("username"));
-    nameColumn.setCellFactory(new PropertyValueFactory("fullname"));
-    inviteStatusColumn.setCellFactory(new PropertyValueFactory("inviteStatus"));
-    contactNumberColumn.setCellFactory(new PropertyValueFactory("contact"));
+    usernameColumn.setCellValueFactory(cellData -> cellData.getValue().username);
+    nameColumn.setCellValueFactory(cellData -> cellData.getValue().fullname);
+    inviteStatusColumn.setCellValueFactory(cellData -> cellData.getValue().inviteStatus);
+    contactNumberColumn.setCellValueFactory(cellData -> cellData.getValue().contact);
     
     usersInMeetingTable.setItems(accounts);
-    usersInMeetingTable.getColumns().addAll(usernameColumn, nameColumn, inviteStatusColumn, contactNumberColumn);
+  }
+  
+  
+  private void initializeAdminTables() {
+    adminAccountIdColumn.setCellValueFactory(cellData -> cellData.getValue().accountId);
+    adminUsernameColumn.setCellValueFactory(cellData -> cellData.getValue().username);
+    adminFullnameColumn.setCellValueFactory(cellData -> cellData.getValue().fullname);
+    adminPasswordColumn.setCellValueFactory(cellData -> cellData.getValue().password);
+    adminAddressColumn.setCellValueFactory(cellData -> cellData.getValue().address);
+    adminEmployeeColumn.setCellValueFactory(cellData -> cellData.getValue().employee);
+    
+    adminAccountsTable.setItems(adminEnabledAccounts);
+    
+    addAccountsInAdminTable();
+  }
+  
+  
+  private void addAccountsInAdminTable() {
+    List<Account> accountTempo = dbController.getAllAccounts();
+    
+    for (Account acc : accountTempo) {
+      AccountAdminTableCell cell = new AccountAdminTableCell(acc);
+      
+      if (!account.isEmployee()) {
+          if (acc.isAdmin()) {
+            adminEnabledAccounts.add(cell);
+          }
+      } else {
+        if (!acc.isAdmin()) {
+          adminEnabledAccounts.add(cell);
+        }
+      }
+    }
   }
   
   
@@ -338,6 +397,14 @@ public class UserGUIController implements Initializable {
    */
   @FXML
   void onCreateMeeting(ActionEvent event) {
+    Meeting meeting = new Meeting();
+    meeting.setOwnerID(account.getId());
+    meeting.setInvitedList(new LinkedList<>());
+    meeting.setAcceptedList(new LinkedList<>());
+    meeting.setRejectedList(new LinkedList<>());
+    dbController.addObject(meeting);
+    
+    
     if (tabEditMeeting.isDisabled()) {
       tabEditMeeting.setDisable(false);
     }

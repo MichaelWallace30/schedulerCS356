@@ -36,7 +36,7 @@ public class Meeting implements DataBaseInterface{
     private LinkedList<Account> rejectedList;
     private Integer ownerID;
     
-    public Meeting(){
+    public Meeting() {
         setMeetingID(UUID.randomUUID().toString());
     }
     
@@ -158,7 +158,13 @@ public class Meeting implements DataBaseInterface{
         
         // set the preparedstatement parameters
         ps.setString(1, meeting.getMeetingID());
-        ps.setInt(2,meeting.getRoom().getRoomNumber());
+        
+        if (meeting.getRoom() != null) {
+          ps.setInt(2,meeting.getRoom().getRoomNumber());
+        } else {
+          ps.setInt(2, 0);
+        }
+        
         ps.setString(3,DataBaseController.listToString(invitedStringList));
         ps.setString(4,DataBaseController.listToString(acceptedStringList));
         ps.setString(5,DataBaseController.listToString(rejectedStringList));

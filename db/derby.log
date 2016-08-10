@@ -1,14 +1,20 @@
-Mon Aug 08 12:58:59 PDT 2016 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
+Wed Aug 10 00:46:39 PDT 2016 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Mon Aug 08 12:59:04 PDT 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0156-6bbc-9f70-ffffec477f2c 
-on database directory C:\Users\Lenovo\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
-Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_91/db/lib/derby.jar
+Wed Aug 10 00:47:08 PDT 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0156-736a-bc85-000025a224b2 
+on database directory C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_101/db/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_91-b15
-user.dir=C:\Program Files\Java\jdk1.8.0_91\db
-os.name=Windows 10
+java.runtime.version=1.8.0_20-b26
+user.dir=C:\Program Files\Java\jdk1.8.0_101\db
+os.name=Windows 8.1
 os.arch=amd64
-os.version=10.0
-derby.system.home=C:\Users\Lenovo\Documents\GitHub\schedulerCS356\db
+os.version=6.3
+derby.system.home=C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db
 Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Wed Aug 10 05:09:41 PDT 2016: Shutting down Derby engine
+----------------------------------------------------------------
+Wed Aug 10 05:09:41 PDT 2016:
+Shutting down instance a816c00e-0156-736a-bc85-000025a224b2 on database directory C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+----------------------------------------------------------------

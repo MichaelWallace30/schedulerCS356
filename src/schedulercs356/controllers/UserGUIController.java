@@ -8,6 +8,7 @@ package schedulercs356.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -48,6 +49,7 @@ import schedulercs356.cells.AccountTableCell;
 import schedulercs356.entity.Meeting;
 import schedulercs356.cells.MeetingTableCell;
 import schedulercs356.cells.RoomTableCell;
+import schedulercs356.entity.Room;
 import schedulercs356.entity.Schedule;
 
 /**
@@ -223,7 +225,7 @@ public class UserGUIController implements Initializable {
   @FXML
   private Button adminRemoveEmployeePassword;
   @FXML
-  private TableColumn<?, ?> roomsRoomNumberColumn;
+  private TableColumn<RoomTableCell, Number> roomsRoomNumberColumn;
   @FXML
   private SplitPane parentSplitPane;
   @FXML
@@ -232,6 +234,22 @@ public class UserGUIController implements Initializable {
   private AnchorPane otherSplitPane;
   @FXML
   private Text sidebarInvites;
+  @FXML
+  private Button editRoomsUpdateButton;
+  @FXML
+  private Button editRoomsCancelChangesButton;
+  @FXML
+  private Button editRoomsRemoveRoomButton;
+  @FXML
+  private TextArea editRoomsDescription;
+  @FXML
+  private TextField editRoomsRoomNumber;
+  @FXML
+  private TextField editRoomsMaxIOccupancy;
+  @FXML
+  private TableColumn<RoomTableCell, Number> roomsMaxOccupancyColumn;
+  @FXML
+  private TableColumn<RoomTableCell, String> roomsDescriptionColumn;
 
   void Attending(ActionEvent event) {
 
@@ -253,6 +271,7 @@ public class UserGUIController implements Initializable {
     accounts = FXCollections.observableArrayList();
     schedules = FXCollections.observableArrayList();
     meetingData = FXCollections.observableArrayList();
+    rooms = FXCollections.observableArrayList();
     SplitPane.setResizableWithParent(sidebarSplitPane, Boolean.FALSE);
     SplitPane.setResizableWithParent(otherSplitPane, Boolean.FALSE);
  
@@ -302,6 +321,7 @@ public class UserGUIController implements Initializable {
       sidebarDate.setText(new Date().toString());
       runTimeOnThread();
       addMeetingsToTables();      
+      addRoomsInTables();
     } else {
       throw new RuntimeException("Null account value was passed!");
     }
@@ -388,8 +408,22 @@ public class UserGUIController implements Initializable {
     adminMaxOccupancyColumn.setCellValueFactory(cellData -> cellData.getValue().maxOccupancy);
     adminDescriptionColumn.setCellValueFactory(cellData -> cellData.getValue().description);
     
+    roomsRoomNumberColumn.setCellValueFactory(cellData -> cellData.getValue().roomNumber);
+    roomsMaxOccupancyColumn.setCellValueFactory(cellData -> cellData.getValue().maxOccupancy);
+    roomsDescriptionColumn.setCellValueFactory(cellData -> cellData.getValue().description);
+    
     adminRoomsTable.setItems(rooms);
     roomsTable.setItems(rooms);
+  }
+  
+  
+  private void addRoomsInTables() {
+    List<Room> roomTempo = dbController.getAllRooms();
+    
+    for (Room room : roomTempo) {
+      RoomTableCell cell = new RoomTableCell(room);
+      rooms.add(cell);
+    }
   }
   
   
@@ -578,7 +612,9 @@ public class UserGUIController implements Initializable {
         child.removeProperty().addListener((obj, old, n) -> {
           if (n) {
             boolean success = dbController.removeObject(victimAccount);
-            adminEnabledAccounts.remove(index);
+            if (success) {
+              adminEnabledAccounts.remove(index);
+            }
           }
         });
         
@@ -605,6 +641,33 @@ public class UserGUIController implements Initializable {
   
   @FXML
   private void onCreateRoom(ActionEvent event) {
+    
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/FastCreateRoom.fxml"));
+      AnchorPane pane = (AnchorPane)loader.load();
+      Scene scene = new Scene(pane);
+      Stage parentStage = (Stage) tabPane.getScene().getWindow();
+      Stage stage = new Stage();
+    
+      FastCreateRoomController child = loader.getController();
+      child.getRoomProperty().addListener((obj, old, n) -> {
+        if (n != null) {
+          RoomTableCell cell = new RoomTableCell(n);
+          dbController.addObject(n);
+          rooms.add(cell);
+        }
+      });
+      
+      stage.initModality(Modality.WINDOW_MODAL);
+      stage.initOwner(parentStage);
+      stage.setScene(scene);
+      
+      stage.centerOnScreen();
+      stage.showAndWait();
+    
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   
@@ -615,5 +678,6 @@ public class UserGUIController implements Initializable {
   
   @FXML
   private void onRemoveRoom(ActionEvent event) {
+    
   }
 }

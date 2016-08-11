@@ -130,8 +130,8 @@
                                     <TableView fx:id="roomsTable" layoutX="2.0" layoutY="1.0" prefHeight="331.0" prefWidth="778.0" AnchorPane.bottomAnchor="131.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="1.0">
                                       <columns>
                                         <TableColumn fx:id="roomsRoomNumberColumn" prefWidth="75.0" text="Room #" />
-                                        <TableColumn prefWidth="122.0" text="Max Occupancy" />
-                                          <TableColumn prefWidth="580.0" text="Description" />
+                                        <TableColumn fx:id="roomsMaxOccupancyColumn" prefWidth="122.0" text="Max Occupancy" />
+                                          <TableColumn fx:id="roomsDescriptionColumn" prefWidth="580.0" text="Description" />
                                       </columns>
                                     </TableView>
                                  </children></AnchorPane>

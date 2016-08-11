@@ -25,4 +25,7 @@ public class RoomTableCell {
     maxOccupancy = new SimpleIntegerProperty(room.getMaxOccupancy());
     description = new SimpleStringProperty(room.getDescription());
   }
+
+  public RoomTableCell() {
+  }
 }

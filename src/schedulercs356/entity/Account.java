@@ -239,20 +239,14 @@ public class Account implements DataBaseInterface {
         ListIterator<Meeting> it;
             
         LinkedList<String> meetingIDList = new LinkedList<>();
-        it = meetingList.listIterator();
-        while(it.hasNext()){
-          if (it.next() != null) {
-            meetingIDList.add(it.next().getMeetingID());
-          }
-        }
+        meetingList.stream().forEach((meeting) -> {
+          meetingIDList.add(meeting.getMeetingID());
+        });
         
         LinkedList<String> invitedMeetingIDList = new LinkedList<>();
-        it = invitedMeetingList.listIterator();
-        while(it.hasNext()){
-          if (it.next() != null) {
-            invitedMeetingIDList.add(it.next().getMeetingID());
-          }
-        }
+        invitedMeetingList.stream().forEach((meeting) -> {
+          invitedMeetingIDList.add(meeting.getMeetingID());
+        });
 
         // set the preparedstatement parameters
         ps.setString(1, account.getUserName());

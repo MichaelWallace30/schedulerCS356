@@ -29,6 +29,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -87,8 +88,6 @@ public class UserGUIController implements Initializable {
   private MenuItem menuAboutButton;
   @FXML
   private Tab tabSearch;
-  @FXML
-  private Text sidebarNews;
   @FXML
   private TextFlow sidebarUpcomingMeetingsDisplay;
   @FXML
@@ -225,6 +224,14 @@ public class UserGUIController implements Initializable {
   private Button adminRemoveEmployeePassword;
   @FXML
   private TableColumn<?, ?> roomsRoomNumberColumn;
+  @FXML
+  private SplitPane parentSplitPane;
+  @FXML
+  private AnchorPane sidebarSplitPane;
+  @FXML
+  private AnchorPane otherSplitPane;
+  @FXML
+  private Text sidebarInvites;
 
   void Attending(ActionEvent event) {
 
@@ -246,6 +253,8 @@ public class UserGUIController implements Initializable {
     accounts = FXCollections.observableArrayList();
     schedules = FXCollections.observableArrayList();
     meetingData = FXCollections.observableArrayList();
+    SplitPane.setResizableWithParent(sidebarSplitPane, Boolean.FALSE);
+    SplitPane.setResizableWithParent(otherSplitPane, Boolean.FALSE);
  
     account = (Account)rb.getObject("data"); 
    

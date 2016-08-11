@@ -8,25 +8,25 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="336.0" prefWidth="495.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="schedulercs356.controllers.CreateNewUserController">
+<AnchorPane id="AnchorPane" prefHeight="336.0" prefWidth="495.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="schedulercs356.controllers.CreateNewUserController">
     <stylesheets>
-        <URL value="@schedulercs356/css/createnewuser.css" />
+        <URL value="@/schedulercs356/css/createnewuser.css" />
     </stylesheets>
    <children>
-      <Button layoutX="14.0" layoutY="299.0" mnemonicParsing="false" text="Create" />
-      <CheckBox layoutX="280.0" layoutY="242.0" mnemonicParsing="false" text="Administrator Clearance" />
-      <CheckBox layoutX="29.0" layoutY="242.0" mnemonicParsing="false" text="Employee Clearance" />
-      <TextField layoutX="29.0" layoutY="64.0" promptText="Enter a Username" />
-      <TextField layoutX="29.0" layoutY="99.0" promptText="Enter First Name" />
-      <TextField layoutX="184.0" layoutY="99.0" promptText="Enter Last Name" />
-      <Button layoutX="429.0" layoutY="299.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="createUserButton" layoutX="14.0" layoutY="299.0" mnemonicParsing="false" text="Create" />
+      <CheckBox fx:id="checkboxAdministrator" layoutX="280.0" layoutY="242.0" mnemonicParsing="false" text="Administrator Clearance" />
+      <CheckBox fx:id="checkboxEmployee" layoutX="29.0" layoutY="242.0" mnemonicParsing="false" text="Employee Clearance" />
+      <TextField fx:id="enterUsernameText" layoutX="29.0" layoutY="64.0" promptText="Enter a Username" />
+      <TextField fx:id="enterFirstNameText" layoutX="29.0" layoutY="99.0" promptText="Enter First Name" />
+      <TextField fx:id="enterLastNameText" layoutX="184.0" layoutY="99.0" promptText="Enter Last Name" />
+      <Button fx:id="cancelButton" layoutX="429.0" layoutY="299.0" mnemonicParsing="false" text="Cancel" />
       <Text layoutX="30.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New User">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <TextField layoutX="30.0" layoutY="131.0" prefHeight="25.0" prefWidth="309.0" promptText="Address" />
-      <TextField layoutX="29.0" layoutY="162.0" prefHeight="25.0" prefWidth="309.0" promptText="Password" />
-      <TextField layoutX="29.0" layoutY="193.0" prefHeight="25.0" prefWidth="309.0" promptText="Retype Password" />
+      <TextField fx:id="enterAddressText" layoutX="30.0" layoutY="131.0" prefHeight="25.0" prefWidth="309.0" promptText="Address" />
+      <TextField fx:id="enterPasswordText" layoutX="29.0" layoutY="162.0" prefHeight="25.0" prefWidth="309.0" promptText="Password" />
+      <TextField fx:id="retypePasswordText" layoutX="29.0" layoutY="193.0" prefHeight="25.0" prefWidth="309.0" promptText="Retype Password" />
    </children>
 </AnchorPane>

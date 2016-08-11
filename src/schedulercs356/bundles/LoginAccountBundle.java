@@ -17,6 +17,11 @@ import java.util.ResourceBundle;
 public class LoginAccountBundle extends ResourceBundle {
 
   private Account account;
+  
+  public LoginAccountBundle() {
+    account = null;
+  }
+  
   @Override
   protected Object handleGetObject(String key) {
     if (key.equals("data")) {

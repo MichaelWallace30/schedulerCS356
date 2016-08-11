@@ -39,7 +39,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import schedulercs356.bundles.LoginAccountBundle;
 import schedulercs356.entity.Account;
 import schedulercs356.cells.AccountAdminTableCell;
 import schedulercs356.cells.AccountTableCell;
@@ -247,10 +249,12 @@ public class UserGUIController implements Initializable {
     meetingData = FXCollections.observableArrayList();
  
     account = (Account)rb.getObject("data"); 
+   
     
     if (account != null) {
       initializeMeetingTable();
       initializeUsersInMeetingTable();
+      initializeRoomsInTables();
       
       sidebarName.setText(account.getFirstName() + " " + account.getLastName());
       profileName.setText(account.getFirstName() + " " + account.getLastName());
@@ -288,7 +292,7 @@ public class UserGUIController implements Initializable {
       profileUserName.setText(account.getUserName());
       profileAddress.setText("Address: " + account.getAddress());
       sidebarDate.setText(new Date().toString());
-      runOnThread();
+      runTimeOnThread();
       addMeetingsToTables();      
     } else {
       throw new RuntimeException("Null account value was passed!");
@@ -298,7 +302,7 @@ public class UserGUIController implements Initializable {
   
   // Run this little guy on the thread...
   // Houses the timer for the date.
-  private void runOnThread() {
+  private void runTimeOnThread() {
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
       sidebarDate.setText(new Date().toString());
     }));
@@ -463,6 +467,31 @@ public class UserGUIController implements Initializable {
 
   @FXML
   private void onAdminCreateEmployeeButton(ActionEvent event) {
+    try {
+      // TODO(Garcia): Figure out how to pass info back to this.
+      LoginAccountBundle bundle = new LoginAccountBundle();
+      bundle.setAccount(account);
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/CreateNewUser.fxml"),
+                                         bundle);
+      
+      AnchorPane pane = (AnchorPane)loader.load();
+      Scene scene = new Scene(pane);
+      Stage parentStage = (Stage) tabPane.getScene().getWindow();
+      Stage stage = new Stage();
+      
+      stage.initModality(Modality.WINDOW_MODAL);
+      stage.initOwner(parentStage);
+      stage.setScene(scene);
+      
+      stage.centerOnScreen();
+      stage.showAndWait();
+      
+      
+      System.out.println("I did it!");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
   }
 
   @FXML

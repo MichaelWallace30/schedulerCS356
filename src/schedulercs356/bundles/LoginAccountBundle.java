@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package schedulercs356;
+package schedulercs356.bundles;
 
 import schedulercs356.entity.Account;
 import java.util.Collections;

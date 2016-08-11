@@ -16,7 +16,7 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ListIterator;
 import schedulercs356.entity.Account;
-import schedulercs356.DataBaseInterface;
+import schedulercs356.entity.DataBaseInterface;
 import schedulercs356.entity.Meeting;
 import schedulercs356.entity.Room;
 import schedulercs356.entity.Schedule;

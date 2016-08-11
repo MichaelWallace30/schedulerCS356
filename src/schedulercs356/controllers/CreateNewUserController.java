@@ -143,6 +143,7 @@ public class CreateNewUserController implements Initializable {
     enterPasswordText.setEffect(null);
     retypePasswordText.setEffect(null); 
     checkboxEmployee.setEffect(null);
+    checkboxAdministrator.setEffect(null);
               
     if (enterUsernameText.getText().length() <= 0) {
       errorStr = "You require a Username!";
@@ -170,6 +171,13 @@ public class CreateNewUserController implements Initializable {
         checkboxEmployee.setEffect(errorGlow);
         errorStr = "New User must at least be an Employee!!";
         triggered = true;
+      } else {
+        if (!checkboxEmployee.isSelected() && !checkboxAdministrator.isSelected()) {
+          errorStr = "User must be Employee and/or Admin!";
+          triggered = true;
+          checkboxEmployee.setEffect(errorGlow);
+          checkboxAdministrator.setEffect(errorGlow);
+        }
       }
     }
     

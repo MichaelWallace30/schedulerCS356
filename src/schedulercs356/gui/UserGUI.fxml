@@ -151,9 +151,9 @@
                                           <TableColumn fx:id="adminDescriptionColumn" prefWidth="576.0" text="Description" />
                                       </columns>
                                     </TableView>
-                                    <Button fx:id="adminCreateRoomButton" layoutX="14.0" layoutY="424.0" mnemonicParsing="false" text="Create New Room" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
-                                    <Button fx:id="adminEditRoomButton" layoutX="354.0" layoutY="424.0" mnemonicParsing="false" text="Edit Room" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="353.0" />
-                                    <Button fx:id="adminRemoveRoomButton" layoutX="670.0" layoutY="424.0" mnemonicParsing="false" text="Remove Room" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                                    <Button fx:id="adminCreateRoomButton" layoutX="14.0" layoutY="424.0" mnemonicParsing="false" onAction="#onCreateRoom" text="Create New Room" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
+                                    <Button fx:id="adminEditRoomButton" layoutX="354.0" layoutY="424.0" mnemonicParsing="false" onAction="#onEditRoom" text="Edit Room" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="353.0" />
+                                    <Button fx:id="adminRemoveRoomButton" layoutX="670.0" layoutY="424.0" mnemonicParsing="false" onAction="#onRemoveRoom" text="Remove Room" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                                  </children></AnchorPane>
                           </content>
                         </Tab>

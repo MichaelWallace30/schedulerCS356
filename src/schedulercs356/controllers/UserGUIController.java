@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -427,6 +426,7 @@ public class UserGUIController implements Initializable {
     
   }
   
+  
   @FXML
   void onCloseMenuItem(ActionEvent event) {
     if (Platform.isImplicitExit()) {
@@ -454,6 +454,7 @@ public class UserGUIController implements Initializable {
     }
   }
 
+  
   @FXML
   private void onAdminCreateEmployeeButton(ActionEvent event) {
     try {
@@ -586,8 +587,24 @@ public class UserGUIController implements Initializable {
     
   }
   
+  
   private void addAccountToAdminList(Account newAccount) {
     AccountAdminTableCell cell = new AccountAdminTableCell(newAccount);
     adminEnabledAccounts.add(cell);
+  }
+
+  
+  @FXML
+  private void onCreateRoom(ActionEvent event) {
+  }
+
+  
+  @FXML
+  private void onEditRoom(ActionEvent event) {
+  }
+
+  
+  @FXML
+  private void onRemoveRoom(ActionEvent event) {
   }
 }

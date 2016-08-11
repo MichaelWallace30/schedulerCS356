@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import schedulercs356.entity.Account;
@@ -52,6 +53,12 @@ public class ResetUserPasswordController implements Initializable {
     Account account = (Account) rb.getObject("data");
     if (account != null) {
       username.setText(account.getUserName());
+      
+      newPasswordText.setOnKeyReleased(event -> {
+        if (event.getCode() == KeyCode.ENTER) {
+          onResetButton(null);
+        }
+      });
     }
   }  
 

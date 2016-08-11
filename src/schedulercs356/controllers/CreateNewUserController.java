@@ -19,6 +19,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import schedulercs356.entity.Account;
 
 /**
@@ -166,6 +167,12 @@ public class CreateNewUserController implements Initializable {
     } else {
       errorText.setVisible(triggered);
     }
+  }
+
+  @FXML
+  private void OnCancelButton(ActionEvent event) {
+    Stage stage = (Stage) cancelButton.getScene().getWindow();
+    stage.close();
   }
   
 }

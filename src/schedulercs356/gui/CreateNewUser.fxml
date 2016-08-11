@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
@@ -19,7 +20,7 @@
       <TextField fx:id="enterUsernameText" layoutX="29.0" layoutY="64.0" promptText="Enter a Username" />
       <TextField fx:id="enterFirstNameText" layoutX="29.0" layoutY="99.0" promptText="Enter First Name" />
       <TextField fx:id="enterLastNameText" layoutX="184.0" layoutY="99.0" promptText="Enter Last Name" />
-      <Button fx:id="cancelButton" layoutX="429.0" layoutY="299.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="cancelButton" layoutX="429.0" layoutY="299.0" mnemonicParsing="false" onAction="#OnCancelButton" text="Cancel" />
       <Text layoutX="30.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New User">
          <font>
             <Font size="20.0" />

@@ -323,20 +323,9 @@ public class UserGUIController implements Initializable {
       I put this in to no break any thing
       if not meeting list this breaks the code
       */
+    List<Meeting> meetings = account.getMeetingList();
     
-    ListIterator<Meeting> it;  
-    LinkedList<String> meetings = new LinkedList<>();
-    it = account.getMeetingList().listIterator();
-    while(it.hasNext()){
-        String id = it.next().getMeetingID();
-        if(id != null){
-            meetings.add(id);
-        }
-    }
-    //List<String> meetings = account.getMeetingList();
-    
-    for (String str : meetings) {
-      Meeting meeting = dbController.getMeeting(str);
+    for (Meeting meeting : meetings) {
       
       if (meeting != null) {
         accountMeetings.add(meeting);
@@ -479,6 +468,15 @@ public class UserGUIController implements Initializable {
       Stage parentStage = (Stage) tabPane.getScene().getWindow();
       Stage stage = new Stage();
       
+      CreateNewUserController child = loader.getController();
+      child.accountProperty().addListener((obj, old, n) -> {
+        if (n != null) {
+          dbController.addObject(n);
+          addAccountToAdminList(n);
+        }
+      });
+      
+      
       stage.initModality(Modality.WINDOW_MODAL);
       stage.initOwner(parentStage);
       stage.setScene(scene);
@@ -500,5 +498,10 @@ public class UserGUIController implements Initializable {
 
   @FXML
   private void onAdminRemoveEmployee(ActionEvent event) {
+  }
+  
+  private void addAccountToAdminList(Account newAccount) {
+    AccountAdminTableCell cell = new AccountAdminTableCell(newAccount);
+    adminEnabledAccounts.add(cell);
   }
 }

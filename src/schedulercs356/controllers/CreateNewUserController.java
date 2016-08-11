@@ -6,9 +6,11 @@
 package schedulercs356.controllers;
 
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -29,6 +31,17 @@ import schedulercs356.entity.Account;
  */
 public class CreateNewUserController implements Initializable {
 
+  
+  private ReadOnlyObjectWrapper<Account> newAccount = new ReadOnlyObjectWrapper<>();
+  
+  public ReadOnlyObjectProperty<Account> accountProperty() {
+    return newAccount.getReadOnlyProperty();
+  }
+  
+  public Account getNewAccount() {
+    return newAccount.get();
+  }
+  
   @FXML
   private TextField enterFirstNameText;
   @FXML
@@ -166,6 +179,20 @@ public class CreateNewUserController implements Initializable {
       errorText.setText(errorStr);
     } else {
       errorText.setVisible(triggered);
+      
+      // Create our Account.
+      newAccount.set(new Account(enterFirstNameText.getText(),
+                                 enterLastNameText.getText(),
+                                 enterAddressText.getText(),
+                                 0,
+                                 enterUsernameText.getText(),
+                                 enterPasswordText.getText(),
+                                 (Boolean)checkboxEmployee.isSelected(),
+                                 (Boolean)checkboxAdministrator.isSelected(),
+                                 new LinkedList<>(),
+                                 new LinkedList<>()));
+      // Close After.
+      OnCancelButton(null);
     }
   }
 

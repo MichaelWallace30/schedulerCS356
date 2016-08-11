@@ -226,7 +226,7 @@ public class Account implements DataBaseInterface {
     @Override
     public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
         Account account = (Account)obj; 
-        stmt.executeUpdate("DELETE FROM EMPLOYEES " + " ID = " +  account.getId());
+        stmt.executeUpdate("DELETE FROM EMPLOYEES " + "WHERE ID = " +  account.getId());
         
     }  
     @Override

@@ -492,10 +492,16 @@ public class UserGUIController implements Initializable {
     
   }
 
+  
   @FXML
   private void onAdminResetEmployeePassword(ActionEvent event) {
     // Still need this mofo.
     AccountAdminTableCell cell = adminAccountsTable.getSelectionModel().getSelectedItem();
+    
+    if (cell == null) {
+      return;
+    }
+    
     int index = adminAccountsTable.getSelectionModel().getSelectedIndex();
     Account victimAccount = dbController.getAccount(cell.accountId.get());
     
@@ -537,6 +543,46 @@ public class UserGUIController implements Initializable {
   
   @FXML
   private void onAdminRemoveEmployee(ActionEvent event) {
+    AccountAdminTableCell cell = adminAccountsTable.getSelectionModel().getSelectedItem();
+    
+    if (cell == null) {
+      return;
+    }
+    
+    int index = adminAccountsTable.getSelectionModel().getSelectedIndex();
+    Account victimAccount = dbController.getAccount(cell.accountId.get());
+    
+    if (victimAccount != null) {
+      try {
+        LoginAccountBundle bundle = new LoginAccountBundle();
+        bundle.setAccount(victimAccount);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/RemoveUserConfirmation.fxml"),
+                                           bundle);
+      
+        AnchorPane pane = (AnchorPane) loader.load();
+        Scene scene = new Scene(pane);
+        Stage parentStage = (Stage) tabPane.getScene().getWindow();
+        Stage stage = new Stage();
+        
+        RemoveUserConfirmationController child = loader.getController();
+        child.removeProperty().addListener((obj, old, n) -> {
+          if (n) {
+            boolean success = dbController.removeObject(victimAccount);
+            adminEnabledAccounts.remove(index);
+          }
+        });
+        
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(parentStage);
+        stage.setScene(scene);
+        
+        stage.centerOnScreen();
+        stage.showAndWait();
+        
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
     
   }
   

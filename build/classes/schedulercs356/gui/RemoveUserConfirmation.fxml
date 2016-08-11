@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="188.0" prefWidth="350.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="schedulercs356.controllers.RemoveUserConfirmationController">
+    <stylesheets>
+        <URL value="@/schedulercs356/css/removeuserconfirmation.css" />
+    </stylesheets>
+   <children>
+      <Text layoutX="57.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm User Removal">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Text layoutX="118.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Removing " />
+      <Text fx:id="username" layoutX="175.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="username" />
+      <Text layoutX="138.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure?" />
+      <Button fx:id="removeButton" layoutX="57.0" layoutY="149.0" mnemonicParsing="false" onAction="#onRemoveButton" text="Remove" />
+      <Button fx:id="cancelButton" layoutX="227.0" layoutY="149.0" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
+   </children>
+</AnchorPane>

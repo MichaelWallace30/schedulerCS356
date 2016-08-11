@@ -463,7 +463,7 @@ public class UserGUIController implements Initializable {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/CreateNewUser.fxml"),
                                          bundle);
       
-      AnchorPane pane = (AnchorPane)loader.load();
+      AnchorPane pane = (AnchorPane) loader.load();
       Scene scene = new Scene(pane);
       Stage parentStage = (Stage) tabPane.getScene().getWindow();
       Stage stage = new Stage();
@@ -494,10 +494,50 @@ public class UserGUIController implements Initializable {
 
   @FXML
   private void onAdminResetEmployeePassword(ActionEvent event) {
+    // Still need this mofo.
+    AccountAdminTableCell cell = adminAccountsTable.getSelectionModel().getSelectedItem();
+    int index = adminAccountsTable.getSelectionModel().getSelectedIndex();
+    Account victimAccount = dbController.getAccount(cell.accountId.get());
+    
+    if (victimAccount != null) {
+      try {
+        LoginAccountBundle bundle = new LoginAccountBundle();
+        bundle.setAccount(victimAccount);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/ResetUserPassword.fxml"),
+                                           bundle);
+      
+        AnchorPane pane = (AnchorPane) loader.load();
+        Scene scene = new Scene(pane);
+        Stage parentStage = (Stage) tabPane.getScene().getWindow();
+        Stage stage = new Stage();
+      
+        ResetUserPasswordController child = loader.getController();
+        child.passwordProperty().addListener((obj, old, n) -> {
+          adminEnabledAccounts.remove(cell);
+          victimAccount.hashPassword(n);
+          dbController.updateObject(victimAccount);
+          AccountAdminTableCell newCell = new AccountAdminTableCell(victimAccount);
+          adminEnabledAccounts.add(index, newCell);
+        });
+      
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(parentStage);
+        stage.setScene(scene);
+        
+        stage.centerOnScreen();
+        stage.showAndWait();
+        
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    
   }
 
+  
   @FXML
   private void onAdminRemoveEmployee(ActionEvent event) {
+    
   }
   
   private void addAccountToAdminList(Account newAccount) {

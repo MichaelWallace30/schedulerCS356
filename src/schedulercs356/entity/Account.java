@@ -241,13 +241,17 @@ public class Account implements DataBaseInterface {
         LinkedList<String> meetingIDList = new LinkedList<>();
         it = meetingList.listIterator();
         while(it.hasNext()){
+          if (it.next() != null) {
             meetingIDList.add(it.next().getMeetingID());
+          }
         }
         
         LinkedList<String> invitedMeetingIDList = new LinkedList<>();
         it = invitedMeetingList.listIterator();
         while(it.hasNext()){
+          if (it.next() != null) {
             invitedMeetingIDList.add(it.next().getMeetingID());
+          }
         }
 
         // set the preparedstatement parameters

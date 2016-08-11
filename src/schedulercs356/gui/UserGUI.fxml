@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="673.0" prefWidth="1063.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="schedulercs356.controllers.UserGUIController">
+    <stylesheets>
+        <URL value="@/schedulercs356/css/usergui.css" />
+    </stylesheets>
+   <children>
+      <SplitPane dividerPositions="0.2639019792648445" layoutX="-1.0" layoutY="22.0" prefHeight="653.0" prefWidth="1064.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="22.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="506.0" prefWidth="218.0">
+               <children>
+                  <Text fx:id="sidebarName" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First Last" AnchorPane.bottomAnchor="649.0" AnchorPane.leftAnchor="13.13671875" AnchorPane.rightAnchor="279.86328125" AnchorPane.topAnchor="14.0">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="sidebarEmployeeStatus" layoutX="13.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Employee" AnchorPane.bottomAnchor="614.2353515625" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="238.30517578125" AnchorPane.topAnchor="45.8134765625">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="sidebarDate" layoutX="14.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MM/DD/YYYY" AnchorPane.bottomAnchor="597.98828125" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="227.73828125" AnchorPane.topAnchor="66.05078125" />
+                  <Button fx:id="sidebarCreateMeeting" layoutX="13.0" layoutY="641.0" mnemonicParsing="false" onAction="#onCreateMeeting" prefHeight="25.0" prefWidth="292.0" text="Create Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="11.0" />
+                  <Text fx:id="sidebarUpcomingMeetings" layoutX="14.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Upcoming Meetings" underline="true" AnchorPane.bottomAnchor="532.486328125" AnchorPane.leftAnchor="13.42578125" AnchorPane.rightAnchor="176.57421875" AnchorPane.topAnchor="128.892578125">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="sidebarNews" layoutX="14.0" layoutY="418.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Company News" underline="true" AnchorPane.leftAnchor="13.13671875" AnchorPane.rightAnchor="279.86328125" AnchorPane.topAnchor="405.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <TextFlow fx:id="sidebarNewsDisplay" layoutX="14.0" layoutY="424.0" prefHeight="183.0" prefWidth="253.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="424.0" />
+                  <TextFlow fx:id="sidebarUpcomingMeetingsDisplay" layoutX="12.0" layoutY="148.0" prefHeight="250.0" prefWidth="253.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="148.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="654.0" prefWidth="708.0">
+               <children>
+                  <TabPane fx:id="tabPane" layoutY="159.0" prefHeight="521.0" prefWidth="750.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="159.0">
+                    <tabs>
+                      <Tab fx:id="tabProfile" text="Profile">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Text fx:id="profileName" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First Last" AnchorPane.bottomAnchor="432.0" AnchorPane.leftAnchor="13.13671875" AnchorPane.rightAnchor="705.86328125" AnchorPane.topAnchor="14.0">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fx:id="profileEmployeeStatus" layoutX="14.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Employee" />
+                                    <Text fx:id="profileAddress" layoutX="13.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address" />
+                                    <Text fx:id="profileUserName" layoutX="13.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab fx:id="tablMeetings" text="Meetings">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.4135135135135135" layoutX="3.0" layoutY="-3.0" prefHeight="359.0" prefWidth="778.0" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="-3.0" AnchorPane.topAnchor="-3.0">
+                                      <items>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <TableView fx:id="meetingTable" layoutX="-3.0" layoutY="-1.0" prefHeight="470.0" prefWidth="306.0" AnchorPane.bottomAnchor="-4.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="meetingIdColumn" prefWidth="75.0" text="Meeting ID" />
+                                                    <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Date" />
+                                                      <TableColumn fx:id="numberAttendingColumn" prefWidth="75.0" text="# Attending" />
+                                                      <TableColumn fx:id="hostingColumn" prefWidth="75.0" text="Hosting" />
+                                                  </columns>
+                                                </TableView>
+                                             </children>
+                                          </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <TableView fx:id="usersInMeetingTable" layoutX="-1.0" layoutY="-1.0" prefHeight="470.0" prefWidth="433.0" AnchorPane.bottomAnchor="-4.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="usernameColumn" prefWidth="103.0" text="Username" />
+                                                    <TableColumn fx:id="nameColumn" prefWidth="106.0" text="Name" />
+                                                      <TableColumn fx:id="inviteStatusColumn" prefWidth="95.0" text="Invite Status" />
+                                                      <TableColumn fx:id="contactNumberColumn" prefWidth="125.0" text="Contact #" />
+                                                  </columns>
+                                                </TableView>
+                                             </children>
+                                          </AnchorPane>
+                                      </items>
+                                    </SplitPane>
+                                    <Button fx:id="editMeetingButton" layoutX="338.0" layoutY="424.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="Edit Meeting" AnchorPane.bottomAnchor="14.0" />
+                                    <Button fx:id="cancelMeetingButton" layoutX="649.0" layoutY="424.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Cancel Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                                    <Button fx:id="attendMeetingButton" layoutX="14.0" layoutY="424.0" mnemonicParsing="false" text="Attend Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
+                                    <Button fx:id="meetingDetailsButton" layoutX="540.0" layoutY="424.0" mnemonicParsing="false" text="Meeting Details" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="138.0" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                        <Tab fx:id="tabEditRooms" disable="true" text="Edit Rooms">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabRooms" text="Rooms">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TableView fx:id="roomsTable" layoutX="2.0" layoutY="1.0" prefHeight="331.0" prefWidth="778.0" AnchorPane.bottomAnchor="131.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="1.0">
+                                      <columns>
+                                        <TableColumn fx:id="roomsRoomNumberColumn" prefWidth="75.0" text="Room #" />
+                                        <TableColumn prefWidth="122.0" text="Max Occupancy" />
+                                          <TableColumn prefWidth="580.0" text="Description" />
+                                      </columns>
+                                    </TableView>
+                                 </children></AnchorPane>
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabSearch" text="Search">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabAdmin" text="Admin">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TableView fx:id="adminAccountsTable" layoutY="-1.0" prefHeight="162.0" prefWidth="778.0" AnchorPane.bottomAnchor="302.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+                                      <columns>
+                                        <TableColumn fx:id="adminAccountIdColumn" prefWidth="75.0" text="AccountId" />
+                                        <TableColumn fx:id="adminUsernameColumn" prefWidth="155.0" text="Username" />
+                                          <TableColumn fx:id="adminFullnameColumn" prefWidth="118.0" text="Full Name" />
+                                          <TableColumn fx:id="adminPasswordColumn" prefWidth="191.0" text="Password" />
+                                          <TableColumn fx:id="adminAddressColumn" prefWidth="144.0" text="Address" />
+                                          <TableColumn fx:id="adminEmployeeColumn" prefWidth="94.0" text="Employee" />
+                                      </columns>
+                                    </TableView>
+                                    <Button fx:id="adminCreateUserButton" layoutX="14.0" layoutY="167.0" mnemonicParsing="false" onAction="#onAdminCreateEmployeeButton" text="Create New User" AnchorPane.bottomAnchor="271.0" AnchorPane.leftAnchor="14.0" />
+                                    <Button fx:id="adminResetEmployeePasswordButton" layoutX="313.0" layoutY="167.0" mnemonicParsing="false" onAction="#onAdminResetEmployeePassword" text="Reset Employee Password" AnchorPane.bottomAnchor="271.0" AnchorPane.rightAnchor="311.0" />
+                                    <Button fx:id="adminRemoveEmployeePassword" layoutX="650.0" layoutY="167.0" mnemonicParsing="false" onAction="#onAdminRemoveEmployee" text="Remove Employee" AnchorPane.bottomAnchor="271.0" AnchorPane.rightAnchor="14.0" />
+                                    <TableView fx:id="adminRoomsTable" layoutY="198.0" prefHeight="200.0" prefWidth="778.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                      <columns>
+                                        <TableColumn fx:id="adminRoomNumberColumn" prefWidth="75.0" text="Room #" />
+                                        <TableColumn fx:id="adminMaxOccupancyColumn" prefWidth="126.0" text="Max Occupancy" />
+                                          <TableColumn fx:id="adminDescriptionColumn" prefWidth="576.0" text="Description" />
+                                      </columns>
+                                    </TableView>
+                                    <Button fx:id="adminCreateRoomButton" layoutX="14.0" layoutY="424.0" mnemonicParsing="false" text="Create New Room" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
+                                    <Button fx:id="adminEditRoomButton" layoutX="354.0" layoutY="424.0" mnemonicParsing="false" text="Edit Room" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="353.0" />
+                                    <Button fx:id="adminRemoveRoomButton" layoutX="670.0" layoutY="424.0" mnemonicParsing="false" text="Remove Room" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                                 </children></AnchorPane>
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabRoomDetails" disable="true" text="Room Details">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabMeetingDetails" disable="true" text="Meeting Details">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabEditMeeting" disable="true" text="Edit Meeting">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.29797979797979796" layoutX="1.0" layoutY="-1.0" prefHeight="466.0" prefWidth="778.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+                                      <items>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="464.0" prefWidth="179.0">
+                                             <children>
+                                                <Text fx:id="editMeetingText" layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Meeting">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                                <DatePicker fx:id="editMeetingDatePicker" layoutX="16.0" layoutY="105.0" promptText="Select Date" />
+                                                <Button fx:id="editMeetingUpdateButton" layoutX="70.0" layoutY="425.0" mnemonicParsing="false" text="Update" AnchorPane.bottomAnchor="14.0" />
+                                                <Text layoutX="16.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Meeting ID: " />
+                                                <Text fx:id="editMeetingIdText" layoutX="86.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="id" />
+                                                <Text layoutX="12.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Schedule Edit" />
+                                                <Text layoutX="16.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Time" AnchorPane.bottomAnchor="307.0" AnchorPane.topAnchor="140.0" />
+                                                <ChoiceBox fx:id="editMeetingStartTimeChooserHour" layoutX="16.0" layoutY="164.0" prefHeight="25.0" prefWidth="23.0" />
+                                                <ChoiceBox fx:id="editMeetingStartTimeMinuteChooser" layoutX="67.0" layoutY="164.0" prefHeight="25.0" prefWidth="24.0" />
+                                                <Text layoutX="58.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="12.6015625" />
+                                                <Text layoutX="14.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="End time" AnchorPane.bottomAnchor="251.0390625" AnchorPane.topAnchor="197.0" />
+                                                <ChoiceBox fx:id="editMeetingEndTimeChooserHour1" layoutX="16.0" layoutY="220.0" prefHeight="25.0" prefWidth="23.0" />
+                                                <ChoiceBox fx:id="editMeetingEndTimeMinuteChooser1" layoutX="65.0" layoutY="220.0" prefHeight="25.0" prefWidth="24.0" />
+                                                <Text layoutX="57.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="9.6015625" />
+                                                <TextArea fx:id="editMeetingDescription" layoutX="14.0" layoutY="250.0" prefHeight="160.0" prefWidth="200.0" promptText="Describe the Meeting!" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="250.0" />
+                                             </children>
+                                          </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <TableView fx:id="editMeetingUsersTable" prefHeight="265.0" prefWidth="197.0" AnchorPane.bottomAnchor="199.0" AnchorPane.topAnchor="0.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="editMeetingUsernameColumn" prefWidth="96.0" text="Username" />
+                                                    <TableColumn fx:id="editMeetingNameColumn" prefWidth="99.0" text="Name" />
+                                                  </columns>
+                                                </TableView>
+                                                <TableView layoutX="349.0" prefHeight="267.0" prefWidth="193.0" AnchorPane.bottomAnchor="197.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                  <columns>
+                                                    <TableColumn prefWidth="96.0" text="Username" />
+                                                    <TableColumn prefWidth="96.0" text="Name" />
+                                                  </columns>
+                                                </TableView>
+                                                <Button layoutX="225.0" layoutY="71.0" mnemonicParsing="false" text="Add To Invites" AnchorPane.bottomAnchor="368.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" />
+                                                <Button layoutX="204.0" layoutY="134.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="135.0" text="Remove from Invites" AnchorPane.bottomAnchor="305.0" AnchorPane.leftAnchor="204.0" AnchorPane.rightAnchor="203.0" />
+                                                <TableView layoutX="-2.0" layoutY="319.0" prefHeight="145.0" prefWidth="546.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="-2.0">
+                                                  <columns>
+                                                    <TableColumn prefWidth="126.0" text="Room #" />
+                                                    <TableColumn prefWidth="137.0" text="Maximum Occupancy" />
+                                                      <TableColumn prefWidth="282.0" text="Description" />
+                                                  </columns>
+                                                </TableView>
+                                                <Text layoutX="214.0" layoutY="299.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Room" underline="true" AnchorPane.bottomAnchor="160.482421875" AnchorPane.leftAnchor="213.5458984375" AnchorPane.rightAnchor="214.4541015625">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                                <Text layoutX="233.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Invite List">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                          </AnchorPane>
+                                      </items>
+                                    </SplitPane>
+                                 </children></AnchorPane>
+                          </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+                  <Button fx:id="searchButton" layoutX="263.0" layoutY="107.0" mnemonicParsing="false" text="Search" />
+                  <TextField fx:id="searchbarText" layoutX="14.0" layoutY="107.0" prefHeight="25.0" prefWidth="253.0" promptText="Search..." />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      <MenuBar fx:id="menuBar" layoutX="1.0" layoutY="2.0" prefHeight="25.0" prefWidth="1063.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <menus>
+          <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="menuCloseButton" mnemonicParsing="false" onAction="#onCloseMenuItem" text="Close" />
+                  <MenuItem fx:id="logoutMenuItem" mnemonicParsing="false" onAction="#onLogoutMenuItem" text="Logout" />
+            </items>
+          </Menu>
+          <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem fx:id="menuAboutButton" mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </children>
+</AnchorPane>

@@ -49,10 +49,10 @@ public class CreateNewUserController implements Initializable {
     private TextField enterLastNameText;
 
     @FXML
-    private TextField enterPasswordText;
+    private PasswordField enterPasswordText;
 
     @FXML
-    private TextField retypePasswordText;
+    private PasswordField retypePasswordText;
 
   /**
    * Initializes the controller class.

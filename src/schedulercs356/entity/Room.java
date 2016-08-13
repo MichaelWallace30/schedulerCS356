@@ -5,13 +5,14 @@
  */
 package schedulercs356.entity;
 
-import schedulercs356.entity.Meeting;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import schedulercs356.controllers.DataBaseController;
 import static schedulercs356.controllers.DataBaseController.listToString;
 
 
@@ -25,7 +26,8 @@ public class Room implements DataBaseInterface {
     private String description;    
     private Integer roomNumber;
     private LinkedList<Meeting> meetingList;
-    
+    private String meetingListTableName;
+    public static String queryMeetingTable = "ROOM_MEETING_TABLE_LIST_ROOM_NUMBER_";
     
     
     public Room(int maxOccupancy, String description, Integer roomNumber, LinkedList<Meeting> meetingList){
@@ -33,14 +35,25 @@ public class Room implements DataBaseInterface {
         this.setDescription(description);
         this.setRoomNumber(roomNumber);
         this.setMeetingList(meetingList);
-
+        this.setMeetingListTableName(this.queryMeetingTable + getRoomNumber().toString());
+        
+        //create table if dne
+        DataBaseController db = new DataBaseController();
+        if(!db.doesTableExsist(getMeetingListTableName())){
+            String sql = "CREATE TABLE " + getMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key)";
+            db.createTable(sql);            
+        }
+        else{//populate table
+            
+        }
+            
     }
     
     public void addMeeting(Meeting meeting){
-        meetingList.add(meeting);
+        meetingList.add(meeting);        
     }
     
-    public void removeMeeting(String meeting){
+    public void removeMeeting(Meeting meeting){
         meetingList.remove(meeting);
     }
 
@@ -81,38 +94,58 @@ public class Room implements DataBaseInterface {
             this.meetingList = meetingList;
          }
     }
-      
+    
+    private Boolean addMeetingTable(Connection con, String meetingID){
+        try
+        {
+            PreparedStatement ps = con.prepareStatement(
+            "INSERT INTO " + this.meetingListTableName 
+                +"(RMEETING_ID) VALUES"
+                + "(?)");  
+
+             ps.setString(1,meetingID);
+
+            int i = ps.executeUpdate();
+            ps.close();   
+
+            if(i <= 0){
+            return false;
+            }
+            return true;         
+        }
+        catch(SQLException err){
+            //System.out.println(err.getMessage());
+            //ignore duplicate excetions
+        }
+        return false;
+    }
+
+     
   
     @Override
     public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{   
      Room room = (Room)obj;
         PreparedStatement ps = con.prepareStatement(
         "INSERT INTO ROOMS" 
-            +"(ROOM_NUMBER, DESCRIPTION, MAX_OCCUPANCY, MEETING_ID_LIST) VALUES"
-            + "(?,?,?,?)");       
-        
-        
-        
-        
-            
-        LinkedList<String> meetingIDList = new LinkedList<>();
+            +"(ROOM_NUMBER, DESCRIPTION, MAX_OCCUPANCY) VALUES"
+            + "(?,?,?)");       
         
         ListIterator<Meeting> it;
         it = meetingList.listIterator();
         while(it.hasNext()){
-            meetingIDList.add(it.next().getMeetingID());
+            addMeetingTable(con, it.next().getMeetingID());
         }
         
         // set the preparedstatement parameters
         ps.setInt(1, room.getRoomNumber());
         ps.setString(2,room.getDescription());
         ps.setInt(3,room.getMaxOccupancy());
-        ps.setString(4, listToString(meetingIDList));
         
-
+        
         // call executeUpdate to execute our sql update statement
         ps.executeUpdate();
-        ps.close();          
+        ps.close();     
+        
     }
     
     @Override
@@ -126,19 +159,16 @@ public class Room implements DataBaseInterface {
     public Boolean updateObject(DataBaseInterface obj, Connection con)throws SQLException{
         Room room = (Room)obj;
         PreparedStatement ps = con.prepareStatement(
-        "UPDATE ROOMS SET DESCRIPTION = ?, MAX_OCCUPANCY = ?, MEETING_ID_LIST = ? WHERE ROOM_NUMBER = ?");
+        "UPDATE ROOMS SET DESCRIPTION = ?, MAX_OCCUPANCY = ? WHERE ROOM_NUMBER = ?");
 
         ListIterator<Meeting> it;
-            
-        LinkedList<String> meetingIDList = new LinkedList<>();
         it = meetingList.listIterator();
         while(it.hasNext()){
-            meetingIDList.add(it.next().getMeetingID());
+            addMeetingTable(con, it.next().getMeetingID());
         }
         // set the preparedstatement parameters
         ps.setString(1,room.getDescription());
-        ps.setInt(2,room.getMaxOccupancy());
-        ps.setString(3, listToString(meetingIDList));
+        ps.setInt(2,room.getMaxOccupancy());        
         ps.setInt(4,room.getRoomNumber());
 
         // call executeUpdate to execute our sql update statement
@@ -150,6 +180,14 @@ public class Room implements DataBaseInterface {
         return false;
         }
         return true;
+    }
+
+    public String getMeetingListTableName() {
+        return meetingListTableName;
+    }
+
+    public void setMeetingListTableName(String meetingListTableName) {
+        this.meetingListTableName = meetingListTableName;
     }
     
 }

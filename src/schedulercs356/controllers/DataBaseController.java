@@ -9,6 +9,7 @@ import java.lang.reflect.Array;
 import java.util.LinkedList;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -149,7 +150,34 @@ public class DataBaseController {
         }
         return true;
     }
+    
+    public Boolean doesTableExsist(String name){
         
+        try{
+            DatabaseMetaData dbmd = con.getMetaData();
+            ResultSet rs = dbmd.getTables(null, "ROOT", name.toUpperCase(), null);
+            if (rs.next()) {
+                return true;
+            }
+        }
+        catch(SQLException err){
+            System.out.println(err.getMessage());
+        }
+        return false;
+    }
+        
+    
+    public void createTable(String sql){
+        try{
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(sql);
+        }
+        catch(SQLException err){
+            System.out.println(err.getMessage());
+        }
+    }
+    
+    
     /*********************************************************
      * 
      * none object calls for Room, Account, Schedule, Meeting
@@ -162,23 +190,27 @@ public class DataBaseController {
     public Room parseRoom(ResultSet rs){        
         try
         {
-            
             Integer roomid = rs.getInt("ROOM_NUMBER");
             String description = rs.getString("DESCRIPTION");
             Integer max = rs.getInt("MAX_OCCUPANCY");
-            String meetingStringList = rs.getString("MEETING_ID_LIST");
-
-            LinkedList<String> lls = new LinkedList<>();
-            lls = stringToList(meetingStringList);
-            
-            ListIterator<String> it;
             
             LinkedList<Meeting> meetingList = new LinkedList<>();
-            it = lls.listIterator();
-            while(it.hasNext()){
-                meetingList.add(getMeeting(it.next()));
-            }
             
+            try{
+                Statement stmt = con.createStatement();
+                String sql = "SELECT * FROM " + Room.queryMeetingTable + roomid.toString();
+                ResultSet rsMeetingList = stmt.executeQuery("sql");
+
+                while(rsMeetingList.next()){
+                    meetingList.add(getMeeting(rsMeetingList.getString("MEETING_ID")));
+                }
+            }
+            catch(SQLException err){
+                //throws exception if table has never been created can ignore
+                //just use empty meeting list
+            }
+                
+
             Room newRoom = new Room(max,description,roomid,meetingList);
             return newRoom; 
 

@@ -43,13 +43,14 @@ public class Meeting implements DataBaseInterface{
     
     public Meeting(String meetingID, Schedule schedule, Room room, 
             LinkedList<Account> invitedList, LinkedList<Account> acceptedList,
-            LinkedList<Account> rejectedList){
+            LinkedList<Account> rejectedList, Integer ownerID){
         this.setMeetingID(meetingID);
         this.setSchedule(schedule);
         this.setRoom(room);
         this.setInvitedList(invitedList);
         this.setAcceptedList(acceptedList);
         this.setRejectedList(rejectedList);
+        this.setOwnerID(ownerID);
     }
 
     public String getMeetingID() {
@@ -185,6 +186,25 @@ public class Meeting implements DataBaseInterface{
     @Override
     public Boolean updateObject(DataBaseInterface obj, Connection con)throws SQLException{
         Meeting meeting = (Meeting)obj;
+        
+        
+        //update invited list for each account
+        ListIterator<Account> itAccount;
+        
+        itAccount = invitedList.listIterator();//check if people need new invited
+        while(itAccount.hasNext()){
+            //ad meeting to invited list
+            Account tempAccount = itAccount.next();
+
+                LinkedList<Meeting> meetingInviteList  = tempAccount.getInvitedMeetingList();
+                meetingInviteList.add(this);    
+
+                tempAccount.setInvitedMeetingList(meetingInviteList);
+
+                //update account
+                DataBaseController dbController = new DataBaseController();
+                dbController.updateObject(tempAccount);            
+        }
         
         LinkedList<String> invitedStringList = new LinkedList<>();
         LinkedList<String> acceptedStringList = new LinkedList<>();

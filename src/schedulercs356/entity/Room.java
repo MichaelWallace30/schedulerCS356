@@ -27,7 +27,7 @@ public class Room implements DataBaseInterface {
     private Integer roomNumber;
     private LinkedList<Meeting> meetingList;
     private String meetingListTableName;
-    public static String queryMeetingTable = "ROOM_MEETING_TABLE_LIST_ROOM_NUMBER_";
+    public static String queryRoomMeetingTable = "ROOM_MEETING_TABLE_LIST_ROOM_NUMBER_";
     
     
     public Room(int maxOccupancy, String description, Integer roomNumber, LinkedList<Meeting> meetingList){
@@ -35,7 +35,7 @@ public class Room implements DataBaseInterface {
         this.setDescription(description);
         this.setRoomNumber(roomNumber);
         this.setMeetingList(meetingList);
-        this.setMeetingListTableName(this.queryMeetingTable + getRoomNumber().toString());
+        this.setMeetingListTableName(this.queryRoomMeetingTable + getRoomNumber().toString());
         
         //create table if dne
         DataBaseController db = new DataBaseController();
@@ -46,6 +46,8 @@ public class Room implements DataBaseInterface {
         else{//populate table
             
         }
+        
+        
             
     }
     
@@ -100,7 +102,7 @@ public class Room implements DataBaseInterface {
         {
             PreparedStatement ps = con.prepareStatement(
             "INSERT INTO " + this.meetingListTableName 
-                +"(RMEETING_ID) VALUES"
+                +"(MEETING_ID) VALUES"
                 + "(?)");  
 
              ps.setString(1,meetingID);
@@ -182,7 +184,7 @@ public class Room implements DataBaseInterface {
         return true;
     }
 
-    public String getMeetingListTableName() {
+     String getMeetingListTableName() {
         return meetingListTableName;
     }
 

@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -155,18 +156,18 @@ public class DataBaseController {
         
         try{
             DatabaseMetaData dbmd = con.getMetaData();
-            ResultSet rs = dbmd.getTables(null, "ROOT", name.toUpperCase(), null);
+            ResultSet rs = dbmd.getTables(null, "ROOT", name, null);
             if (rs.next()) {
                 return true;
             }
         }
         catch(SQLException err){
-            System.out.println(err.getMessage());
+           // System.out.println(err.getMessage());
         }
         return false;
     }
         
-    
+    //called in entiy class
     public void createTable(String sql){
         try{
             Statement stmt = con.createStatement();
@@ -176,6 +177,27 @@ public class DataBaseController {
             System.out.println(err.getMessage());
         }
     }
+    
+    public void parseMeetingList(String sqlTable, LinkedList<Meeting> meetingList){
+         try{
+                Statement stmt = con.createStatement();
+                String sql = "SELECT * FROM " + sqlTable;
+                ResultSet rsMeetingList = stmt.executeQuery(sql);
+
+                while(rsMeetingList.next()){
+                    String temp = rsMeetingList.getString("MEETING_ID");
+                    Meeting meeting = getMeeting(temp);
+                    meetingList.add(meeting);
+                }
+            }
+            catch(SQLException err){
+                //throws exception if table has never been created can ignore
+                //just use empty meeting list
+                System.out.println(err.getMessage());
+            }
+    }
+    
+    
     
     
     /*********************************************************
@@ -195,21 +217,8 @@ public class DataBaseController {
             Integer max = rs.getInt("MAX_OCCUPANCY");
             
             LinkedList<Meeting> meetingList = new LinkedList<>();
-            
-            try{
-                Statement stmt = con.createStatement();
-                String sql = "SELECT * FROM " + Room.queryMeetingTable + roomid.toString();
-                ResultSet rsMeetingList = stmt.executeQuery("sql");
-
-                while(rsMeetingList.next()){
-                    meetingList.add(getMeeting(rsMeetingList.getString("MEETING_ID")));
-                }
-            }
-            catch(SQLException err){
-                //throws exception if table has never been created can ignore
-                //just use empty meeting list
-            }
-                
+                        
+            parseMeetingList(Room.queryRoomMeetingTable + roomid.toString(),meetingList);                
 
             Room newRoom = new Room(max,description,roomid,meetingList);
             return newRoom; 
@@ -304,12 +313,15 @@ public class DataBaseController {
     public Schedule getSchedule(String objID){         
         try
         {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM SCHEDULE WHERE OWNER_ID =" + objID);
-                if(rs.next())
-                {
-                   return parseSchedule(rs);
-                } 
+            
+            String sql = "SELECT * FROM SCHEDULE WHERE OWNER_ID = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, objID);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next())
+            {
+               return parseSchedule(rs);
+            } 
         }        
         catch(SQLException err)
         {
@@ -332,24 +344,13 @@ public class DataBaseController {
             String userName = rs.getString("USER_NAME");
             int password = rs.getInt("PASSWORD");
             String address = rs.getString("ADDRESS");
-            int id = rs.getInt("ID");
-            LinkedList<String> meetingIDList = stringToList(rs.getString("MEETING_ID_LIST"));
-            LinkedList<String> invitedMeetingIDList = stringToList(rs.getString("INVITED_MEETING_ID_LIST"));
-            
-            
-            ListIterator<String> it;
+            Integer id = rs.getInt("ID");
             
             LinkedList<Meeting> meetingList = new LinkedList<>();
-            it = meetingIDList.listIterator();
-            while(it.hasNext()){
-                meetingList.add(getMeeting(it.next()));
-            }
-        
             LinkedList<Meeting> invitedMeetingList = new LinkedList<>();
-            it = invitedMeetingIDList.listIterator();
-            while(it.hasNext()){
-                invitedMeetingList.add(getMeeting(it.next()));
-            }
+            
+            parseMeetingList(Account.queryAccountInvitedMeetingTable + id.toString(), invitedMeetingList);
+            parseMeetingList(Account.queryAccountMeetingTable + id.toString(), meetingList);
             
             Account account = new Account(firstName, lastName, address, id, userName, password, employee, admin, meetingList, invitedMeetingList);
             return account; 
@@ -385,6 +386,7 @@ public class DataBaseController {
     public Account getAccount(Integer objID){         
         try
         {
+            
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM EMPLOYEES WHERE ID =" + objID);
                 if(rs.next())
@@ -476,7 +478,7 @@ public Meeting parseMeeting(ResultSet rs){
             
             Schedule schedule = getSchedule(meetingID);
             
-            Meeting meeting = new Meeting(meetingID, schedule, room, invitedList, acceptedList, rejectedList);
+            Meeting meeting = new Meeting(meetingID, schedule, room, invitedList, acceptedList, rejectedList, ownerID);
             return meeting; 
 
         }
@@ -509,9 +511,11 @@ public Meeting parseMeeting(ResultSet rs){
     
     public Meeting getMeeting(String objID){         
         try
-        {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM MEETING WHERE ID =" + objID);
+        {            
+            String sql = "SELECT * FROM MEETING WHERE ID = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, objID);
+            ResultSet rs = ps.executeQuery();
                 if(rs.next())
                 {
                    return parseMeeting(rs);

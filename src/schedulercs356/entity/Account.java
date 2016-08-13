@@ -33,13 +33,19 @@ public class Account implements DataBaseInterface {
     private int password;        
     private String address;
     private int id;
-    private LinkedList<Meeting> meetingList;
+    
     private LinkedList<Meeting> invitedMeetingList;
+    private String invitedMeetingListTableName;
+    public static String queryAccountInvitedMeetingTable = "ACCOUNT_INVITED_MEETING_TABLE_LIST_ACCOUNT_ID_";
+    
+    private LinkedList<Meeting> meetingList;
+    private String meetingListTableName;
+    public static String queryAccountMeetingTable = "ACCOUNT_MEETING_TABLE_LIST_ACCOUNT_ID_";
 
     
     //non hashed password as string
     public Account(String firstName, String lastName, String address,
-            int id, String userName, String password,            
+            Integer id, String userName, String password,            
             Boolean employee, Boolean admin,
             LinkedList<Meeting> meetingList, LinkedList<Meeting> invitedMeetingList){
         
@@ -57,6 +63,26 @@ public class Account implements DataBaseInterface {
         this.setMeetingList(meetingList);
         this.setInvitedMeetingList(invitedMeetingList);
         
+        this.setAccountInvitedMeetingListTableName(queryAccountInvitedMeetingTable + getId());
+        this.setMeetingListTableName(queryAccountMeetingTable  + getId());
+        
+        //create table if dne for meeting list
+        DataBaseController db = new DataBaseController();
+        if(!db.doesTableExsist(getMeetingListTableName())){
+            String sql = "CREATE TABLE " + getMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key)";
+            db.createTable(sql);            
+        }
+        else{
+            //ignore exception table already exsist
+        }        
+        //create table if dne for invited list
+        if(!db.doesTableExsist(getInvitedMeetingListTableName())){
+            String sql = "CREATE TABLE " + getInvitedMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key)";
+            db.createTable(sql);            
+        }
+        else{
+            //ignore exception table already exsist
+        }
     }
 
     //hashed password as int
@@ -78,6 +104,27 @@ public class Account implements DataBaseInterface {
         
         this.setMeetingList(meetingList);
         this.setInvitedMeetingList(invitedMeetingList);
+        
+        this.setAccountInvitedMeetingListTableName(queryAccountInvitedMeetingTable  + getId());
+        this.setMeetingListTableName(queryAccountMeetingTable  + getId());
+
+        //create table if dne for meeting list
+        DataBaseController db = new DataBaseController();
+        if(!db.doesTableExsist(this.getMeetingListTableName())){
+            String sql = "CREATE TABLE " + getMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key)";
+            db.createTable(sql);            
+        }
+        else{
+            //ignore exception table already exsist
+        }        
+        //create table if dne for invited list
+        if(!db.doesTableExsist(this.getInvitedMeetingListTableName())){
+            String sql = "CREATE TABLE " + getInvitedMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key)";
+            db.createTable(sql);            
+        }
+        else{
+            //ignore exception table already exsist
+        }
         
     }
     public Boolean isAdmin() {
@@ -167,6 +214,58 @@ public class Account implements DataBaseInterface {
     public void setInvitedMeetingList(LinkedList<Meeting> invitedMeetingList) {
         this.invitedMeetingList = invitedMeetingList;
     }
+        public String getAccountInvitedMeetingListTableName() {
+        return getInvitedMeetingListTableName();
+    }
+
+    public void setAccountInvitedMeetingListTableName(String accountInvitedMeetingListTableName) {
+        this.setInvitedMeetingListTableName(accountInvitedMeetingListTableName);
+    }
+
+    public String getMeetingListTableName() {
+        return meetingListTableName;
+    }
+
+    public void setMeetingListTableName(String accountMeetingListTableName) {
+        this.meetingListTableName = accountMeetingListTableName;
+    }
+
+    public String getInvitedMeetingListTableName() {
+        return invitedMeetingListTableName;
+    }
+
+    public void setInvitedMeetingListTableName(String invitedMeetingListTableName) {
+        this.invitedMeetingListTableName = invitedMeetingListTableName;
+    }
+
+    
+    private Boolean addMeetingTable(Connection con, String meetingID, String listName){
+        try
+        {
+            PreparedStatement ps = con.prepareStatement(
+            "INSERT INTO " + listName 
+                +"(MEETING_ID) VALUES"
+                + "(?)");  
+
+            ps.setString(1,meetingID);
+
+            int i = ps.executeUpdate();
+            ps.close();   
+
+            if(i <= 0){
+            return false;
+            }
+            return true;         
+        }
+        catch(SQLException err){
+            //System.out.println(err.getMessage());
+            //ignore duplicate excetions
+        }
+        return false;
+    }
+    
+    
+    
     @Override
     public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{
         Account account = (Account)obj; 
@@ -187,35 +286,30 @@ public class Account implements DataBaseInterface {
         
         PreparedStatement ps = con.prepareStatement(
         "INSERT INTO EMPLOYEES" 
-            +"(ID, USER_NAME, PASSWORD, FIRST_NAME, LAST_NAME, ADMIN, MEETING_ID_LIST, EMPLOYEE, ADDRESS, INVITED_MEETING_ID_LIST) VALUES"
-            + "(?,?,?,?,?,?,?,?, ?,?)");
+            +"(ID, USER_NAME, PASSWORD, FIRST_NAME, LAST_NAME, ADMIN, EMPLOYEE, ADDRESS) VALUES"
+            + "(?,?,?,?,?,?,?,?)");
  
-
         ListIterator<Meeting> it;
-            
-        LinkedList<String> meetingIDList = new LinkedList<>();
         it = meetingList.listIterator();
         while(it.hasNext()){
-            meetingIDList.add(it.next().getMeetingID());
+            addMeetingTable(con, it.next().getMeetingID(), meetingListTableName);
         }
         
-        LinkedList<String> invitedMeetingIDList = new LinkedList<>();
         it = invitedMeetingList.listIterator();
         while(it.hasNext()){
-            invitedMeetingIDList.add(it.next().getMeetingID());
+            addMeetingTable(con, it.next().getMeetingID(), invitedMeetingListTableName);
         }
-        
+
         // set the preparedstatement parameters
         ps.setInt(1,account.getId());
         ps.setString(2, account.getUserName());
         ps.setInt(3, account.getPassword());
         ps.setString(4,account.getFirstName());
         ps.setString(5,account.getLastName());
-        ps.setBoolean(6, account.isAdmin());
-        ps.setString(7,DataBaseController.listToString(meetingIDList));
-        ps.setBoolean(8, account.isEmployee());
-        ps.setString(9, account.getAddress());
-        ps.setString(10, DataBaseController.listToString(invitedMeetingIDList));
+        ps.setBoolean(6, account.isAdmin());        
+        ps.setBoolean(7, account.isEmployee());
+        ps.setString(8, account.getAddress());
+        
 
         // call executeUpdate to execute our sql update statement
         ps.executeUpdate();
@@ -234,19 +328,18 @@ public class Account implements DataBaseInterface {
         Account account = (Account)obj; 
         PreparedStatement ps = con.prepareStatement(
         "UPDATE EMPLOYEES SET  USER_NAME = ?, PASSWORD = ?, FIRST_NAME = ?, "
-                + "LAST_NAME = ?, ADMIN = ?, MEETING_ID_LIST = ?, EMPLOYEE = ?, ADDRESS = ?,INVITED_MEETING_ID_LIST =? WHERE ID = ?");
+                + "LAST_NAME = ?, ADMIN = ?, EMPLOYEE = ?, ADDRESS = ? WHERE ID = ?");
         
         ListIterator<Meeting> it;
-            
-        LinkedList<String> meetingIDList = new LinkedList<>();
-        meetingList.stream().forEach((meeting) -> {
-          meetingIDList.add(meeting.getMeetingID());
-        });
+        it = meetingList.listIterator();
+        while(it.hasNext()){
+            addMeetingTable(con, it.next().getMeetingID(), meetingListTableName);
+        }
         
-        LinkedList<String> invitedMeetingIDList = new LinkedList<>();
-        invitedMeetingList.stream().forEach((meeting) -> {
-          invitedMeetingIDList.add(meeting.getMeetingID());
-        });
+        it = invitedMeetingList.listIterator();
+        while(it.hasNext()){
+            addMeetingTable(con, it.next().getMeetingID(), invitedMeetingListTableName);
+        }
 
         // set the preparedstatement parameters
         ps.setString(1, account.getUserName());
@@ -254,11 +347,9 @@ public class Account implements DataBaseInterface {
         ps.setString(3,account.getFirstName());
         ps.setString(4,account.getLastName());
         ps.setBoolean(5, account.isAdmin());
-        ps.setString(6,DataBaseController.listToString(meetingIDList));
-        ps.setBoolean(7, account.isEmployee());
-        ps.setString(8, account.getAddress());
-        ps.setString(9, DataBaseController.listToString(invitedMeetingIDList));
-        ps.setInt(10, account.getId());
+        ps.setBoolean(6, account.isEmployee());
+        ps.setString(7, account.getAddress());
+        ps.setInt(8, account.getId());
 
         // call executeUpdate to execute our sql update statement
         int i = ps.executeUpdate();
@@ -269,6 +360,4 @@ public class Account implements DataBaseInterface {
         }
         return true;
     }  
-
-
 }

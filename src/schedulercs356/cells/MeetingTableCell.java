@@ -30,6 +30,8 @@ public class MeetingTableCell {
       + " - " + meeting.getSchedule().getEndDateTime().toString());
     meetingID = new SimpleStringProperty(meeting.getMeetingID());   
     numberOfAttendees = new SimpleIntegerProperty(meeting.getAcceptedList().size());
+    Integer test = meeting.getOwnerID();
+    Integer test2 = account.getId();
     isHosting = new SimpleBooleanProperty((meeting.getOwnerID() == account.getId()));
   }
 }

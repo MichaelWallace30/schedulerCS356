@@ -70,42 +70,7 @@ public class DataBaseController {
         return -1;
     }    
     
-    
-     /*********************************************************
-     * 
-     * Database conversion of list to strings
-     * 
-     **********************************************************/
-    static public String listToString(LinkedList<String> list){
-        String newString = new String();
-        
-        
-        while(list != null && !list.isEmpty())
-        {
-            newString += list.remove();
-            if(!list.isEmpty())newString += ":;:";
-        }        
-        return newString;        
-    }
-    
-    static public LinkedList<String> stringToList(String stringArray){
-        String newString = "";
-        
-        LinkedList<String> newList = new LinkedList<>();  
-        
-        if(stringArray != null){
-            String strArr[] = stringArray.split(":;:");
-
-            for(int x = 0; x < Array.getLength(strArr); x++)
-            {
-                newList.add(strArr[x]);
-            }
-        }
-        
-        return newList;
-    }
-
-     /*********************************************************
+        /*********************************************************
      * 
      * Object calls for Room, Account, Schedule, Meeting
      * 
@@ -155,6 +120,7 @@ public class DataBaseController {
     public Boolean doesTableExsist(String name){
         
         try{
+            name = name.toUpperCase();
             DatabaseMetaData dbmd = con.getMetaData();
             ResultSet rs = dbmd.getTables(null, "ROOT", name, null);
             if (rs.next()) {
@@ -188,6 +154,25 @@ public class DataBaseController {
                     String temp = rsMeetingList.getString("MEETING_ID");
                     Meeting meeting = getMeeting(temp);
                     meetingList.add(meeting);
+                }
+            }
+            catch(SQLException err){
+                //throws exception if table has never been created can ignore
+                //just use empty meeting list
+                System.out.println(err.getMessage());
+            }
+    }
+    
+    public void parseAccountList(String sqlTable, LinkedList<Account> accountList){
+         try{
+                Statement stmt = con.createStatement();
+                String sql = "SELECT * FROM " + sqlTable;
+                ResultSet rsAccountList = stmt.executeQuery(sql);
+
+                while(rsAccountList.next()){
+                    Integer temp = rsAccountList.getInt("ACCOUNT_ID");
+                    Account account = getAccount(temp);
+                    accountList.add(account);
                 }
             }
             catch(SQLException err){
@@ -443,42 +428,23 @@ public Meeting parseMeeting(ResultSet rs){
         try
         {
             String meetingID = rs.getString("ID");
-            Integer roomID = rs.getInt("ROOM_ID");
-            String invitedString = rs.getString("INVITED_LIST");
-            String acceptedString = rs.getString("ACCEPTED_LIST");
-            String rejectedString = rs.getString("REJECTED_LIST");
+            Integer roomID = rs.getInt("ROOM_ID");            
             Integer ownerID = rs.getInt("OWNER_ID");
                         
-            LinkedList<String> invitedStringList = stringToList(invitedString);
-            LinkedList<String> acceptedStringList = stringToList(acceptedString);
-            LinkedList<String> rejectedStringList = stringToList(rejectedString);
+            LinkedList<Account> invitedMeetingList = new LinkedList<>();
+            LinkedList<Account> rejectedMeetingList = new LinkedList<>();
+            LinkedList<Account> acceptedMeetingList = new LinkedList<>();
             
-            LinkedList<Account> invitedList = new LinkedList<>();
-            LinkedList<Account> acceptedList = new LinkedList<>();
-            LinkedList<Account> rejectedList = new LinkedList<>();
-                               
-            ListIterator<String> it;
+            parseAccountList(Meeting.queryMeetingAcceptedAccountTable + meetingID, acceptedMeetingList);
+            parseAccountList(Meeting.queryMeetingInvitedTable + meetingID, invitedMeetingList);
+            parseAccountList(Meeting.queryMeetingRejectedAccountTable + meetingID, rejectedMeetingList);
             
-            it = invitedStringList.listIterator();
-            while(it.hasNext()){
-                invitedList.add(getAccount(Integer.parseInt(it.next())));
-            }
-
-            it = acceptedStringList.listIterator();
-            while(it.hasNext()){
-                acceptedList.add(getAccount(Integer.parseInt(it.next())));
-            }
-            
-            it = rejectedStringList.listIterator();
-            while(it.hasNext()){
-                rejectedList.add(getAccount(Integer.parseInt(it.next())));
-            }
             
             Room room = getRoom(roomID);
             
             Schedule schedule = getSchedule(meetingID);
             
-            Meeting meeting = new Meeting(meetingID, schedule, room, invitedList, acceptedList, rejectedList, ownerID);
+            Meeting meeting = new Meeting(meetingID, schedule, room, invitedMeetingList, acceptedMeetingList, rejectedMeetingList, ownerID);
             return meeting; 
 
         }

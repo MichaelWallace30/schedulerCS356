@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 Sun Aug 14 15:16:55 PDT 2016 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
 Sun Aug 14 15:17:38 PDT 2016:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0156-8b20-edc2-000025a224b2 
 on database directory C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
 Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_101/db/lib/derby.jar
+=======
+Sun Aug 14 12:09:12 PDT 2016 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
+----------------------------------------------------------------
+Sun Aug 14 12:09:14 PDT 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0156-8a75-3547-00003fbb59f8 
+on database directory D:\Users\Bender\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_91/db/lib/derby.jar
+>>>>>>> 1863f37d547878cb9e8c88c540fe3b36aa9714e9
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_20-b26
 user.dir=C:\Program Files\Java\jdk1.8.0_101\db
@@ -13,8 +22,15 @@ os.version=6.3
 derby.system.home=C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db
 Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
+<<<<<<< HEAD
 Sun Aug 14 15:23:30 PDT 2016: Shutting down Derby engine
 ----------------------------------------------------------------
 Sun Aug 14 15:23:30 PDT 2016:
 Shutting down instance a816c00e-0156-8b20-edc2-000025a224b2 on database directory C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+=======
+Sun Aug 14 12:09:32 PDT 2016: Shutting down Derby engine
+----------------------------------------------------------------
+Sun Aug 14 12:09:32 PDT 2016:
+Shutting down instance a816c00e-0156-8a75-3547-00003fbb59f8 on database directory D:\Users\Bender\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+>>>>>>> 1863f37d547878cb9e8c88c540fe3b36aa9714e9
 ----------------------------------------------------------------

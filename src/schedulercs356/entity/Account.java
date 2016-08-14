@@ -263,9 +263,7 @@ public class Account implements DataBaseInterface {
         }
         return false;
     }
-    
-    
-    
+
     @Override
     public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{
         Account account = (Account)obj; 
@@ -321,8 +319,14 @@ public class Account implements DataBaseInterface {
     public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
         Account account = (Account)obj; 
         stmt.executeUpdate("DELETE FROM EMPLOYEES " + "WHERE ID = " +  account.getId());
+          
+        String sql = "DROP TABLE " + this.meetingListTableName;
+        stmt.executeUpdate(sql);
         
+        String sq2 = "DROP TABLE " + this.invitedMeetingListTableName;
+        stmt.executeUpdate(sq2);
     }  
+    
     @Override
     public Boolean updateObject(DataBaseInterface obj,  Connection con)throws SQLException{
         Account account = (Account)obj; 

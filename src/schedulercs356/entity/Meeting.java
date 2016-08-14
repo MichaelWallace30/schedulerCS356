@@ -32,13 +32,63 @@ public class Meeting implements DataBaseInterface{
     //Object variables
     private Schedule schedule;
     private Room room;
+    
     private LinkedList<Account> invitedList;
+    private String invitedMeetingListTableName;
+    public static String queryMeetingInvitedTable ="MEETING_INVITED_ACCOUNT_TABLE_LIST_MEETING_ID_";    
+    
     private LinkedList<Account> acceptedList;
+    private String acceptedMeetingListTableName;
+    public static String queryMeetingAcceptedAccountTable ="MEETING_ACCEPTED_ACCOUNT_TABLE_LIST_MEETING_ID_";    
+    
     private LinkedList<Account> rejectedList;
+    private String rejectedMeetingListTableName;
+    public static String queryMeetingRejectedAccountTable ="MEETING_REJECTED_ACCOUNT_TABLE_LIST_MEETING_ID_";    
+    
     private Integer ownerID;
     
+    
+    private static String CREATE_TABLE_SQL = "(ACCOUNT_ID INTEGER primary key)";
+    
     public Meeting() {
-        setMeetingID(UUID.randomUUID().toString());
+        
+        String meetingID = UUID.randomUUID().toString();
+        //table name can't have '-' in it
+        meetingID.replace("-", "");
+        setMeetingID(meetingID);
+                
+        setAcceptedMeetingListTableName(queryMeetingAcceptedAccountTable + getMeetingID());
+        setInvitedMeetingListTableName(queryMeetingInvitedTable + getMeetingID());
+        setRejectedMeetingListTableName(queryMeetingRejectedAccountTable + getMeetingID());
+        
+        //create table if dne for meeting list
+        DataBaseController db = new DataBaseController();
+        if(!db.doesTableExsist(getAcceptedMeetingListTableName())){
+            String sql = "CREATE TABLE " + getAcceptedMeetingListTableName() +CREATE_TABLE_SQL;
+            db.createTable(sql);            
+        }
+        else{
+            //ignore exception table already exsist
+        }        
+        //create table if dne for invited list
+        if(!db.doesTableExsist(getInvitedMeetingListTableName())){
+            String sql = "CREATE TABLE " + getInvitedMeetingListTableName() +CREATE_TABLE_SQL;
+            db.createTable(sql);            
+        }
+        else{
+            //ignore exception table already exsist
+        }
+        
+        //create table if dne for invited list
+        if(!db.doesTableExsist(getRejectedMeetingListTableName())){
+            String sql = "CREATE TABLE " + getRejectedMeetingListTableName() +CREATE_TABLE_SQL;
+            db.createTable(sql);            
+        }
+        else{
+            //ignore exception table already exsist
+        }
+        
+        
     }
     
     public Meeting(String meetingID, Schedule schedule, Room room, 
@@ -51,6 +101,37 @@ public class Meeting implements DataBaseInterface{
         this.setAcceptedList(acceptedList);
         this.setRejectedList(rejectedList);
         this.setOwnerID(ownerID);
+                        
+        setAcceptedMeetingListTableName(queryMeetingAcceptedAccountTable + getMeetingID());
+        setInvitedMeetingListTableName(queryMeetingInvitedTable + getMeetingID());
+        setRejectedMeetingListTableName(queryMeetingRejectedAccountTable + getMeetingID());
+        
+         //create table if dne for meeting list
+        DataBaseController db = new DataBaseController();
+        if(!db.doesTableExsist(getAcceptedMeetingListTableName())){          
+            String sql = "CREATE TABLE " + getAcceptedMeetingListTableName() + CREATE_TABLE_SQL;
+            db.createTable(sql);            
+        }
+        //create table if dne for invited list
+        if(!db.doesTableExsist(getInvitedMeetingListTableName())){
+            String sql = "CREATE TABLE " + getInvitedMeetingListTableName() +CREATE_TABLE_SQL;
+            db.createTable(sql);            
+        }
+        else{
+            //ignore exception table already exsist
+        }
+        
+        //create table if dne for invited list
+        if(!db.doesTableExsist(getRejectedMeetingListTableName())){
+            String sql = "CREATE TABLE " + getRejectedMeetingListTableName() +CREATE_TABLE_SQL;
+            db.createTable(sql);            
+        }
+        else{
+            //ignore exception table already exsist
+        }
+        
+        
+        
     }
 
     public String getMeetingID() {
@@ -109,6 +190,57 @@ public class Meeting implements DataBaseInterface{
         this.ownerID = ownerID;
     }
     
+        public String getInvitedMeetingListTableName() {
+        return invitedMeetingListTableName;
+    }
+
+    public void setInvitedMeetingListTableName(String invitedMeetingListTableName) {
+        this.invitedMeetingListTableName = invitedMeetingListTableName;
+    }
+
+    public String getAcceptedMeetingListTableName() {
+        return acceptedMeetingListTableName;
+    }
+
+    public void setAcceptedMeetingListTableName(String acceptedMeetingListTableName) {
+        this.acceptedMeetingListTableName = acceptedMeetingListTableName;
+    }
+
+    public String getRejectedMeetingListTableName() {
+        return rejectedMeetingListTableName;
+    }
+
+    public void setRejectedMeetingListTableName(String rejectedMeetingListTableName) {
+        this.rejectedMeetingListTableName = rejectedMeetingListTableName;
+    }
+    
+        
+    private Boolean addAccountTable(Connection con, Integer accountID, String listName){
+        try
+        {
+            PreparedStatement ps = con.prepareStatement(
+            "INSERT INTO " + listName 
+                +"(MEETING_ID) VALUES"
+                + "(?)");  
+
+            ps.setInt(1,accountID);
+
+            int i = ps.executeUpdate();
+            ps.close();   
+
+            if(i <= 0){
+            return false;
+            }
+            return true;         
+        }
+        catch(SQLException err){
+            //System.out.println(err.getMessage());
+            //ignore duplicate excetions
+        }
+        return false;
+    }
+    
+    
      @Override
     public void addObject(DataBaseInterface obj,  Connection con)throws SQLException{   
         Meeting meeting = (Meeting)obj;
@@ -132,30 +264,27 @@ public class Meeting implements DataBaseInterface{
             dbController.updateObject(tempAccount);            
         }
 
-        LinkedList<String> invitedStringList = new LinkedList<>();
-        LinkedList<String> acceptedStringList = new LinkedList<>();
-        LinkedList<String> rejectedStringList = new LinkedList<>();
-        
         ListIterator<Account> it;
-
-        it = invitedList.listIterator();
-        while(it.hasNext()){
-            invitedStringList.add(Integer.toString(it.next().getId()));
-        }
-
         it = acceptedList.listIterator();
         while(it.hasNext()){
-            acceptedStringList.add(Integer.toString(it.next().getId()));
+            addAccountTable(con, it.next().getId(), acceptedMeetingListTableName);
         }
-         
+        
+        it = invitedList.listIterator();
+        while(it.hasNext()){
+            addAccountTable(con, it.next().getId(), invitedMeetingListTableName);
+        }
+        
         it = rejectedList.listIterator();
         while(it.hasNext()){
-            rejectedStringList.add(Integer.toString(it.next().getId()));
+            addAccountTable(con, it.next().getId(), rejectedMeetingListTableName);
         }
+        
+
          
         PreparedStatement ps = con.prepareStatement(
         "INSERT INTO MEETING" 
-            +"(ID, ROOM_ID,INVITED_LIST, ACCEPTED_LIST,REJECTED_LIST,OWNER_ID) VALUES"
+            +"(ID, ROOM_ID, OWNER_ID) VALUES"
             + "(?,?,?,?,?,?)");        
         
         // set the preparedstatement parameters
@@ -166,11 +295,8 @@ public class Meeting implements DataBaseInterface{
         } else {
           ps.setInt(2, 0);
         }
-        
-        ps.setString(3,DataBaseController.listToString(invitedStringList));
-        ps.setString(4,DataBaseController.listToString(acceptedStringList));
-        ps.setString(5,DataBaseController.listToString(rejectedStringList));
-        ps.setInt(6,meeting.getOwnerID());
+
+        ps.setInt(3,meeting.getOwnerID());
 
         // call executeUpdate to execute our sql update statement
         ps.executeUpdate();
@@ -181,6 +307,15 @@ public class Meeting implements DataBaseInterface{
     public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
         Meeting meeting = (Meeting)obj;
         stmt.executeUpdate("DELETE FROM MEETING " + " WHERE ID = " +  meeting.getMeetingID());
+        
+        String sql = "DROP TABLE " + this.acceptedMeetingListTableName;
+        stmt.executeUpdate(sql);
+        
+        String sq2 = "DROP TABLE " + this.invitedMeetingListTableName;
+        stmt.executeUpdate(sq2);
+        
+        String sq3 = "DROP TABLE " + this.rejectedMeetingListTableName;
+        stmt.executeUpdate(sq3);
     }
     
     @Override
@@ -206,36 +341,30 @@ public class Meeting implements DataBaseInterface{
                 dbController.updateObject(tempAccount);            
         }
         
-        LinkedList<String> invitedStringList = new LinkedList<>();
-        LinkedList<String> acceptedStringList = new LinkedList<>();
-        LinkedList<String> rejectedStringList = new LinkedList<>();
-        
         ListIterator<Account> it;
-
-        it = invitedList.listIterator();
-        while(it.hasNext()){
-            invitedStringList.add(Integer.toString(it.next().getId()));
-        }
-
         it = acceptedList.listIterator();
         while(it.hasNext()){
-            acceptedStringList.add(Integer.toString(it.next().getId()));
+            addAccountTable(con, it.next().getId(), acceptedMeetingListTableName);
         }
-         
+        
+        it = invitedList.listIterator();
+        while(it.hasNext()){
+            addAccountTable(con, it.next().getId(), invitedMeetingListTableName);
+        }
+        
         it = rejectedList.listIterator();
         while(it.hasNext()){
-            rejectedStringList.add(Integer.toString(it.next().getId()));
+            addAccountTable(con, it.next().getId(), rejectedMeetingListTableName);
         }
+        
+        
         PreparedStatement ps = con.prepareStatement(
-        "UPDATE MEETING SET ROOM_ID = ? ,INVITED_LIST = ?, ACCEPTED_LIST = ?,REJECTED_LIST = ?,OWNER_ID = ? WHERE ID = ?");
+        "UPDATE MEETING SET ROOM_ID = ? ,OWNER_ID = ? WHERE ID = ?");
           
         // set the preparedstatement parameters        
         ps.setInt(1,meeting.getRoom().getRoomNumber());
-        ps.setString(2,DataBaseController.listToString(invitedStringList));
-        ps.setString(3,DataBaseController.listToString(acceptedStringList));
-        ps.setString(4,DataBaseController.listToString(rejectedStringList));
-        ps.setInt(5,meeting.getOwnerID());
-        ps.setString(6, meeting.getMeetingID());
+        ps.setInt(2,meeting.getOwnerID());
+        ps.setString(3, meeting.getMeetingID());
         
         // call executeUpdate to execute our sql update statement
         int i = ps.executeUpdate();
@@ -246,5 +375,7 @@ public class Meeting implements DataBaseInterface{
         }
         return true;
     }
+
+
     
 }

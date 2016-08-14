@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import schedulercs356.controllers.DataBaseController;
-import static schedulercs356.controllers.DataBaseController.listToString;
+
 
 
 /**
@@ -155,6 +155,10 @@ public class Room implements DataBaseInterface {
         Room room = (Room)obj;
         stmt.executeUpdate("DELETE FROM ROOMS " + " WHERE ROOM_NUMBER = " +  room.getRoomNumber());
 
+        String sq2 = "DROP TABLE " + this.meetingListTableName;
+        stmt.executeUpdate(sq2);
+        
+        
     }
     
     @Override

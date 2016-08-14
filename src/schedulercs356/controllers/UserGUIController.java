@@ -250,6 +250,8 @@ public class UserGUIController implements Initializable {
   private TableColumn<RoomTableCell, Number> roomsMaxOccupancyColumn;
   @FXML
   private TableColumn<RoomTableCell, String> roomsDescriptionColumn;
+  @FXML
+  private TableColumn<MeetingTableCell, Number> meetingsRoomColumn;
 
   void Attending(ActionEvent event) {
 
@@ -328,8 +330,9 @@ public class UserGUIController implements Initializable {
   }
   
   
-  // Run this little guy on the thread...
-  // Houses the timer for the date.
+  /**
+   * Run the time on a thread.
+   */
   private void runTimeOnThread() {
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
       sidebarDate.setText(new Date().toString());
@@ -341,7 +344,8 @@ public class UserGUIController implements Initializable {
   
   
   /**
-   * 
+   * Adds meeting values into tables for Employees and 
+   * Employee Administrators.
    */
   private void addMeetingsToTables() {
       
@@ -364,7 +368,7 @@ public class UserGUIController implements Initializable {
   
   
   /**
-   * 
+   * Initialized the Meeting tables.
    */
   private void initializeMeetingTable() {
     meetingIdColumn.setCellValueFactory(cellData -> cellData.getValue().meetingID);
@@ -377,18 +381,22 @@ public class UserGUIController implements Initializable {
   
   
   /**
-   * 
+   * Initialize the Meeting tables with Users.
    */
   private void initializeUsersInMeetingTable() {
     usernameColumn.setCellValueFactory(cellData -> cellData.getValue().username);
     nameColumn.setCellValueFactory(cellData -> cellData.getValue().fullname);
     inviteStatusColumn.setCellValueFactory(cellData -> cellData.getValue().inviteStatus);
     contactNumberColumn.setCellValueFactory(cellData -> cellData.getValue().contact);
+    meetingsRoomColumn.setCellValueFactory(cellData -> cellData.getValue().roomNumber);
     
     usersInMeetingTable.setItems(accounts);
   }
   
   
+  /**
+   * Initialize Administrator tables.
+   */
   private void initializeAdminTables() {
     adminAccountIdColumn.setCellValueFactory(cellData -> cellData.getValue().accountId);
     adminUsernameColumn.setCellValueFactory(cellData -> cellData.getValue().username);
@@ -403,6 +411,9 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * Initialize Rooms in tables for both Administrator and Employee.
+   */
   private void initializeRoomsInTables() {
     adminRoomNumberColumn.setCellValueFactory(cellData -> cellData.getValue().roomNumber);
     adminMaxOccupancyColumn.setCellValueFactory(cellData -> cellData.getValue().maxOccupancy);
@@ -417,6 +428,9 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * Add rooms into the tables.
+   */
   private void addRoomsInTables() {
     List<Room> roomTempo = dbController.getAllRooms();
     
@@ -427,6 +441,9 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * Add accounts into the administrator table.
+   */
   private void addAccountsInAdminTable() {
     List<Account> accountTempo = dbController.getAllAccounts();
     
@@ -470,6 +487,10 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * Close the Window using the Menu Item Close.
+   * @param event 
+   */
   @FXML
   void onCloseMenuItem(ActionEvent event) {
     if (Platform.isImplicitExit()) {
@@ -478,6 +499,10 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * Log out of the account, in order to sign in as another user.
+   * @param event 
+   */
   @FXML
   void onLogoutMenuItem(ActionEvent event) {
     account = null;
@@ -498,10 +523,14 @@ public class UserGUIController implements Initializable {
   }
 
   
+  /**
+   * Allows the user to add an employee into the database. Administrative 
+   * privileges only!.
+   * @param event 
+   */
   @FXML
   private void onAdminCreateEmployeeButton(ActionEvent event) {
     try {
-      // TODO(Garcia): Figure out how to pass info back to this.
       LoginAccountBundle bundle = new LoginAccountBundle();
       bundle.setAccount(account);
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/CreateNewUser.fxml"),
@@ -537,6 +566,10 @@ public class UserGUIController implements Initializable {
   }
 
   
+  /**
+   * Allows user to reset an employee password! Administrative privileges only!
+   * @param event 
+   */
   @FXML
   private void onAdminResetEmployeePassword(ActionEvent event) {
     // Still need this mofo.
@@ -585,6 +618,11 @@ public class UserGUIController implements Initializable {
   }
 
   
+  /**
+   * Allows user to remove an employee from the data base. Administrative 
+   * privileges only!
+   * @param event 
+   */
   @FXML
   private void onAdminRemoveEmployee(ActionEvent event) {
     AccountAdminTableCell cell = adminAccountsTable.getSelectionModel().getSelectedItem();
@@ -633,12 +671,20 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * Add an account in the list of adminEnabledAccounts.
+   * @param newAccount 
+   */
   private void addAccountToAdminList(Account newAccount) {
     AccountAdminTableCell cell = new AccountAdminTableCell(newAccount);
     adminEnabledAccounts.add(cell);
   }
 
   
+  /**
+   * Create a room in a quick fashion. Administrative privileges only!
+   * @param event 
+   */
   @FXML
   private void onCreateRoom(ActionEvent event) {
     
@@ -671,11 +717,19 @@ public class UserGUIController implements Initializable {
   }
 
   
+  /**
+   * 
+   * @param event 
+   */
   @FXML
   private void onEditRoom(ActionEvent event) {
   }
 
   
+  /**
+   * 
+   * @param event 
+   */
   @FXML
   private void onRemoveRoom(ActionEvent event) {
     

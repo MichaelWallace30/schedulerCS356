@@ -67,7 +67,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <SplitPane dividerPositions="0.4135135135135135" layoutX="3.0" layoutY="-3.0" prefHeight="359.0" prefWidth="778.0" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="-3.0" AnchorPane.topAnchor="-3.0">
+                                    <SplitPane dividerPositions="0.4832474226804124" layoutX="3.0" layoutY="-3.0" prefHeight="359.0" prefWidth="778.0" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="-3.0" AnchorPane.topAnchor="-3.0">
                                       <items>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                              <children>
@@ -77,18 +77,19 @@
                                                     <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Date" />
                                                       <TableColumn fx:id="numberAttendingColumn" prefWidth="75.0" text="# Attending" />
                                                       <TableColumn fx:id="hostingColumn" prefWidth="75.0" text="Hosting" />
+                                                      <TableColumn fx:id="meetingsRoomColumn" prefWidth="75.0" text="Room #" />
                                                   </columns>
                                                 </TableView>
                                              </children>
                                           </AnchorPane>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="357.0" prefWidth="431.0">
                                              <children>
                                                 <TableView fx:id="usersInMeetingTable" layoutX="-1.0" layoutY="-1.0" prefHeight="470.0" prefWidth="433.0" AnchorPane.bottomAnchor="-4.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
                                                   <columns>
-                                                    <TableColumn fx:id="usernameColumn" prefWidth="103.0" text="Username" />
-                                                    <TableColumn fx:id="nameColumn" prefWidth="106.0" text="Name" />
-                                                      <TableColumn fx:id="inviteStatusColumn" prefWidth="95.0" text="Invite Status" />
-                                                      <TableColumn fx:id="contactNumberColumn" prefWidth="125.0" text="Contact #" />
+                                                    <TableColumn fx:id="usernameColumn" prefWidth="113.0" text="Username" />
+                                                    <TableColumn fx:id="nameColumn" prefWidth="114.0" text="Name" />
+                                                      <TableColumn fx:id="inviteStatusColumn" prefWidth="83.0" text="Invite Status" />
+                                                      <TableColumn fx:id="contactNumberColumn" prefWidth="89.0" text="Contact #" />
                                                   </columns>
                                                 </TableView>
                                              </children>

@@ -24,6 +24,7 @@ public class MeetingTableCell {
   public StringProperty meetingID;
   public IntegerProperty numberOfAttendees;
   public BooleanProperty isHosting;
+  public IntegerProperty roomNumber;
   
   public MeetingTableCell(Meeting meeting, Account account) {
     date = new SimpleStringProperty(meeting.getSchedule().getStartDateTime().toString()
@@ -33,5 +34,12 @@ public class MeetingTableCell {
     Integer test = meeting.getOwnerID();
     Integer test2 = account.getId();
     isHosting = new SimpleBooleanProperty((meeting.getOwnerID() == account.getId()));
+    
+    if (meeting.getRoom() != null) {
+    roomNumber = new SimpleIntegerProperty(meeting.getRoom().getRoomNumber());
+    } else {
+      roomNumber = new SimpleIntegerProperty(-1);
+    }
+    
   }
 }

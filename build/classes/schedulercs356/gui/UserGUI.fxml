@@ -210,6 +210,8 @@
                                                 <ChoiceBox fx:id="editMeetingEndTimeMinuteChooser1" layoutX="65.0" layoutY="220.0" prefHeight="25.0" prefWidth="24.0" />
                                                 <Text layoutX="57.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="9.6015625" />
                                                 <TextArea fx:id="editMeetingDescription" layoutX="14.0" layoutY="250.0" prefHeight="160.0" prefWidth="200.0" promptText="Describe the Meeting!" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="250.0" />
+                                                <ChoiceBox fx:id="editMeetingTimeDay" layoutX="125.0" layoutY="164.0" prefHeight="25.0" prefWidth="42.0" />
+                                                <ChoiceBox fx:id="editMeetingEndTimeDay" layoutX="125.0" layoutY="220.0" prefHeight="25.0" prefWidth="43.0" />
                                              </children>
                                           </AnchorPane>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">

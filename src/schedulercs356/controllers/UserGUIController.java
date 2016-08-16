@@ -272,6 +272,10 @@ public class UserGUIController implements Initializable {
   private TableColumn<RoomTableCell, Number> editMeetingRoomMaxOccupancyColumn;
   @FXML
   private TableColumn<RoomTableCell, String> editMeetingRoomDescriptionColumn;
+  @FXML
+  private ChoiceBox<String> editMeetingTimeDay;
+  @FXML
+  private ChoiceBox<String> editMeetingEndTimeDay;
 
   void Attending(ActionEvent event) {
 
@@ -344,6 +348,7 @@ public class UserGUIController implements Initializable {
       runTimeOnThread();
       addMeetingsToTables();      
       addRoomsInTables();
+      initializeChoiceBoxes();
     } else {
       throw new RuntimeException("Null account value was passed!");
     }
@@ -384,6 +389,25 @@ public class UserGUIController implements Initializable {
         meetingData.add(new MeetingTableCell(meeting, account));
       }
     }
+  }
+  
+  
+  private void initializeChoiceBoxes() {
+    ObservableList<Number> minutes = FXCollections.observableArrayList();
+    
+    for (int i = 0; i < 60; ++i) {
+      minutes.add(i);
+    }
+    
+    
+    editMeetingStartTimeChooserHour.setItems(FXCollections.observableArrayList(1, 2,
+            3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+    editMeetingStartTimeMinuteChooser.setItems(minutes);
+    editMeetingEndTimeChooserHour1.setItems(FXCollections.observableArrayList(1, 2,
+            3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+    editMeetingEndTimeMinuteChooser1.setItems(minutes);
+    editMeetingTimeDay.setItems(FXCollections.observableArrayList("AM", "PM"));
+    editMeetingEndTimeDay.setItems(FXCollections.observableArrayList("AM", "PM"));
   }
   
   

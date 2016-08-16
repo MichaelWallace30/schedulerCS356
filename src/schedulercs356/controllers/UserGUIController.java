@@ -75,6 +75,8 @@ public class UserGUIController implements Initializable {
   private ObservableList<Schedule> schedules;
   private ObservableList<AccountAdminTableCell> adminEnabledAccounts;
   private ObservableList<RoomTableCell> rooms;
+  private ObservableList<AccountTableCell> notInvitedUsers;
+  private ObservableList<AccountTableCell> invitedUsers;
   
   @FXML
   private Text profileName;
@@ -402,6 +404,9 @@ public class UserGUIController implements Initializable {
    * Initialize the Meeting tables with Users.
    */
   private void initializeUsersInMeetingTable() {
+    invitedUsers = FXCollections.observableArrayList();
+    notInvitedUsers = FXCollections.observableArrayList();
+    
     usernameColumn.setCellValueFactory(cellData -> cellData.getValue().username);
     nameColumn.setCellValueFactory(cellData -> cellData.getValue().fullname);
     inviteStatusColumn.setCellValueFactory(cellData -> cellData.getValue().inviteStatus);
@@ -415,6 +420,8 @@ public class UserGUIController implements Initializable {
     editMeetingInvitedNameColumn.setCellValueFactory(cellData -> cellData.getValue().fullname);
     
     usersInMeetingTable.setItems(accounts);
+    editMeetingUsersNoInviteTable.setItems(notInvitedUsers);
+    editMeetingUsersInvitedTable.setItems(invitedUsers);
   }
   
   
@@ -512,7 +519,14 @@ public class UserGUIController implements Initializable {
     
     tabEditMeeting.getTabPane().getSelectionModel().select(tabEditMeeting);
     
+    List<Account> users = dbController.getAllAccounts();
     
+    for (Account user : users) {
+      if (user.isEmployee()) {
+        AccountTableCell cell = new AccountTableCell(user, meeting);
+        notInvitedUsers.add(cell);
+      }
+    }
   }
   
   

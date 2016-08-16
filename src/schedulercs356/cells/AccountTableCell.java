@@ -21,7 +21,7 @@ public class AccountTableCell {
   public StringProperty inviteStatus;
   public StringProperty contact;
   
-  AccountTableCell(Account account, Meeting meeting) {
+  public AccountTableCell(Account account, Meeting meeting) {
     String status = "Unknown";
     List<Account> list = meeting.getAcceptedList();
     

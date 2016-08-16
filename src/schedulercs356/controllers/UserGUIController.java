@@ -169,12 +169,6 @@ public class UserGUIController implements Initializable {
   @FXML
   private DatePicker editMeetingDatePicker;
   @FXML
-  private TableView<?> editMeetingUsersTable;
-  @FXML
-  private TableColumn<?, ?> editMeetingUsernameColumn;
-  @FXML
-  private TableColumn<?, ?> editMeetingNameColumn;
-  @FXML
   private MenuItem logoutMenuItem;
   @FXML
   private TableView<AccountAdminTableCell> adminAccountsTable;
@@ -252,6 +246,30 @@ public class UserGUIController implements Initializable {
   private TableColumn<RoomTableCell, String> roomsDescriptionColumn;
   @FXML
   private TableColumn<MeetingTableCell, Number> meetingsRoomColumn;
+  @FXML
+  private TableView<AccountTableCell> editMeetingUsersNoInviteTable;
+  @FXML
+  private TableColumn<AccountTableCell, String> editMeetingNotInviteUsernameColumn;
+  @FXML
+  private TableColumn<AccountTableCell, String> editMeetingNotInviteNameColumn;
+  @FXML
+  private TableView<AccountTableCell> editMeetingUsersInvitedTable;
+  @FXML
+  private TableColumn<AccountTableCell, String> editMeetingInvitedUsernameColumn;
+  @FXML
+  private TableColumn<AccountTableCell, String> editMeetingInvitedNameColumn;
+  @FXML
+  private Button editMeetingAddInviteButton;
+  @FXML
+  private Button editMeetingRemoveInviteButton;
+  @FXML
+  private TableView<RoomTableCell> editMeetingRoomSelectColumn;
+  @FXML
+  private TableColumn<RoomTableCell, Number> editMeetingRoomNumberColumn;
+  @FXML
+  private TableColumn<RoomTableCell, Number> editMeetingRoomMaxOccupancyColumn;
+  @FXML
+  private TableColumn<RoomTableCell, String> editMeetingRoomDescriptionColumn;
 
   void Attending(ActionEvent event) {
 
@@ -390,6 +408,12 @@ public class UserGUIController implements Initializable {
     contactNumberColumn.setCellValueFactory(cellData -> cellData.getValue().contact);
     meetingsRoomColumn.setCellValueFactory(cellData -> cellData.getValue().roomNumber);
     
+    editMeetingNotInviteUsernameColumn.setCellValueFactory(cellData -> cellData.getValue().username);
+    editMeetingNotInviteNameColumn.setCellValueFactory(cellData -> cellData.getValue().fullname);
+    
+    editMeetingInvitedUsernameColumn.setCellValueFactory(cellData -> cellData.getValue().username);
+    editMeetingInvitedNameColumn.setCellValueFactory(cellData -> cellData.getValue().fullname);
+    
     usersInMeetingTable.setItems(accounts);
   }
   
@@ -423,8 +447,13 @@ public class UserGUIController implements Initializable {
     roomsMaxOccupancyColumn.setCellValueFactory(cellData -> cellData.getValue().maxOccupancy);
     roomsDescriptionColumn.setCellValueFactory(cellData -> cellData.getValue().description);
     
+    editMeetingRoomNumberColumn.setCellValueFactory(cellData -> cellData.getValue().roomNumber);
+    editMeetingRoomMaxOccupancyColumn.setCellValueFactory(cellData -> cellData.getValue().maxOccupancy);
+    editMeetingRoomDescriptionColumn.setCellValueFactory(cellData -> cellData.getValue().description);
+    
     adminRoomsTable.setItems(rooms);
     roomsTable.setItems(rooms);
+    editMeetingRoomSelectColumn.setItems(rooms);
   }
   
   
@@ -723,6 +752,9 @@ public class UserGUIController implements Initializable {
    */
   @FXML
   private void onEditRoom(ActionEvent event) {
+    tabEditRooms.getTabPane().getSelectionModel().select(tabEditRooms);
+    
+    
   }
 
   
@@ -733,5 +765,17 @@ public class UserGUIController implements Initializable {
   @FXML
   private void onRemoveRoom(ActionEvent event) {
     
+  }
+
+  @FXML
+  private void onEditMeetingUpdate(ActionEvent event) {
+  }
+
+  @FXML
+  private void onAddToInvitesButton(ActionEvent event) {
+  }
+
+  @FXML
+  private void onRemoveInvitesButton(ActionEvent event) {
   }
 }

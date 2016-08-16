@@ -197,7 +197,7 @@
                                                    </font>
                                                 </Text>
                                                 <DatePicker fx:id="editMeetingDatePicker" layoutX="16.0" layoutY="105.0" promptText="Select Date" />
-                                                <Button fx:id="editMeetingUpdateButton" layoutX="70.0" layoutY="425.0" mnemonicParsing="false" text="Update" AnchorPane.bottomAnchor="14.0" />
+                                                <Button fx:id="editMeetingUpdateButton" layoutX="70.0" layoutY="425.0" mnemonicParsing="false" onAction="#onEditMeetingUpdate" text="Update" AnchorPane.bottomAnchor="14.0" />
                                                 <Text layoutX="16.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Meeting ID: " />
                                                 <Text fx:id="editMeetingIdText" layoutX="86.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="id" />
                                                 <Text layoutX="12.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Schedule Edit" />
@@ -214,25 +214,25 @@
                                           </AnchorPane>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                              <children>
-                                                <TableView fx:id="editMeetingUsersTable" prefHeight="265.0" prefWidth="197.0" AnchorPane.bottomAnchor="199.0" AnchorPane.topAnchor="0.0">
+                                                <TableView fx:id="editMeetingUsersNoInviteTable" prefHeight="265.0" prefWidth="197.0" AnchorPane.bottomAnchor="199.0" AnchorPane.topAnchor="0.0">
                                                   <columns>
-                                                    <TableColumn fx:id="editMeetingUsernameColumn" prefWidth="96.0" text="Username" />
-                                                    <TableColumn fx:id="editMeetingNameColumn" prefWidth="99.0" text="Name" />
+                                                    <TableColumn fx:id="editMeetingNotInviteUsernameColumn" prefWidth="96.0" text="Username" />
+                                                    <TableColumn fx:id="editMeetingNotInviteNameColumn" prefWidth="99.0" text="Name" />
                                                   </columns>
                                                 </TableView>
-                                                <TableView layoutX="349.0" prefHeight="267.0" prefWidth="193.0" AnchorPane.bottomAnchor="197.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <TableView fx:id="editMeetingUsersInvitedTable" layoutX="349.0" prefHeight="267.0" prefWidth="193.0" AnchorPane.bottomAnchor="197.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                   <columns>
-                                                    <TableColumn prefWidth="96.0" text="Username" />
-                                                    <TableColumn prefWidth="96.0" text="Name" />
+                                                    <TableColumn fx:id="editMeetingInvitedUsernameColumn" prefWidth="96.0" text="Username" />
+                                                    <TableColumn fx:id="editMeetingInvitedNameColumn" prefWidth="96.0" text="Name" />
                                                   </columns>
                                                 </TableView>
-                                                <Button layoutX="225.0" layoutY="71.0" mnemonicParsing="false" text="Add To Invites" AnchorPane.bottomAnchor="368.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" />
-                                                <Button layoutX="204.0" layoutY="134.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="135.0" text="Remove from Invites" AnchorPane.bottomAnchor="305.0" AnchorPane.leftAnchor="204.0" AnchorPane.rightAnchor="203.0" />
-                                                <TableView layoutX="-2.0" layoutY="319.0" prefHeight="145.0" prefWidth="546.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="-2.0">
+                                                <Button fx:id="editMeetingAddInviteButton" layoutX="225.0" layoutY="71.0" mnemonicParsing="false" onAction="#onAddToInvitesButton" text="Add To Invites" AnchorPane.bottomAnchor="368.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" />
+                                                <Button fx:id="editMeetingRemoveInviteButton" layoutX="204.0" layoutY="134.0" mnemonicParsing="false" onAction="#onRemoveInvitesButton" prefHeight="25.0" prefWidth="135.0" text="Remove from Invites" AnchorPane.bottomAnchor="305.0" AnchorPane.leftAnchor="204.0" AnchorPane.rightAnchor="203.0" />
+                                                <TableView fx:id="editMeetingRoomSelectColumn" layoutX="-2.0" layoutY="319.0" prefHeight="145.0" prefWidth="546.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="-2.0">
                                                   <columns>
-                                                    <TableColumn prefWidth="126.0" text="Room #" />
-                                                    <TableColumn prefWidth="137.0" text="Maximum Occupancy" />
-                                                      <TableColumn prefWidth="282.0" text="Description" />
+                                                    <TableColumn fx:id="editMeetingRoomNumberColumn" prefWidth="126.0" text="Room #" />
+                                                    <TableColumn fx:id="editMeetingRoomMaxOccupancyColumn" prefWidth="137.0" text="Maximum Occupancy" />
+                                                      <TableColumn fx:id="editMeetingRoomDescriptionColumn" prefWidth="282.0" text="Description" />
                                                   </columns>
                                                 </TableView>
                                                 <Text layoutX="214.0" layoutY="299.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Room" underline="true" AnchorPane.bottomAnchor="160.482421875" AnchorPane.leftAnchor="213.5458984375" AnchorPane.rightAnchor="214.4541015625">

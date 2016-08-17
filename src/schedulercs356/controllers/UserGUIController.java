@@ -8,7 +8,6 @@ package schedulercs356.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -380,35 +379,15 @@ public class UserGUIController implements Initializable {
       I put this in to no break any thing
       if not meeting list this breaks the code
       */
-    List<Meeting> meetings = dbController.getAllMeetings();
+    List<Meeting> meetings = account.getMeetingList();
     
     for (Meeting meeting : meetings) {
       
       if (meeting != null) {
         // Prolly don't need it yet.
         //List<Account> rejectedList = meeting.getRejectedList();
-        if (meeting.getOwnerID() == account.getId()) {
-          accountMeetings.add(meeting);
-          meetingData.add(new MeetingTableCell(meeting, account));       
-        } else {
-          
-          List<Account> acceptedList = meeting.getAcceptedList();
-          List<Account> invitedList = meeting.getInvitedList();
-        
-          for (Account acc : acceptedList) {
-            if (acc.getId() == account.getId()) {
-              accountMeetings.add(meeting);
-              meetingData.add(new MeetingTableCell(meeting, account));
-            }
-          }
-        
-          for (Account acc : invitedList) {
-            if (acc.getId() == account.getId()) {
-              accountMeetings.add(meeting);
-              meetingData.add(new MeetingTableCell(meeting, account));
-            }
-          }
-        }
+        accountMeetings.add(meeting);
+        meetingData.add(new MeetingTableCell(meeting, account));       
       }
     }
   }
@@ -556,9 +535,11 @@ public class UserGUIController implements Initializable {
     meeting.setInvitedList(new LinkedList<>());
     meeting.setAcceptedList(new LinkedList<>());
     meeting.setRejectedList(new LinkedList<>());
+    
+    account.getMeetingList().add(meeting);
     dbController.addObject(meeting);
-    
-    
+    dbController.updateObject(account);
+   
     if (tabEditMeeting.isDisabled()) {
       tabEditMeeting.setDisable(false);
     }
@@ -576,6 +557,7 @@ public class UserGUIController implements Initializable {
     
     meeting.getAcceptedList().add(account);
     editMeetingIdText.setText(meeting.getMeetingID());
+    meetingData.add(new MeetingTableCell(meeting, account));
   }
   
   
@@ -833,21 +815,25 @@ public class UserGUIController implements Initializable {
   
   @FXML
   private void onEditMeetingUpdate(ActionEvent event) {
+    
   }
 
   
   @FXML
   private void onAddToInvitesButton(ActionEvent event) {
+    
   }
 
   
   @FXML
   private void onRemoveInvitesButton(ActionEvent event) {
+    
   }
 
   
   @FXML
   private void onEditMeeting(ActionEvent event) {
+    
   }
 
   
@@ -872,9 +858,12 @@ public class UserGUIController implements Initializable {
   
   @FXML
   private void onAttendMeeting(ActionEvent event) {
+    
   }
 
+  
   @FXML
   private void onMeetingDetails(ActionEvent event) {
+    
   }
 }

@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -334,15 +335,21 @@ public class Account implements DataBaseInterface {
         "UPDATE EMPLOYEES SET  USER_NAME = ?, PASSWORD = ?, FIRST_NAME = ?, "
                 + "LAST_NAME = ?, ADMIN = ?, EMPLOYEE = ?, ADDRESS = ? WHERE ID = ?");
         
-        ListIterator<Meeting> it;
-        it = meetingList.listIterator();
-        while(it.hasNext()){
-            addMeetingTable(con, it.next().getMeetingID(), meetingListTableName);
+        Iterator<Meeting> it;
+        it = meetingList.iterator();
+        while(it.hasNext()) {
+          Meeting meeting = it.next();
+          if (meeting != null) {
+            addMeetingTable(con, meeting.getMeetingID(), meetingListTableName);
+          }
         }
         
         it = invitedMeetingList.listIterator();
-        while(it.hasNext()){
-            addMeetingTable(con, it.next().getMeetingID(), invitedMeetingListTableName);
+        while(it.hasNext()) {
+          Meeting meeting = it.next();
+          if (meeting != null) {
+            addMeetingTable(con, meeting.getMeetingID(), invitedMeetingListTableName);
+          }
         }
 
         // set the preparedstatement parameters

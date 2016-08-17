@@ -854,6 +854,7 @@ public class UserGUIController implements Initializable {
   @FXML
   private void onRemoveMeeting(ActionEvent event) {
     MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
+    int index = meetingTable.getSelectionModel().getFocusedIndex();
     
     if (cell != null) {
       Meeting meeting = dbController.getMeeting(cell.meetingID.get());
@@ -862,6 +863,7 @@ public class UserGUIController implements Initializable {
         
         if (removed) {
           System.out.println("Removed!");
+          meetingData.remove(index);
         }
       }
     }

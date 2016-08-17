@@ -23,6 +23,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import schedulercs356.bundles.LoginAccountBundle;
 
@@ -31,8 +32,9 @@ import schedulercs356.bundles.LoginAccountBundle;
  * @author Lenovo
  */
 public class LoginControllerFXML implements Initializable {
-    
+    private static final int MAX_NUMBER_OF_TRIES = 3;
     DataBaseController dbController;
+    private int incorrectTries;
     private Stage primaryStage;
     
     @FXML
@@ -83,6 +85,31 @@ public class LoginControllerFXML implements Initializable {
             //if login failed
             invalidLabel.setVisible(true);
             inputNameTextField.requestFocus();
+            incorrectTries += 1;
+            
+            if (incorrectTries == MAX_NUMBER_OF_TRIES) {
+              try {
+              FXMLLoader loader = 
+                      new FXMLLoader(
+                              getClass()
+                                      .getResource("/schedulercs356/gui/wrongPassWordGUI.fxml"));
+              
+              AnchorPane pane = (AnchorPane) loader.load();
+              Scene scene = new Scene(pane);
+              Stage parentStage = (Stage)loginButton.getScene().getWindow();
+              Stage stage = new Stage();
+              
+              stage.setScene(scene);
+              stage.initOwner(parentStage);
+              stage.initModality(Modality.WINDOW_MODAL);
+              stage.setTitle("DIDN'T SAY THE MAGIC WORD!!");
+              
+              stage.showAndWait();
+              incorrectTries = 0;
+              } catch (IOException e) {
+                
+              }
+            }
         }
         clearTextFields();
     }
@@ -97,6 +124,7 @@ public class LoginControllerFXML implements Initializable {
         //set focus on inputName TextField
         dbController = new DataBaseController();
         invalidLabel.setVisible(false);
+        incorrectTries = 0;
         Platform.runLater(new Runnable() 
         {
             @Override

@@ -22,11 +22,11 @@ import java.util.UUID;
  * Meeting ID = 0 + owner id + dateMonth + dateDay + dateTime is special case for non meeting schedule
  * New meetings will auto generate id
  * 
- * When creating new meeting use default constructor init uuid
+ * When creating new meeting use default constructor id.
  * then add the rest of the data can easily create another constructor but its already confusing
  * 
  */
-public class Meeting implements DataBaseInterface{    
+public class Meeting implements DataBaseInterface {    
     private String meetingID;
     
     //Object variables
@@ -316,7 +316,8 @@ public class Meeting implements DataBaseInterface{
     @Override
     public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
         Meeting meeting = (Meeting)obj;
-        stmt.executeUpdate("DELETE FROM MEETING " + " WHERE ID = " +  meeting.getMeetingID());
+        String s = meeting.getMeetingID();
+        stmt.executeUpdate("DELETE FROM MEETING " + " WHERE ID = \'" +  meeting.getMeetingID() + "\'");
         
         String sql = "DROP TABLE " + this.acceptedMeetingListTableName;
         stmt.executeUpdate(sql);
@@ -325,6 +326,7 @@ public class Meeting implements DataBaseInterface{
         stmt.executeUpdate(sq2);
         
         String sq3 = "DROP TABLE " + this.rejectedMeetingListTableName;
+       
         stmt.executeUpdate(sq3);
         
         if(schedule != null){

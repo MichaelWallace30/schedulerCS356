@@ -27,8 +27,13 @@ public class MeetingTableCell {
   public IntegerProperty roomNumber;
   
   public MeetingTableCell(Meeting meeting, Account account) {
-    date = new SimpleStringProperty(meeting.getSchedule().getStartDateTime().toString()
-      + " - " + meeting.getSchedule().getEndDateTime().toString());
+    if (meeting.getSchedule() != null) {
+      date = new SimpleStringProperty(meeting.getSchedule().getStartDateTime().toString()
+        + " - " + meeting.getSchedule().getEndDateTime().toString());
+    } else {
+      date = new SimpleStringProperty("Unknown time!");
+    }
+    
     meetingID = new SimpleStringProperty(meeting.getMeetingID());   
     numberOfAttendees = new SimpleIntegerProperty(meeting.getAcceptedList().size());
     Integer test = meeting.getOwnerID();

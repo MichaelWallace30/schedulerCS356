@@ -380,13 +380,35 @@ public class UserGUIController implements Initializable {
       I put this in to no break any thing
       if not meeting list this breaks the code
       */
-    List<Meeting> meetings = account.getMeetingList();
+    List<Meeting> meetings = dbController.getAllMeetings();
     
     for (Meeting meeting : meetings) {
       
       if (meeting != null) {
-        accountMeetings.add(meeting);
-        meetingData.add(new MeetingTableCell(meeting, account));
+        // Prolly don't need it yet.
+        //List<Account> rejectedList = meeting.getRejectedList();
+        if (meeting.getOwnerID() == account.getId()) {
+          accountMeetings.add(meeting);
+          meetingData.add(new MeetingTableCell(meeting, account));       
+        } else {
+          
+          List<Account> acceptedList = meeting.getAcceptedList();
+          List<Account> invitedList = meeting.getInvitedList();
+        
+          for (Account acc : acceptedList) {
+            if (acc.getId() == account.getId()) {
+              accountMeetings.add(meeting);
+              meetingData.add(new MeetingTableCell(meeting, account));
+            }
+          }
+        
+          for (Account acc : invitedList) {
+            if (acc.getId() == account.getId()) {
+              accountMeetings.add(meeting);
+              meetingData.add(new MeetingTableCell(meeting, account));
+            }
+          }
+        }
       }
     }
   }
@@ -551,6 +573,9 @@ public class UserGUIController implements Initializable {
         notInvitedUsers.add(cell);
       }
     }
+    
+    meeting.getAcceptedList().add(account);
+    editMeetingIdText.setText(meeting.getMeetingID());
   }
   
   
@@ -805,15 +830,49 @@ public class UserGUIController implements Initializable {
     
   }
 
+  
   @FXML
   private void onEditMeetingUpdate(ActionEvent event) {
   }
 
+  
   @FXML
   private void onAddToInvitesButton(ActionEvent event) {
   }
 
+  
   @FXML
   private void onRemoveInvitesButton(ActionEvent event) {
+  }
+
+  
+  @FXML
+  private void onEditMeeting(ActionEvent event) {
+  }
+
+  
+  @FXML
+  private void onRemoveMeeting(ActionEvent event) {
+    MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
+    
+    if (cell != null) {
+      Meeting meeting = dbController.getMeeting(cell.meetingID.get());
+      if (meeting != null) {
+        boolean removed = dbController.removeObject(meeting);
+        
+        if (removed) {
+          System.out.println("Removed!");
+        }
+      }
+    }
+  }
+
+  
+  @FXML
+  private void onAttendMeeting(ActionEvent event) {
+  }
+
+  @FXML
+  private void onMeetingDetails(ActionEvent event) {
   }
 }

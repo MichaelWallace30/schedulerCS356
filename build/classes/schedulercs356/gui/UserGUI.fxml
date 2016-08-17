@@ -96,10 +96,10 @@
                                           </AnchorPane>
                                       </items>
                                     </SplitPane>
-                                    <Button fx:id="editMeetingButton" layoutX="338.0" layoutY="424.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="Edit Meeting" AnchorPane.bottomAnchor="14.0" />
-                                    <Button fx:id="cancelMeetingButton" layoutX="649.0" layoutY="424.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Cancel Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-                                    <Button fx:id="attendMeetingButton" layoutX="14.0" layoutY="424.0" mnemonicParsing="false" text="Attend Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
-                                    <Button fx:id="meetingDetailsButton" layoutX="540.0" layoutY="424.0" mnemonicParsing="false" text="Meeting Details" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="138.0" />
+                                    <Button fx:id="editMeetingButton" layoutX="338.0" layoutY="424.0" mnemonicParsing="false" onAction="#onEditMeeting" prefHeight="25.0" prefWidth="108.0" text="Edit Meeting" AnchorPane.bottomAnchor="14.0" />
+                                    <Button fx:id="cancelMeetingButton" layoutX="649.0" layoutY="424.0" mnemonicParsing="false" onAction="#onRemoveMeeting" prefHeight="25.0" prefWidth="115.0" text="Cancel Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                                    <Button fx:id="attendMeetingButton" layoutX="14.0" layoutY="424.0" mnemonicParsing="false" onAction="#onAttendMeeting" text="Attend Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
+                                    <Button fx:id="meetingDetailsButton" layoutX="540.0" layoutY="424.0" mnemonicParsing="false" onAction="#onMeetingDetails" text="Meeting Details" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="138.0" />
                                  </children>
                               </AnchorPane>
                         </content>

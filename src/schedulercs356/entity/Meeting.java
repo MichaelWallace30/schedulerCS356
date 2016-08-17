@@ -54,8 +54,8 @@ public class Meeting implements DataBaseInterface{
         
         String meetingID = UUID.randomUUID().toString();
         //table name can't have '-' in it
-        meetingID.replace("-", "");
-        setMeetingID(meetingID);
+        String newMeetingID = meetingID.replace("-", "");
+        setMeetingID(newMeetingID);
                 
         setAcceptedMeetingListTableName(queryMeetingAcceptedAccountTable + getMeetingID());
         setInvitedMeetingListTableName(queryMeetingInvitedTable + getMeetingID());
@@ -248,44 +248,50 @@ public class Meeting implements DataBaseInterface{
         
         //update invited list for each account
         ListIterator<Account> itAccount;
-        
-        itAccount = invitedList.listIterator();
-        while(itAccount.hasNext()){
-            //ad meeting to invited list
-            Account tempAccount = itAccount.next();
-            
-            LinkedList<Meeting> meetingInviteList  = tempAccount.getInvitedMeetingList();
-            meetingInviteList.add(this);    
-            
-            tempAccount.setInvitedMeetingList(meetingInviteList);
-            
-            //update account
-            DataBaseController dbController = new DataBaseController();
-            dbController.updateObject(tempAccount);            
-        }
-
         ListIterator<Account> it;
-        it = acceptedList.listIterator();
-        while(it.hasNext()){
-            addAccountTable(con, it.next().getId(), acceptedMeetingListTableName);
-        }
         
-        it = invitedList.listIterator();
-        while(it.hasNext()){
-            addAccountTable(con, it.next().getId(), invitedMeetingListTableName);
+        if(invitedList != null){
+        itAccount = invitedList.listIterator();
+            while(itAccount.hasNext()){
+                //ad meeting to invited list
+                Account tempAccount = itAccount.next();
+
+                LinkedList<Meeting> meetingInviteList  = tempAccount.getInvitedMeetingList();
+                meetingInviteList.add(this);    
+
+                tempAccount.setInvitedMeetingList(meetingInviteList);
+
+                //update account
+                DataBaseController dbController = new DataBaseController();
+                dbController.updateObject(tempAccount);            
+            }
+
+                it = invitedList.listIterator();
+                while(it.hasNext()){
+                    addAccountTable(con, it.next().getId(), invitedMeetingListTableName);
+                }
+            }
+
+         if(acceptedList != null){    
+            it = acceptedList.listIterator();
+            while(it.hasNext()){
+                addAccountTable(con, it.next().getId(), acceptedMeetingListTableName);
+            }
+         }
+            
+        if(rejectedList != null){
+            it = rejectedList.listIterator();
+            while(it.hasNext()){
+                addAccountTable(con, it.next().getId(), rejectedMeetingListTableName);
+            }
         }
-        
-        it = rejectedList.listIterator();
-        while(it.hasNext()){
-            addAccountTable(con, it.next().getId(), rejectedMeetingListTableName);
-        }
-        
 
          
+        
         PreparedStatement ps = con.prepareStatement(
         "INSERT INTO MEETING" 
             +"(ID, ROOM_ID, OWNER_ID) VALUES"
-            + "(?,?,?,?,?,?)");        
+            + "(?,?,?)");        
         
         // set the preparedstatement parameters
         ps.setString(1, meeting.getMeetingID());
@@ -301,6 +307,10 @@ public class Meeting implements DataBaseInterface{
         // call executeUpdate to execute our sql update statement
         ps.executeUpdate();
         ps.close();          
+       
+        if(schedule != null){
+            schedule.addObject(schedule, con);
+        }
     }
     
     @Override
@@ -316,6 +326,10 @@ public class Meeting implements DataBaseInterface{
         
         String sq3 = "DROP TABLE " + this.rejectedMeetingListTableName;
         stmt.executeUpdate(sq3);
+        
+        if(schedule != null){
+            schedule.removeObject(schedule, stmt);
+        }
     }
     
     @Override
@@ -369,6 +383,10 @@ public class Meeting implements DataBaseInterface{
         // call executeUpdate to execute our sql update statement
         int i = ps.executeUpdate();
         ps.close();   
+        
+        if(schedule != null){
+            schedule.updateObject(schedule, con);
+        }
         
         if(i <= 0){
         return false;

@@ -319,13 +319,13 @@ public class Meeting implements DataBaseInterface {
         String s = meeting.getMeetingID();
         stmt.executeUpdate("DELETE FROM MEETING " + " WHERE ID = \'" +  meeting.getMeetingID() + "\'");
         
-        String sql = "DROP TABLE " + this.acceptedMeetingListTableName;
+        String sql = "DROP TABLE " + this.acceptedMeetingListTableName.toUpperCase();
         stmt.executeUpdate(sql);
         
-        String sq2 = "DROP TABLE " + this.invitedMeetingListTableName;
+        String sq2 = "DROP TABLE " + this.invitedMeetingListTableName.toUpperCase();
         stmt.executeUpdate(sq2);
         
-        String sq3 = "DROP TABLE " + this.rejectedMeetingListTableName;
+        String sq3 = "DROP TABLE " + this.rejectedMeetingListTableName.toUpperCase();
        
         stmt.executeUpdate(sq3);
         

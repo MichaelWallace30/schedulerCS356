@@ -371,6 +371,7 @@ public class UserGUIController implements Initializable {
               Stage parentStage = (Stage)((Node)menuBar).getScene().getWindow();
               Stage stage = new Stage();
               
+              stage.setTitle("About");
               stage.setScene(scene);
               stage.initOwner(parentStage);
               stage.initModality(Modality.WINDOW_MODAL);

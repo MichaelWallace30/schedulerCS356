@@ -1,0 +1,1 @@
+To create a private schedule just create a meeting with no room and don't invite any one.

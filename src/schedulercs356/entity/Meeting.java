@@ -19,9 +19,6 @@ import java.util.UUID;
  *
  * @author Michael Wallace
  * 
- * Meeting ID = 0 + owner id + dateMonth + dateDay + dateTime is special case for non meeting schedule
- * New meetings will auto generate id
- * 
  * When creating new meeting use default constructor id.
  * then add the rest of the data can easily create another constructor but its already confusing
  * 

@@ -22,8 +22,9 @@ When an account logs in it should check its invitedMeetingList and force the acc
 		
 		LinkedList<Meeting> invitedList = myAccount.getInvitedMeetingList();
 		
-		for each tempMeeting in invitedList
-		{		
+		while(invitedList.size() > 0)//asuuming list is a pointer to the class list
+		{
+			Meeting tempMeeting = invitedList.peekFirst();
 			
 			//display and get decission from user on gui level
 			Boolean accepetedInvited = gui bs get response;

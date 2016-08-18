@@ -107,7 +107,7 @@ public class LoginControllerFXML implements Initializable {
               stage.showAndWait();
               incorrectTries = 0;
               } catch (IOException e) {
-                
+                e.printStackTrace();
               }
             }
         }

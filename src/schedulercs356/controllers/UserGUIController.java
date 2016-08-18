@@ -799,6 +799,7 @@ public class UserGUIController implements Initializable {
   private void onEditRoom(ActionEvent event) {
     tabEditRooms.getTabPane().getSelectionModel().select(tabEditRooms);
     
+    editMeetingIdText.setText(EMPLOYEE);
     
   }
 

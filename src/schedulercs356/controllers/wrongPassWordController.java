@@ -5,6 +5,7 @@
  */
 package schedulercs356.controllers;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
@@ -18,6 +19,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 /**
@@ -25,6 +28,7 @@ import javafx.util.Duration;
  * @author Eggs
  */
 public class wrongPassWordController implements Initializable {
+    String soundFile = "src/schedulercs356/funstuff/jurass01.mp3";
     
     @FXML
     ImageView imageView1;
@@ -43,6 +47,16 @@ public class wrongPassWordController implements Initializable {
         rt.setAutoReverse(true);
         rt.play();
         
+        File soundF = new File(soundFile);
+       
+        if (soundF.exists()) {
+          Media sound = new Media(soundF.toURI().toString());
+          MediaPlayer mediaPlayer = new MediaPlayer(sound);
+          mediaPlayer.play();
+        } else {
+          System.out.println(soundF.getAbsolutePath().toString());
+          throw new RuntimeException("File does not exist");
+        }
     }    
     
     

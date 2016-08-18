@@ -19,9 +19,13 @@ import javafx.util.Duration;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -352,6 +356,33 @@ public class UserGUIController implements Initializable {
       throw new RuntimeException("Null account value was passed!");
     }
   }
+  
+    @FXML
+    private void menuAboutButtonAction(ActionEvent event) {
+        //about button was pressed
+        try{
+        FXMLLoader loader = 
+                      new FXMLLoader(
+                              getClass()
+                                      .getResource("/schedulercs356/gui/aboutGUI.fxml"));
+              
+              AnchorPane pane = (AnchorPane) loader.load();
+              Scene scene = new Scene(pane);
+              Stage parentStage = (Stage)((Node)menuBar).getScene().getWindow();
+              Stage stage = new Stage();
+              
+              stage.setScene(scene);
+              stage.initOwner(parentStage);
+              stage.initModality(Modality.WINDOW_MODAL);
+              
+              
+              stage.showAndWait();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+         }
+        
+    }
   
   
   /**

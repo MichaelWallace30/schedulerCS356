@@ -930,13 +930,23 @@ public class UserGUIController implements Initializable {
   
   @FXML
   private void onAddToInvitesButton(ActionEvent event) {
+    AccountTableCell cell = editMeetingUsersNoInviteTable.getSelectionModel().getSelectedItem();
     
+    if (cell != null) {
+      editMeetingNotInvitedUsers.remove(cell);
+      editMeetingInvitedUsers.add(cell);
+    }
   }
 
   
   @FXML
   private void onRemoveInvitesButton(ActionEvent event) {
+    AccountTableCell cell = editMeetingUsersInvitedTable.getSelectionModel().getSelectedItem();
     
+    if (cell != null) {
+      editMeetingInvitedUsers.remove(cell);
+      editMeetingNotInvitedUsers.add(cell);
+    }
   }
 
   

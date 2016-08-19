@@ -107,7 +107,9 @@ public class LoginControllerFXML implements Initializable {
               stage.setTitle("DIDN'T SAY THE MAGIC WORD!!");
               
               stage.setOnCloseRequest((WindowEvent event) -> {
-                
+                System.out.println("Window has closed.");
+                wrongPassWordController controller = loader.getController();
+                controller.stop();
               });
               
               stage.showAndWait();

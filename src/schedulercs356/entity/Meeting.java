@@ -395,7 +395,11 @@ public class Meeting implements DataBaseInterface {
         "UPDATE MEETING SET ROOM_ID = ? ,OWNER_ID = ? WHERE ID = ?");
           
         // set the preparedstatement parameters        
-        ps.setInt(1,meeting.getRoom().getRoomNumber());
+        if (meeting.getRoom() != null) {
+          ps.setInt(1, meeting.getRoom().getRoomNumber());
+        } else {
+          ps.setInt(1, -1);
+        }
         ps.setInt(2,meeting.getOwnerID());
         ps.setString(3, meeting.getMeetingID());
         

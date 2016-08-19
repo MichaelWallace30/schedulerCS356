@@ -26,7 +26,7 @@
       </Label>
       <TextField id="inputNameTextField" fx:id="inputNameTextField" layoutX="136.0" layoutY="69.0" prefHeight="25.0" prefWidth="193.0" />
       <PasswordField id="inputPasswordField" fx:id="inputPasswordField" layoutX="136.0" layoutY="128.0" prefHeight="25.0" prefWidth="193.0" />
-      <Label fx:id="invalidLabel" layoutX="119.0" layoutY="224.0" text="Invlaid Password or UserName" textFill="RED">
+      <Label fx:id="invalidLabel" layoutX="119.0" layoutY="224.0" text="Invalid Password or Username" textFill="RED">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Label>

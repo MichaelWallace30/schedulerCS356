@@ -1075,7 +1075,7 @@ public class UserGUIController implements Initializable {
     int index;
         
     Schedule sch = meeting.getSchedule();
-    index = sch.getStartDateTime().getHour();
+    index = sch.getStartDateTime().getHour() - 1;
         
     if (index > TIME_HOUR) {
       index = index - TIME_HOUR;
@@ -1091,7 +1091,7 @@ public class UserGUIController implements Initializable {
     editMeetingStartTimeMinuteChooser.getSelectionModel().select(index);
     index = sch.getEndDateTime().getMinute();
     editMeetingEndTimeMinuteChooser1.getSelectionModel().select(index);
-    index = sch.getEndDateTime().getHour();
+    index = sch.getEndDateTime().getHour() - 1;
         
     if (index > TIME_HOUR) {
       index = index - TIME_HOUR;

@@ -322,8 +322,8 @@ public class UserGUIController implements Initializable {
    
     
     if (account != null) {
+      initializeUsersInMeetingTable();      
       initializeMeetingTable();
-      initializeUsersInMeetingTable();
       initializeRoomsInTables();
       
       sidebarName.setText(account.getFirstName() + " " + account.getLastName());
@@ -538,6 +538,22 @@ public class UserGUIController implements Initializable {
     hostingColumn.setCellValueFactory(cellData -> cellData.getValue().isHosting);
     
     meetingTable.setItems(meetingData);
+    
+    // Set up a listener to the observer.
+    meetingTable.getSelectionModel().selectedItemProperty().addListener((edc, old, n) -> {
+      System.out.println("Initializing users for selected meeting.");
+      accounts.clear();
+      MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
+      Meeting meeting = dbController.getMeeting(cell.meetingID.get());
+      
+      if (meeting != null) {
+        List<Account> cs = meeting.getInvitedList();
+        for (Account acc : cs) {
+          accounts.add(new AccountTableCell(acc, meeting));
+        }
+      }
+      
+    });
   }
   
   
@@ -562,7 +578,7 @@ public class UserGUIController implements Initializable {
     
     usersInMeetingTable.setItems(accounts);
     editMeetingUsersNoInviteTable.setItems(editMeetingNotInvitedUsers);
-    editMeetingUsersInvitedTable.setItems(editMeetingInvitedUsers);
+    editMeetingUsersInvitedTable.setItems(editMeetingInvitedUsers);   
   }
   
   

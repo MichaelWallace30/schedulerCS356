@@ -212,12 +212,23 @@ public class Meeting implements DataBaseInterface {
     }
     
         
+    /**
+     * 
+     * @param con
+     * @param accountID
+     * @param listName
+     * @return 
+     */
     private Boolean addAccountTable(Connection con, Integer accountID, String listName){
-        try
+      // TODO (Wallace):
+      // I had to fix this
+      // It was Causing an error, not adding the user into the account meeting list for 
+      // the meeting.
+      try
         {
             PreparedStatement ps = con.prepareStatement(
             "INSERT INTO " + listName 
-                +"(MEETING_ID) VALUES"
+                +"(ACCOUNT_ID) VALUES"
                 + "(?)");  
 
             ps.setInt(1,accountID);
@@ -233,6 +244,7 @@ public class Meeting implements DataBaseInterface {
         catch(SQLException err){
             //System.out.println(err.getMessage());
             //ignore duplicate excetions
+          err.printStackTrace();
         }
         return false;
     }

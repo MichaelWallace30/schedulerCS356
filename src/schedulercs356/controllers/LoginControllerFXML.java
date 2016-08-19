@@ -34,7 +34,7 @@ import schedulercs356.bundles.LoginAccountBundle;
  * @author Lenovo
  */
 public class LoginControllerFXML implements Initializable {
-    private static final int MAX_NUMBER_OF_TRIES = 3;
+    private static final int MAX_NUMBER_OF_TRIES = 5;
     DataBaseController dbController;
     private int incorrectTries;
     private Stage primaryStage;

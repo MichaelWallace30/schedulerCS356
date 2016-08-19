@@ -285,6 +285,12 @@ public class UserGUIController implements Initializable {
   @FXML
   private ChoiceBox<String> editMeetingEndTimeDay;
 
+  
+  private static final int TIME_HOUR = 12;
+  private static final int TIME_MINUTE = 60;
+  private static final int TIME_ONE_DIGIT = 10;
+  
+  
   void Attending(ActionEvent event) {
 
   }
@@ -407,17 +413,36 @@ public class UserGUIController implements Initializable {
   
   private void parseDateToDisplay(LocalDateTime date) {    
       int hour = date.getHour();
+      String minuteString = "00";
+      String secondString = "00";
       String timeDay = "AM";
       
-      if (hour > 12) {
-        hour = hour - 12;
+      if (hour > TIME_HOUR) {
+        hour = hour - TIME_HOUR;
         timeDay = "PM";
+      } else if (hour <= 0) {
+        hour = TIME_HOUR;
+      }
+      
+      int minute = date.getMinute();
+      if (minute < TIME_ONE_DIGIT) {
+        minuteString = "0" + minute;
+      } else {
+        minuteString = String.valueOf(minute);
+      }
+      
+      int second = date.getSecond();
+      
+      if (second < TIME_ONE_DIGIT) {
+        secondString = "0" + second;
+      } else {
+        secondString = String.valueOf(second);
       }
       
       sidebarDate.setText(date.getDayOfWeek() + " "
               + date.getMonth() + " " + date.getDayOfMonth() + ", "
-              + date.getYear() + "\n " + hour + ":" + date.getMinute() 
-              + ":" + date.getSecond() + " " + timeDay);
+              + date.getYear() + "\n " + hour + ":" + minuteString 
+              + ":" + secondString + " " + timeDay);
   }
   
   
@@ -447,11 +472,21 @@ public class UserGUIController implements Initializable {
           if (s != null) {
             
             int hour = s.getStartDateTime().getHour();
+            int minute = s.getStartDateTime().getMinute();
+            String minuteString = "00";
             String dayTime = "AM";
             
-            if (hour > 12) {
-              hour = hour - 12;
+            if (hour > TIME_HOUR) {
+              hour = hour - TIME_HOUR;
               dayTime = "PM";
+            } else if (hour <= 0) {
+              hour = TIME_HOUR;
+            }
+            
+            if (minute < TIME_ONE_DIGIT) {
+              minuteString = "0" + minute;
+            } else {
+              minuteString = String.valueOf(minute);
             }
             
             Text newText = new Text("Meeting on " + s.getStartDateTime().getDayOfWeek()
@@ -459,7 +494,7 @@ public class UserGUIController implements Initializable {
                 + " of " + s.getStartDateTime().getMonth()
                 + ", " + s.getStartDateTime().getYear()
                 + " at " + hour
-                + " : " + s.getStartDateTime().getMinute()
+                + " : " + minuteString
                 + " " + dayTime + "\n");
           
             sidebarUpcomingMeetingsDisplay.getChildren().add(newText);
@@ -939,8 +974,8 @@ public class UserGUIController implements Initializable {
     Schedule sch = meeting.getSchedule();
     index = sch.getStartDateTime().getHour();
         
-    if (index > 12) {
-      index = index - 13;
+    if (index > TIME_HOUR) {
+      index = index - TIME_HOUR;
       editMeetingTimeDay.getSelectionModel().select(1);
     } else if (index < 0) {
       index = 0;
@@ -955,8 +990,8 @@ public class UserGUIController implements Initializable {
     editMeetingEndTimeMinuteChooser1.getSelectionModel().select(index);
     index = sch.getEndDateTime().getHour();
         
-    if (index > 12) {
-      index = index - 13;
+    if (index > TIME_HOUR) {
+      index = index - TIME_HOUR;
       editMeetingEndTimeDay.getSelectionModel().select(1);
     } else if (index < 0) {
       index = 0;

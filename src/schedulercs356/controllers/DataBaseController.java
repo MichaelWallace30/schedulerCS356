@@ -151,7 +151,25 @@ public class DataBaseController {
 
                 while(rsMeetingList.next()){
                     String temp = rsMeetingList.getString("MEETING_ID");
-                    Meeting meeting = getMeeting(temp);
+                    
+                    Schedule schedule = getSchedule(temp);
+                    String meetingID = "";
+                    Integer roomID = -1;
+                    Integer ownerID = -1;
+                    String sq2 = "SELECT * FROM MEETING WHERE ID = ?";
+                    PreparedStatement ps = con.prepareStatement(sq2);
+                    ps.setString(1, temp);
+                    ResultSet rs = ps.executeQuery();
+                    if(rs.next())
+                    {
+                      meetingID = rs.getString("ID");
+                      roomID = rs.getInt("ROOM_ID");            
+                      ownerID = rs.getInt("OWNER_ID");
+                    } 
+                    
+                    Room room = getRoom(roomID);
+                    
+                    Meeting meeting = new Meeting(meetingID,schedule,room,null,null,null,ownerID);
                     meetingList.add(meeting);
                 }
             }

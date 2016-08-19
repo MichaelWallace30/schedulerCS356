@@ -7,6 +7,7 @@ package schedulercs356.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,6 +70,8 @@ public class UserGUIController implements Initializable {
   
   private Account account;
   
+  private int meetingSelectedIndex;
+  
   private List<Meeting> accountMeetings;
   private List<Account> accountReferences;
   private List<Schedule> accountSchedules;
@@ -78,8 +81,8 @@ public class UserGUIController implements Initializable {
   private ObservableList<Schedule> schedules;
   private ObservableList<AccountAdminTableCell> adminEnabledAccounts;
   private ObservableList<RoomTableCell> rooms;
-  private ObservableList<AccountTableCell> notInvitedUsers;
-  private ObservableList<AccountTableCell> invitedUsers;
+  private ObservableList<AccountTableCell> editMeetingNotInvitedUsers;
+  private ObservableList<AccountTableCell> editMeetingInvitedUsers;
   
   @FXML
   private Text profileName;
@@ -461,8 +464,8 @@ public class UserGUIController implements Initializable {
    * Initialize the Meeting tables with Users.
    */
   private void initializeUsersInMeetingTable() {
-    invitedUsers = FXCollections.observableArrayList();
-    notInvitedUsers = FXCollections.observableArrayList();
+    editMeetingInvitedUsers = FXCollections.observableArrayList();
+    editMeetingNotInvitedUsers = FXCollections.observableArrayList();
     
     usernameColumn.setCellValueFactory(cellData -> cellData.getValue().username);
     nameColumn.setCellValueFactory(cellData -> cellData.getValue().fullname);
@@ -477,8 +480,8 @@ public class UserGUIController implements Initializable {
     editMeetingInvitedNameColumn.setCellValueFactory(cellData -> cellData.getValue().fullname);
     
     usersInMeetingTable.setItems(accounts);
-    editMeetingUsersNoInviteTable.setItems(notInvitedUsers);
-    editMeetingUsersInvitedTable.setItems(invitedUsers);
+    editMeetingUsersNoInviteTable.setItems(editMeetingNotInvitedUsers);
+    editMeetingUsersInvitedTable.setItems(editMeetingInvitedUsers);
   }
   
   
@@ -558,6 +561,7 @@ public class UserGUIController implements Initializable {
   
   /**
    * Create Meeting Button Action.
+   * 
    * @param event 
    */
   @FXML
@@ -567,6 +571,9 @@ public class UserGUIController implements Initializable {
     meeting.setInvitedList(new LinkedList<>());
     meeting.setAcceptedList(new LinkedList<>());
     meeting.setRejectedList(new LinkedList<>());
+    meeting.setSchedule(new Schedule(meeting.getMeetingID(), 
+            LocalDateTime.now(), 
+            LocalDateTime.now()));
     
     account.getMeetingList().add(meeting);
     dbController.addObject(meeting);
@@ -577,19 +584,10 @@ public class UserGUIController implements Initializable {
     }
     
     tabEditMeeting.getTabPane().getSelectionModel().select(tabEditMeeting);
-    
-    List<Account> users = dbController.getAllAccounts();
-    
-    for (Account user : users) {
-      if (user.isEmployee()) {
-        AccountTableCell cell = new AccountTableCell(user, meeting);
-        notInvitedUsers.add(cell);
-      }
-    }
-    
-    meeting.getAcceptedList().add(account);
-    editMeetingIdText.setText(meeting.getMeetingID());
     meetingData.add(new MeetingTableCell(meeting, account));
+    int index = meetingData.size() - 1;
+     
+    setupEditMeeting(meeting, index);
   }
   
   
@@ -831,7 +829,7 @@ public class UserGUIController implements Initializable {
   private void onEditRoom(ActionEvent event) {
     tabEditRooms.getTabPane().getSelectionModel().select(tabEditRooms);
     
-    editMeetingIdText.setText(EMPLOYEE);
+    editMeetingIdText.setText("");
     
   }
 
@@ -866,7 +864,89 @@ public class UserGUIController implements Initializable {
   
   @FXML
   private void onEditMeeting(ActionEvent event) {
+    MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
+    int index = meetingTable.getSelectionModel().getSelectedIndex();
     
+    if (cell != null) {
+      Meeting meeting = dbController.getMeeting(cell.meetingID.get());
+      if (meeting != null) {
+        if (tabEditMeeting.isDisabled()) {
+          tabEditMeeting.setDisable(false);
+        }
+        
+        tabEditMeeting.getTabPane().getSelectionModel().select(tabEditMeeting);
+        setupEditMeeting(meeting, index);
+      }
+    } 
+  }
+  
+  
+  /**
+   * Set up the meeting for editMeetings.
+   * @param meeting
+   * @param meetingIndex 
+   */
+  private void setupEditMeeting(Meeting meeting, int meetingIndex) {
+    editMeetingNotInvitedUsers.clear();
+    editMeetingInvitedUsers.clear();
+    meetingSelectedIndex = meetingIndex;
+    editMeetingIdText.setText(meeting.getMeetingID());
+    int index;
+        
+    Schedule sch = meeting.getSchedule();
+    index = sch.getStartDateTime().getHour();
+        
+    if (index > 12) {
+      index = index - 13;
+      editMeetingTimeDay.getSelectionModel().select(1);
+    } else if (index < 0) {
+      index = 0;
+    } else {
+      editMeetingTimeDay.getSelectionModel().select(0);
+    }
+        
+    editMeetingStartTimeChooserHour.getSelectionModel().select(index);
+    index = sch.getStartDateTime().getMinute();
+    editMeetingStartTimeMinuteChooser.getSelectionModel().select(index);
+    index = sch.getEndDateTime().getMinute();
+    editMeetingEndTimeMinuteChooser1.getSelectionModel().select(index);
+    index = sch.getEndDateTime().getHour();
+        
+    if (index > 12) {
+      index = index - 13;
+      editMeetingEndTimeDay.getSelectionModel().select(1);
+    } else if (index < 0) {
+      index = 0;
+    } else {
+      editMeetingEndTimeDay.getSelectionModel().select(0);
+    }
+    
+    editMeetingEndTimeChooserHour1.getSelectionModel().select(index);
+    editMeetingDatePicker.setValue(sch.getStartDateTime().toLocalDate());
+    
+    Room roo = meeting.getRoom();
+    if (roo != null) {
+      RoomTableCell roomCell = new RoomTableCell(roo);
+      editMeetingRoomSelectColumn.getSelectionModel().select(roomCell);
+    }
+    
+    List<Account> allAccounts = dbController.getAllAccounts();
+    for (Account acc : allAccounts) {
+      if (acc.isEmployee()) {
+        editMeetingNotInvitedUsers.add(new AccountTableCell(acc, meeting));
+      }
+    }
+    
+    List<Account> theList = meeting.getAcceptedList();
+    for (Account acc : theList) {
+      editMeetingInvitedUsers.add(new AccountTableCell(acc, meeting));
+    }
+    
+    theList = meeting.getInvitedList();
+    
+    for (Account acc : theList) {
+      editMeetingInvitedUsers.add(new AccountTableCell(acc, meeting));
+    }
   }
 
   
@@ -877,8 +957,23 @@ public class UserGUIController implements Initializable {
     
     if (cell != null) {
       Meeting meeting = dbController.getMeeting(cell.meetingID.get());
+      
+      List<Meeting> meetings = account.getMeetingList();
+      
+      for (int i = 0; i < meetings.size(); ++i) {
+        Meeting me = meetings.get(i);
+        if (me != null) {
+          if (me.getMeetingID().equals(meeting.getMeetingID())) {
+            meetings.remove(i);
+            break;
+          }
+        }
+      }
+      
       if (meeting != null) {
+        dbController.updateObject(account);
         boolean removed = dbController.removeObject(meeting);
+        
         
         if (removed) {
           System.out.println("Removed!");

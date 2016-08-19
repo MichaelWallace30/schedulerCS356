@@ -959,18 +959,25 @@ public class UserGUIController implements Initializable {
       }
       
       // This is where I call upon the power of zues...
+      // This is hell... Wallace has a bounty on me...
       Schedule sch = meeting.getSchedule();
       int hour = editMeetingStartTimeChooserHour.getValue().intValue();
       
       if (editMeetingTimeDay.getValue().equals("PM")) {
-        hour += 12;
-        
-        if (hour > 23) {
+        if (hour == TIME_HOUR) {
+          hour = TIME_HOUR;
+        } else {
+          hour += TIME_HOUR;
+          if (hour > 23) {
+            hour = TIME_HOUR;
+          }
+        }
+      } else {
+        if (hour == TIME_HOUR) {
           hour = 0;
         }
       }
       
-      // This is hell... Wallace has a bounty on me...
       LocalDateTime newDate = editMeetingDatePicker
               .getValue()
               .atStartOfDay()
@@ -981,9 +988,16 @@ public class UserGUIController implements Initializable {
       hour = editMeetingEndTimeChooserHour1.getValue().intValue();
       
       if (editMeetingEndTimeDay.getValue().equals("PM")) {
-        hour += 12;
-        
-        if (hour > 23) {
+        if (hour == TIME_HOUR) {
+          hour = TIME_HOUR;
+        } else {
+          hour += TIME_HOUR;
+          if (hour > 23) {
+            hour = TIME_HOUR;
+          }
+        }
+      } else {
+        if (hour == TIME_HOUR) {
           hour = 0;
         }
       }
@@ -1076,32 +1090,49 @@ public class UserGUIController implements Initializable {
         
     Schedule sch = meeting.getSchedule();
     index = sch.getStartDateTime().getHour() - 1;
-        
-    if (index > TIME_HOUR) {
-      index = index - TIME_HOUR;
-      editMeetingTimeDay.getSelectionModel().select(1);
-    } else if (index < 0) {
-      index = 0;
-    } else {
+    
+    if (index < 0) {
+      index = TIME_HOUR - 1;
       editMeetingTimeDay.getSelectionModel().select(0);
+    } else {  
+      if (index >= TIME_HOUR) {
+        index = index - TIME_HOUR;
+        editMeetingTimeDay.getSelectionModel().select(1);
+      } else if (index < 0) {
+        index = 0;
+      } else {
+        if (index == (TIME_HOUR - 1)) {
+          editMeetingTimeDay.getSelectionModel().select(1);
+        } else {
+          editMeetingTimeDay.getSelectionModel().select(0);
+        }
+      }   
     }
-        
+    
     editMeetingStartTimeChooserHour.getSelectionModel().select(index);
     index = sch.getStartDateTime().getMinute();
     editMeetingStartTimeMinuteChooser.getSelectionModel().select(index);
     index = sch.getEndDateTime().getMinute();
     editMeetingEndTimeMinuteChooser1.getSelectionModel().select(index);
     index = sch.getEndDateTime().getHour() - 1;
-        
-    if (index > TIME_HOUR) {
-      index = index - TIME_HOUR;
-      editMeetingEndTimeDay.getSelectionModel().select(1);
-    } else if (index < 0) {
-      index = 0;
-    } else {
-      editMeetingEndTimeDay.getSelectionModel().select(0);
-    }
     
+    if (index < 0) {
+      index = TIME_HOUR - 1;
+      editMeetingEndTimeDay.getSelectionModel().select(0);
+    } else {  
+      if (index >= TIME_HOUR) {
+        index = index - TIME_HOUR;
+        editMeetingEndTimeDay.getSelectionModel().select(1);
+      } else if (index < 0) {
+        index = 0;
+      } else {
+        if (index == (TIME_HOUR - 1)) {
+          editMeetingEndTimeDay.getSelectionModel().select(1);
+        } else {
+          editMeetingEndTimeDay.getSelectionModel().select(0);
+        }
+      }
+    }
     editMeetingEndTimeChooserHour1.getSelectionModel().select(index);
     editMeetingDatePicker.setValue(sch.getStartDateTime().toLocalDate());
     

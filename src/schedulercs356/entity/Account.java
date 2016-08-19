@@ -235,6 +235,10 @@ public class Account implements DataBaseInterface {
         this.invitedMeetingListTableName = invitedMeetingListTableName;
     }
 
+    public void removeMeeting(Meeting meeting){
+        meetingList.removeFirstOccurrence(meeting);
+        invitedMeetingList.removeFirstOccurrence(meeting);
+    }
     
     private Boolean addMeetingTable(Connection con, String meetingID, String listName){
         try
@@ -313,7 +317,8 @@ public class Account implements DataBaseInterface {
 
                 
     @Override
-    public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
+    public void removeObject(DataBaseInterface obj, Connection con)throws SQLException{
+        Statement stmt = con.createStatement();
         Account account = (Account)obj; 
         stmt.executeUpdate("DELETE FROM EMPLOYEES " + "WHERE ID = " +  account.getId());
           

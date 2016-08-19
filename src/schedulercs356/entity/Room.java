@@ -151,7 +151,8 @@ public class Room implements DataBaseInterface {
     }
     
     @Override
-    public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
+    public void removeObject(DataBaseInterface obj, Connection con)throws SQLException{
+        Statement stmt = con.createStatement();
         Room room = (Room)obj;
         stmt.executeUpdate("DELETE FROM ROOMS " + " WHERE ROOM_NUMBER = " +  room.getRoomNumber());
 

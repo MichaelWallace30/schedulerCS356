@@ -311,10 +311,30 @@ public class Meeting implements DataBaseInterface {
     }
     
     @Override
-    public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
+    public void removeObject(DataBaseInterface obj, Connection con)throws SQLException{
+        Statement stmt = con.createStatement();
         Meeting meeting = (Meeting)obj;
         String s = meeting.getMeetingID();
         stmt.executeUpdate("DELETE FROM MEETING " + " WHERE ID = \'" +  meeting.getMeetingID() + "\'");
+        
+        while(invitedList.size() > 0){
+            Account tempAccount = invitedList.getFirst();
+            tempAccount.removeMeeting(this);
+            tempAccount.updateObject(tempAccount, con);
+        }
+        
+        while(acceptedList.size() > 0){
+            Account tempAccount = invitedList.getFirst();
+            tempAccount.removeMeeting(this);
+            tempAccount.updateObject(tempAccount, con);
+            
+        }
+        
+        while(rejectedList.size() > 0){
+            Account tempAccount = invitedList.getFirst();
+            tempAccount.removeMeeting(this);
+            tempAccount.updateObject(tempAccount, con);
+        }
         
         String sql = "DROP TABLE " + this.acceptedMeetingListTableName.toUpperCase();
         stmt.executeUpdate(sql);
@@ -327,7 +347,7 @@ public class Meeting implements DataBaseInterface {
         stmt.executeUpdate(sq3);
         
         if(schedule != null){
-            schedule.removeObject(schedule, stmt);
+            schedule.removeObject(schedule, con);
         }
     }
     

@@ -91,9 +91,8 @@ public class DataBaseController {
     
     public Boolean removeObject(DataBaseInterface obj){
         try
-        {
-            Statement stmt = con.createStatement();
-            obj.removeObject(obj, stmt);
+        {            
+            obj.removeObject(obj, con);
         }
         catch(SQLException err)
         {

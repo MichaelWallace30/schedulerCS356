@@ -19,10 +19,6 @@ import java.util.ListIterator;
 /**
  *
  * @author Micahel Wallace
- * Needs:
- *  @TODO
- *  Missing address in employees table
-
  * 
  */
 public class Account implements DataBaseInterface {

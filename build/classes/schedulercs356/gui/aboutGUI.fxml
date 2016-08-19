@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="229.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="schedulercs356.controllers.AboutGUIController">
+   <children>
+      <Label layoutX="32.0" layoutY="34.0" prefHeight="17.0" prefWidth="185.0" text="CS 356 Meeting Sheduler">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <Label layoutX="59.0" layoutY="142.0" prefHeight="44.0" prefWidth="123.0" text="Michael Wallace" textAlignment="CENTER">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="76.0" layoutY="85.0" prefHeight="21.0" prefWidth="97.0" text="Version 1.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="68.0" layoutY="120.0" prefHeight="44.0" prefWidth="88.0" text="Mario Garcia" textAlignment="RIGHT">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

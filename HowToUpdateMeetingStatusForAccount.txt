@@ -1,0 +1,39 @@
+How to update meeting sttaua of account and meeting based on accepeting or declineing meetings
+
+Account has two meeting list:
+
+	meetingList
+	invitedMeetingList
+	
+	When a meeting is created it automatically changes an accounts invitedMeetingList by 
+	entity object meeting checking its own invited list.
+	
+When an account logs in it should check its invitedMeetingList and force the account to accept or decline:
+
+	data base method should be used:
+		updateAccountMeetingAttendenceStatus(Account account, Meeting meeting, Boolean attedningMeetingBoolean)
+		
+		
+		
+		EX:
+		
+		Account myAccount = getAccount(id form login controller);
+		db = data base controller;
+		
+		LinkedList<Meeting> invitedList = myAccount.getInvitedMeetingList();
+		
+		while(invitedList.size() > 0)//asuuming list is a pointer to the class list
+		{
+			Meeting tempMeeting = invitedList.peekFirst();
+			
+			//display and get decission from user on gui level
+			Boolean accepetedInvited = gui bs get response;
+						
+			//this method will remove the meeting from account invited list and decide if it should
+			//go into the meeting list. It will also update the meetings lists
+			db.updateAccountMeetingAttendenceStatus(myAccount, tempMeeting, acceptedInvited);
+		
+		}
+		
+		//don't set any meeting lists for account or meeting it is done in above method
+		//not need to update on db level it is done for you, but if you do it won't be a problem

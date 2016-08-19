@@ -78,6 +78,7 @@ public class UserGUIController implements Initializable {
   private List<Account> accountReferences;
   private List<Schedule> accountSchedules;
   
+  private ObservableList<AccountTableCell> tempRejected;
   private ObservableList<MeetingTableCell> meetingData;
   private ObservableList<AccountTableCell> accounts;
   private ObservableList<Schedule> schedules;
@@ -312,6 +313,8 @@ public class UserGUIController implements Initializable {
     schedules = FXCollections.observableArrayList();
     meetingData = FXCollections.observableArrayList();
     rooms = FXCollections.observableArrayList();
+    tempRejected = FXCollections.observableArrayList();
+    
     SplitPane.setResizableWithParent(sidebarSplitPane, Boolean.FALSE);
     SplitPane.setResizableWithParent(otherSplitPane, Boolean.FALSE);
  
@@ -907,6 +910,8 @@ public class UserGUIController implements Initializable {
   private void onEditRoom(ActionEvent event) {
     tabEditRooms.getTabPane().getSelectionModel().select(tabEditRooms);
     
+    tabEditRooms.setDisable(false);
+    
     editMeetingIdText.setText("");
     
   }
@@ -922,12 +927,97 @@ public class UserGUIController implements Initializable {
   }
 
   
+  /**
+   * Update the meeting. BIG OL' ALGORITHM.
+   * @param event 
+   */
   @FXML
   private void onEditMeetingUpdate(ActionEvent event) {
+    String id = editMeetingIdText.getText();
+    Meeting meeting = dbController.getMeeting(id);
     
+    if (meeting != null) {
+      // TODO (Garcia): Must check if an invitation has already been 
+      // sent. This won't require too much time.
+    
+      // Send invitations to invited users.
+      for (int i = 0; i < editMeetingInvitedUsers.size(); ++i) {
+        AccountTableCell cell = editMeetingInvitedUsers.get(i);
+        Account acc = dbController.getAccount(cell.id.get());
+        // store account ref into invited list.
+        if (acc != null) {
+          meeting.getInvitedList().add(acc);
+        }
+      }
+      
+      // remove users from invite list
+      for (int i = 0; i < tempRejected.size(); ++i) {
+        Account acc = dbController.getAccount(tempRejected.get(i).id.get());
+        meeting.getRejectedList().add(acc);
+        // Not sure if this works. May need to check.
+        meeting.getInvitedList().remove(acc);
+      }
+      
+      // This is where I call upon the power of zues...
+      Schedule sch = meeting.getSchedule();
+      int hour = editMeetingStartTimeChooserHour.getValue().intValue();
+      
+      if (editMeetingTimeDay.getValue().equals("PM")) {
+        hour += 12;
+        
+        if (hour > 23) {
+          hour = 0;
+        }
+      }
+      
+      // This is hell... Wallace has a bounty on me...
+      LocalDateTime newDate = editMeetingDatePicker
+              .getValue()
+              .atStartOfDay()
+              .withHour(hour)
+              .withMinute(editMeetingStartTimeMinuteChooser.getValue().intValue());
+     
+      // Now lets do endTime.
+      hour = editMeetingEndTimeChooserHour1.getValue().intValue();
+      
+      if (editMeetingEndTimeDay.getValue().equals("PM")) {
+        hour += 12;
+        
+        if (hour > 23) {
+          hour = 0;
+        }
+      }
+      
+      LocalDateTime end = editMeetingDatePicker
+              .getValue()
+              .atStartOfDay()
+              .withHour(hour)
+              .withMinute(editMeetingEndTimeMinuteChooser1.getValue().intValue());
+      // update the schedule.
+      sch.setStartDateTime(newDate);
+      sch.setEndDateTime(end);
+      
+      // now update the room.
+      RoomTableCell roomCell = editMeetingRoomSelectColumn.getSelectionModel().getSelectedItem();
+      if (roomCell != null) {
+        Room room = dbController.getRoom(roomCell.roomNumber.get());
+        // room will keep reference to meeting.
+        room.addMeeting(meeting);
+        meeting.setRoom(room);
+        // update room.
+        dbController.updateObject(room);
+      }
+      
+      // Update the meeting in db.
+      dbController.updateObject(meeting);
+    }
   }
 
   
+  /**
+   * Add to invites.
+   * @param event 
+   */
   @FXML
   private void onAddToInvitesButton(ActionEvent event) {
     AccountTableCell cell = editMeetingUsersNoInviteTable.getSelectionModel().getSelectedItem();
@@ -946,6 +1036,7 @@ public class UserGUIController implements Initializable {
     if (cell != null) {
       editMeetingInvitedUsers.remove(cell);
       editMeetingNotInvitedUsers.add(cell);
+      tempRejected.add(cell);
     }
   }
 
@@ -975,8 +1066,10 @@ public class UserGUIController implements Initializable {
    * @param meetingIndex 
    */
   private void setupEditMeeting(Meeting meeting, int meetingIndex) {
+    tempRejected.clear();
     editMeetingNotInvitedUsers.clear();
     editMeetingInvitedUsers.clear();
+    
     meetingSelectedIndex = meetingIndex;
     editMeetingIdText.setText(meeting.getMeetingID());
     int index;

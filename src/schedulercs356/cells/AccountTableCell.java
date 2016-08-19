@@ -6,6 +6,8 @@
 package schedulercs356.cells;
 
 import java.util.List;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import schedulercs356.entity.Account;
@@ -20,6 +22,7 @@ public class AccountTableCell {
   public StringProperty fullname;
   public StringProperty inviteStatus;
   public StringProperty contact;
+  public IntegerProperty id;
   
   public AccountTableCell(Account account, Meeting meeting) {
     String status = "Unknown";
@@ -28,6 +31,7 @@ public class AccountTableCell {
     username = new SimpleStringProperty(account.getUserName());
     fullname = new SimpleStringProperty(account.getFirstName() + " " + account.getLastName());
     contact = new SimpleStringProperty(account.getAddress());
+    id = new SimpleIntegerProperty(account.getId());
     
     if (foundInMeetingLists(list, account)) {
       status = "Attending";

@@ -352,7 +352,7 @@ public class UserGUIController implements Initializable {
       //sidebarDate.setText(new Date().toString());
       profileUserName.setText(account.getUserName());
       profileAddress.setText("Address: " + account.getAddress());
-      sidebarDate.setText(new Date().toString());
+      parseDateToDisplay(LocalDateTime.now());
       runTimeOnThread();
       addMeetingsToTables();      
       addRoomsInTables();
@@ -397,7 +397,15 @@ public class UserGUIController implements Initializable {
   private void runTimeOnThread() {
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
       LocalDateTime date = LocalDateTime.now();
-      
+      parseDateToDisplay(date);
+    }));
+    
+    timeline.setCycleCount(Animation.INDEFINITE);
+    timeline.play();
+  }
+  
+  
+  private void parseDateToDisplay(LocalDateTime date) {    
       int hour = date.getHour();
       String timeDay = "AM";
       
@@ -410,10 +418,6 @@ public class UserGUIController implements Initializable {
               + date.getMonth() + " " + date.getDayOfMonth() + ", "
               + date.getYear() + "\n " + hour + ":" + date.getMinute() 
               + ":" + date.getSecond() + " " + timeDay);
-    }));
-    
-    timeline.setCycleCount(Animation.INDEFINITE);
-    timeline.play();
   }
   
   
@@ -989,6 +993,10 @@ public class UserGUIController implements Initializable {
   }
 
   
+  /**
+   * Remove the meeting from user.
+   * @param event 
+   */
   @FXML
   private void onRemoveMeeting(ActionEvent event) {
     MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();

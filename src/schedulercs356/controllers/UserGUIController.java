@@ -1002,10 +1002,10 @@ public class UserGUIController implements Initializable {
       if (roomCell != null) {
         Room room = dbController.getRoom(roomCell.roomNumber.get());
         // room will keep reference to meeting.
-        room.addMeeting(meeting);
+        //room.addMeeting(meeting);
         meeting.setRoom(room);
         // update room.
-        dbController.updateObject(room);
+        //dbController.updateObject(room);
       }
       
       // Update the meeting in db.

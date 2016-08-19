@@ -29,6 +29,7 @@ import javafx.util.Duration;
  */
 public class wrongPassWordController implements Initializable {
     String soundFile = "src/schedulercs356/funstuff/jurass01.mp3";
+    MediaPlayer mediaPlayer;
     
     @FXML
     ImageView imageView1;
@@ -51,8 +52,11 @@ public class wrongPassWordController implements Initializable {
        
         if (soundF.exists()) {
           Media sound = new Media(soundF.toURI().toString());
-          MediaPlayer mediaPlayer = new MediaPlayer(sound);
+          
+          mediaPlayer = new MediaPlayer(sound);
+          mediaPlayer.setCycleCount(Integer.MAX_VALUE);
           mediaPlayer.play();
+          
         } else {
           System.out.println(soundF.getAbsolutePath().toString());
           throw new RuntimeException("File does not exist");
@@ -92,4 +96,7 @@ public class wrongPassWordController implements Initializable {
         return blink;
     }
     
+    public void stop() {
+      mediaPlayer.dispose();
+    }
 }

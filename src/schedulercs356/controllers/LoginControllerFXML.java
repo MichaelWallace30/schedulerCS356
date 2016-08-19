@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,6 +26,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import schedulercs356.bundles.LoginAccountBundle;
 
 /**
@@ -103,6 +105,10 @@ public class LoginControllerFXML implements Initializable {
               stage.initOwner(parentStage);
               stage.initModality(Modality.WINDOW_MODAL);
               stage.setTitle("DIDN'T SAY THE MAGIC WORD!!");
+              
+              stage.setOnCloseRequest((WindowEvent event) -> {
+                
+              });
               
               stage.showAndWait();
               incorrectTries = 0;

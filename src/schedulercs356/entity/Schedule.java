@@ -78,7 +78,8 @@ public class Schedule implements DataBaseInterface  {
     }
                 
     @Override
-    public void removeObject(DataBaseInterface obj,  Statement stmt)throws SQLException{
+    public void removeObject(DataBaseInterface obj, Connection con)throws SQLException{
+        Statement stmt = con.createStatement();
         Schedule schedule = (Schedule)obj;
         stmt.executeUpdate("DELETE FROM SCHEDULE " + " WHERE OWNER_ID = \'" +  schedule.getMeetingID() + "\'");
         

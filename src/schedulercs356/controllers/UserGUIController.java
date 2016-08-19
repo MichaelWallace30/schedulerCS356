@@ -64,6 +64,8 @@ import schedulercs356.entity.Schedule;
 public class UserGUIController implements Initializable {
   private static final String EMPLOYEE = "Employee";
   private static final String ADMINISTRATOR = "Administrator";
+  private static final Integer MAX_SIDE_BAR_DISPLAY = 5;
+  private Integer meetingsDisplayed = 0;
   
   // Our databaseController.
   private DataBaseController dbController;
@@ -394,7 +396,20 @@ public class UserGUIController implements Initializable {
    */
   private void runTimeOnThread() {
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
-      sidebarDate.setText(new Date().toString());
+      LocalDateTime date = LocalDateTime.now();
+      
+      int hour = date.getHour();
+      String timeDay = "AM";
+      
+      if (hour > 12) {
+        hour = hour - 12;
+        timeDay = "PM";
+      }
+      
+      sidebarDate.setText(date.getDayOfWeek() + " "
+              + date.getMonth() + " " + date.getDayOfMonth() + ", "
+              + date.getYear() + "\n " + hour + ":" + date.getMinute() 
+              + ":" + date.getSecond() + " " + timeDay);
     }));
     
     timeline.setCycleCount(Animation.INDEFINITE);
@@ -407,7 +422,6 @@ public class UserGUIController implements Initializable {
    * Employee Administrators.
    */
   private void addMeetingsToTables() {
-      
     /*
       @TODO
       I changed list id to objects this code is probably now not needed
@@ -422,7 +436,32 @@ public class UserGUIController implements Initializable {
         // Prolly don't need it yet.
         //List<Account> rejectedList = meeting.getRejectedList();
         accountMeetings.add(meeting);
-        meetingData.add(new MeetingTableCell(meeting, account));       
+        meetingData.add(new MeetingTableCell(meeting, account));
+        
+        if (meetingsDisplayed < MAX_SIDE_BAR_DISPLAY) {
+          Schedule s = meeting.getSchedule();
+          if (s != null) {
+            
+            int hour = s.getStartDateTime().getHour();
+            String dayTime = "AM";
+            
+            if (hour > 12) {
+              hour = hour - 12;
+              dayTime = "PM";
+            }
+            
+            Text newText = new Text("Meeting on " + s.getStartDateTime().getDayOfWeek()
+                + " " + s.getStartDateTime().getDayOfMonth()
+                + " of " + s.getStartDateTime().getMonth()
+                + ", " + s.getStartDateTime().getYear()
+                + " at " + hour
+                + " : " + s.getStartDateTime().getMinute()
+                + " " + dayTime + "\n");
+          
+            sidebarUpcomingMeetingsDisplay.getChildren().add(newText);
+            meetingsDisplayed++;
+          }
+        }
       }
     }
   }

@@ -244,7 +244,8 @@ public class Meeting implements DataBaseInterface {
         catch(SQLException err){
             //System.out.println(err.getMessage());
             //ignore duplicate excetions
-          err.printStackTrace();
+          // We should print the debug though.
+          System.err.println("Account " + accountID + " is a duplicate! Removing.");
         }
         return false;
     }

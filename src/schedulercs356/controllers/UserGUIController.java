@@ -467,6 +467,7 @@ public class UserGUIController implements Initializable {
       if (meeting != null) {
         // Prolly don't need it yet.
         //List<Account> rejectedList = meeting.getRejectedList();
+        meeting = dbController.getMeeting(meeting.getMeetingID());
         accountMeetings.add(meeting);
         meetingData.add(new MeetingTableCell(meeting, account));
         

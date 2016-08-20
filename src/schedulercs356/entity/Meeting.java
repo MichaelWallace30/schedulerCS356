@@ -330,21 +330,17 @@ public class Meeting implements DataBaseInterface {
         String s = meeting.getMeetingID();
         stmt.executeUpdate("DELETE FROM MEETING " + " WHERE ID = \'" +  meeting.getMeetingID() + "\'");
         
-        while(invitedList.size() > 0){
-            Account tempAccount = invitedList.getFirst();
+        for (Account tempAccount : invitedList) {
             tempAccount.removeMeeting(this);
             tempAccount.updateObject(tempAccount, con);
         }
         
-        while(acceptedList.size() > 0){
-            Account tempAccount = invitedList.getFirst();
+        for (Account tempAccount : acceptedList) {
             tempAccount.removeMeeting(this);
             tempAccount.updateObject(tempAccount, con);
-            
         }
         
-        while(rejectedList.size() > 0){
-            Account tempAccount = invitedList.getFirst();
+        for (Account tempAccount : rejectedList) {
             tempAccount.removeMeeting(this);
             tempAccount.updateObject(tempAccount, con);
         }

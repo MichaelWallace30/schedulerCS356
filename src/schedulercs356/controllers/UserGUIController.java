@@ -1265,6 +1265,8 @@ public class UserGUIController implements Initializable {
       }
       
       if (!success) {
+        meetings = account.getInvitedMeetingList();
+        
         for (int i = 0; i < meetings.size(); ++i) {
           Meeting me = meetings.get(i);
           if (me != null) {

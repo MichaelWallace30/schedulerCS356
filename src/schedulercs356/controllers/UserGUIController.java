@@ -976,7 +976,15 @@ public class UserGUIController implements Initializable {
         Account acc = dbController.getAccount(tempRejected.get(i).id.get());
         meeting.getRejectedList().add(acc);
         // Not sure if this works. May need to check.
-        meeting.getInvitedList().remove(acc);
+        List<Account> invited = meeting.getInvitedList();
+        
+        for (int j = 0; j < invited.size(); ++j) {
+          Account culprit = invited.get(j);
+          if (culprit.getId() == acc.getId()) {
+            invited.remove(j);
+            break;
+          }
+        }
       }
       
       // This is where I call upon the power of zues...

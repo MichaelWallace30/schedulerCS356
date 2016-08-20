@@ -460,40 +460,48 @@ public class UserGUIController implements Initializable {
       I put this in to no break any thing
       if not meeting list this breaks the code
       */
-    List<Meeting> meetings = account.getMeetingList();
-    
+    List<Meeting> meetings = account.getInvitedMeetingList();
+    addMeetingsToTable(meetings);
+    meetings = account.getMeetingList();
+    addMeetingsToTable(meetings);
+  }
+  
+  
+  private void addMeetingsToTable(List<Meeting> meetings) {
     for (Meeting meeting : meetings) {
       
       if (meeting != null) {
         // Prolly don't need it yet.
         //List<Account> rejectedList = meeting.getRejectedList();
         meeting = dbController.getMeeting(meeting.getMeetingID());
-        accountMeetings.add(meeting);
-        meetingData.add(new MeetingTableCell(meeting, account));
         
-        if (meetingsDisplayed < MAX_SIDE_BAR_DISPLAY) {
-          Schedule s = meeting.getSchedule();
-          if (s != null) {
+        if (meeting != null) {
+          accountMeetings.add(meeting);
+          meetingData.add(new MeetingTableCell(meeting, account));
+        
+          if (meetingsDisplayed < MAX_SIDE_BAR_DISPLAY) {
+            Schedule s = meeting.getSchedule();
+            if (s != null) {
             
-            int hour = s.getStartDateTime().getHour();
-            int minute = s.getStartDateTime().getMinute();
-            String minuteString = "00";
-            String dayTime = "AM";
+              int hour = s.getStartDateTime().getHour();
+              int minute = s.getStartDateTime().getMinute();
+              String minuteString = "00";
+              String dayTime = "AM";
             
-            if (hour > TIME_HOUR) {
-              hour = hour - TIME_HOUR;
-              dayTime = "PM";
-            } else if (hour <= 0) {
-              hour = TIME_HOUR;
-            }
+              if (hour > TIME_HOUR) {
+                hour = hour - TIME_HOUR;
+                dayTime = "PM";
+              } else if (hour <= 0) {
+                hour = TIME_HOUR;
+              }
+              
+              if (minute < TIME_ONE_DIGIT) {
+                minuteString = "0" + minute;
+              } else {
+                minuteString = String.valueOf(minute);
+              }
             
-            if (minute < TIME_ONE_DIGIT) {
-              minuteString = "0" + minute;
-            } else {
-              minuteString = String.valueOf(minute);
-            }
-            
-            Text newText = new Text("Meeting on " + s.getStartDateTime().getDayOfWeek()
+              Text newText = new Text("Meeting on " + s.getStartDateTime().getDayOfWeek()
                 + " " + s.getStartDateTime().getDayOfMonth()
                 + " of " + s.getStartDateTime().getMonth()
                 + ", " + s.getStartDateTime().getYear()
@@ -501,8 +509,9 @@ public class UserGUIController implements Initializable {
                 + " : " + minuteString
                 + " " + dayTime + "\n");
           
-            sidebarUpcomingMeetingsDisplay.getChildren().add(newText);
-            meetingsDisplayed++;
+              sidebarUpcomingMeetingsDisplay.getChildren().add(newText);
+              meetingsDisplayed++;
+            }
           }
         }
       }
@@ -549,6 +558,8 @@ public class UserGUIController implements Initializable {
       
       if (meeting != null) {
         List<Account> cs = meeting.getInvitedList();
+        cs.addAll(meeting.getAcceptedList());
+        
         for (Account acc : cs) {
           accounts.add(new AccountTableCell(acc, meeting));
         }
@@ -676,6 +687,8 @@ public class UserGUIController implements Initializable {
             LocalDateTime.now()));
     
     account.getMeetingList().add(meeting);
+    meeting.getAcceptedList().add(account);
+    
     dbController.addObject(meeting);
     dbController.updateObject(account);
    
@@ -967,7 +980,12 @@ public class UserGUIController implements Initializable {
         Account acc = dbController.getAccount(cell.id.get());
         // store account ref into invited list.
         if (acc != null) {
+          // Add the account into the meeting invite list.
           meeting.getInvitedList().add(acc);
+          
+          // Add the meeting into the account invited list.
+          acc.getInvitedMeetingList().add(meeting);
+          dbController.updateObject(acc);
         }
       }
       
@@ -1182,7 +1200,9 @@ public class UserGUIController implements Initializable {
     
     List<Account> theList = meeting.getAcceptedList();
     for (Account acc : theList) {
-      editMeetingInvitedUsers.add(new AccountTableCell(acc, meeting));
+      if (acc.getId() != account.getId()) {
+        editMeetingInvitedUsers.add(new AccountTableCell(acc, meeting));
+      }
     }
     
     theList = meeting.getInvitedList();
@@ -1192,14 +1212,26 @@ public class UserGUIController implements Initializable {
     }
     
     // Remove the users that are already invited, out of the noninvited list!
-    for (AccountTableCell cell : editMeetingInvitedUsers) {
+    if ( !editMeetingInvitedUsers.isEmpty() ) {
+      for (AccountTableCell cell : editMeetingInvitedUsers) {
+        for (int i = 0; i < editMeetingNotInvitedUsers.size(); ++i) {
+          AccountTableCell notInvitedAccount = editMeetingNotInvitedUsers.get(i);
+          if ((notInvitedAccount.id.get() == cell.id.get())) {
+            editMeetingNotInvitedUsers.remove(i--);
+          } else if (notInvitedAccount.id.get() == account.getId()) {
+            // Remove the host from the non invited list!
+            editMeetingNotInvitedUsers.remove(i--);
+          }
+        }
+      }
+    } else {
+      // Just find the Host and remove him from noninvited users.
       for (int i = 0; i < editMeetingNotInvitedUsers.size(); ++i) {
         AccountTableCell notInvitedAccount = editMeetingNotInvitedUsers.get(i);
-        if ((notInvitedAccount.id.get() == cell.id.get())) {
-          editMeetingNotInvitedUsers.remove(i);
-        } else if (notInvitedAccount.id.get() == account.getId()) {
+        if (notInvitedAccount.id.get() == account.getId()) {
           // Remove the host from the non invited list!
-          editMeetingNotInvitedUsers.remove(i--);
+          editMeetingNotInvitedUsers.remove(i);
+          break;
         }
       }
     }
@@ -1219,18 +1251,33 @@ public class UserGUIController implements Initializable {
       Meeting meeting = dbController.getMeeting(cell.meetingID.get());
       
       List<Meeting> meetings = account.getMeetingList();
+      boolean success = false;
       
       for (int i = 0; i < meetings.size(); ++i) {
         Meeting me = meetings.get(i);
         if (me != null) {
           if (me.getMeetingID().equals(meeting.getMeetingID())) {
             meetings.remove(i);
+            success = true;
             break;
           }
         }
       }
       
-      if (meeting != null) {
+      if (!success) {
+        for (int i = 0; i < meetings.size(); ++i) {
+          Meeting me = meetings.get(i);
+          if (me != null) {
+            if (me.getMeetingID().equals(meeting.getMeetingID())) {
+              meetings.remove(i);
+              success = true;
+              break;
+            }
+          }
+        }      
+      }
+      
+      if (meeting != null && success) {
         dbController.updateObject(account);
         boolean removed = dbController.removeObject(meeting);
         

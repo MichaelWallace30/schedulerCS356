@@ -542,7 +542,7 @@ public class UserGUIController implements Initializable {
     
     // Set up a listener to the observer.
     meetingTable.getSelectionModel().selectedItemProperty().addListener((edc, old, n) -> {
-      System.out.println("Initializing users for selected meeting.");
+      System.out.println("Initializing users in meeting " + n.meetingID.get());
       accounts.clear();
       MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
       Meeting meeting = dbController.getMeeting(cell.meetingID.get());
@@ -552,6 +552,8 @@ public class UserGUIController implements Initializable {
         for (Account acc : cs) {
           accounts.add(new AccountTableCell(acc, meeting));
         }
+      } else {
+        System.err.println("Meeting " + n.meetingID.get() + " does not exist!");
       }
       
     });
@@ -720,7 +722,7 @@ public class UserGUIController implements Initializable {
       stage.setTitle("Login");
       stage.show();
     } catch (IOException e) {
-      
+      e.printStackTrace();
     }
   }
 
@@ -760,7 +762,7 @@ public class UserGUIController implements Initializable {
       stage.showAndWait();
       
       
-      System.out.println("I did it!");
+      System.out.println("Admin Tables have been initialized.");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -854,6 +856,8 @@ public class UserGUIController implements Initializable {
             boolean success = dbController.removeObject(victimAccount);
             if (success) {
               adminEnabledAccounts.remove(index);
+            } else {
+              System.err.println("Account" + victimAccount.getId() + " was not properly removed!");
             }
           }
         });
@@ -1041,6 +1045,8 @@ public class UserGUIController implements Initializable {
       
       // Update the meeting in db.
       dbController.updateObject(meeting);
+    } else {
+      System.err.println("Meeting " + id + " does not exist in the database!");
     }
   }
 
@@ -1175,6 +1181,16 @@ public class UserGUIController implements Initializable {
     
     for (Account acc : theList) {
       editMeetingInvitedUsers.add(new AccountTableCell(acc, meeting));
+    }
+    
+    // Remove the users that are already invited, out of the noninvited list!
+    for (AccountTableCell cell : editMeetingInvitedUsers) {
+      for (int i = 0; i < editMeetingNotInvitedUsers.size(); ++i) {
+        AccountTableCell notInvitedAccount = editMeetingNotInvitedUsers.get(i);
+        if (notInvitedAccount.id.get() == cell.id.get()) {
+          editMeetingNotInvitedUsers.remove(i);
+        }
+      }
     }
   }
 

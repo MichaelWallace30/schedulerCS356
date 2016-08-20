@@ -54,7 +54,7 @@ public class AccountTableCell {
   private boolean foundInMeetingLists(List<Account> list, Account account) {
     boolean success = false;
     
-    if (list != null) {
+    if (list == null) {
       return success;
     }
     

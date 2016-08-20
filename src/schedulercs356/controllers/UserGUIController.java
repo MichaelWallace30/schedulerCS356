@@ -1112,7 +1112,7 @@ public class UserGUIController implements Initializable {
     MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
     int index = meetingTable.getSelectionModel().getSelectedIndex();
     
-    if (cell != null) {
+    if (cell != null && (cell.isHosting.get())) {
       Meeting meeting = dbController.getMeeting(cell.meetingID.get());
       if (meeting != null) {
         if (tabEditMeeting.isDisabled()) {
@@ -1250,7 +1250,7 @@ public class UserGUIController implements Initializable {
     MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
     int index = meetingTable.getSelectionModel().getFocusedIndex();
     
-    if (cell != null) {
+    if (cell != null && (cell.isHosting.get())) {
       Meeting meeting = dbController.getMeeting(cell.meetingID.get());
       
       List<Meeting> meetings = account.getMeetingList();

@@ -24,6 +24,12 @@ public class AccountTableCell {
   public StringProperty contact;
   public IntegerProperty id;
   
+  
+  /**
+   * Constructor.
+   * @param account
+   * @param meeting 
+   */
   public AccountTableCell(Account account, Meeting meeting) {
     String status = "Unknown";
     List<Account> list = meeting.getAcceptedList();
@@ -51,6 +57,13 @@ public class AccountTableCell {
     
   }
   
+  
+  /**
+   * Find the account in the list. Return true if found.
+   * @param list
+   * @param account
+   * @return 
+   */
   private boolean foundInMeetingLists(List<Account> list, Account account) {
     boolean success = false;
     

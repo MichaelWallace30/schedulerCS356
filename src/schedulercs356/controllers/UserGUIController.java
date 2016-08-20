@@ -551,22 +551,25 @@ public class UserGUIController implements Initializable {
     
     // Set up a listener to the observer.
     meetingTable.getSelectionModel().selectedItemProperty().addListener((edc, old, n) -> {
-      System.out.println("Initializing users in meeting " + n.meetingID.get());
-      accounts.clear();
-      MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
-      Meeting meeting = dbController.getMeeting(cell.meetingID.get());
+      if (n != null) {
+        System.out.println("Initializing users in meeting " + n.meetingID.get());
+        accounts.clear();
+        MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
+        Meeting meeting = dbController.getMeeting(cell.meetingID.get());
       
-      if (meeting != null) {
-        List<Account> cs = meeting.getInvitedList();
-        cs.addAll(meeting.getAcceptedList());
-        
-        for (Account acc : cs) {
-          accounts.add(new AccountTableCell(acc, meeting));
+        if (meeting != null) {
+          List<Account> cs = meeting.getInvitedList();
+          cs.addAll(meeting.getAcceptedList());
+          
+          for (Account acc : cs) {
+            accounts.add(new AccountTableCell(acc, meeting));
+          }
+        } else {
+          System.err.println("Meeting " + n.meetingID.get() + " does not exist!");
         }
       } else {
-        System.err.println("Meeting " + n.meetingID.get() + " does not exist!");
+        System.err.println("Selected cell is null! Must have been deleted...");
       }
-      
     });
   }
   

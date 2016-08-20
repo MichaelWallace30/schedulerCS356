@@ -1187,8 +1187,11 @@ public class UserGUIController implements Initializable {
     for (AccountTableCell cell : editMeetingInvitedUsers) {
       for (int i = 0; i < editMeetingNotInvitedUsers.size(); ++i) {
         AccountTableCell notInvitedAccount = editMeetingNotInvitedUsers.get(i);
-        if (notInvitedAccount.id.get() == cell.id.get()) {
+        if ((notInvitedAccount.id.get() == cell.id.get())) {
           editMeetingNotInvitedUsers.remove(i);
+        } else if (notInvitedAccount.id.get() == account.getId()) {
+          // Remove the host from the non invited list!
+          editMeetingNotInvitedUsers.remove(i--);
         }
       }
     }

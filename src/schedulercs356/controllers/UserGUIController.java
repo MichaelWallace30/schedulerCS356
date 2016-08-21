@@ -66,6 +66,7 @@ public class UserGUIController implements Initializable {
   private static final String ADMINISTRATOR = "Administrator";
   private static final Integer MAX_SIDE_BAR_DISPLAY = 5;
   private Integer meetingsDisplayed = 0;
+  private Integer invitesDisplayed = 0;
   
   // Our databaseController.
   private DataBaseController dbController;
@@ -479,42 +480,61 @@ public class UserGUIController implements Initializable {
           accountMeetings.add(meeting);
           meetingData.add(new MeetingTableCell(meeting, account));
         
-          if (meetingsDisplayed < MAX_SIDE_BAR_DISPLAY) {
-            Schedule s = meeting.getSchedule();
-            if (s != null) {
-            
-              int hour = s.getStartDateTime().getHour();
-              int minute = s.getStartDateTime().getMinute();
-              String minuteString = "00";
-              String dayTime = "AM";
-            
-              if (hour > TIME_HOUR) {
-                hour = hour - TIME_HOUR;
-                dayTime = "PM";
-              } else if (hour <= 0) {
-                hour = TIME_HOUR;
-              }
-              
-              if (minute < TIME_ONE_DIGIT) {
-                minuteString = "0" + minute;
-              } else {
-                minuteString = String.valueOf(minute);
-              }
-            
-              Text newText = new Text("Meeting on " + s.getStartDateTime().getDayOfWeek()
-                + " " + s.getStartDateTime().getDayOfMonth()
-                + " of " + s.getStartDateTime().getMonth()
-                + ", " + s.getStartDateTime().getYear()
-                + " at " + hour
-                + " : " + minuteString
-                + " " + dayTime + "\n");
-          
-              sidebarUpcomingMeetingsDisplay.getChildren().add(newText);
-              meetingsDisplayed++;
+          boolean isInvitee = false;
+          for (Account poss : meeting.getInvitedList()) {
+            if (poss.getId() == account.getId()) {
+              isInvitee = true;
+              break;
             }
+          }
+          
+          if (meetingsDisplayed < MAX_SIDE_BAR_DISPLAY && !isInvitee) {
+            addToSideBarDisplay(meeting, sidebarUpcomingMeetingsDisplay);
+            meetingsDisplayed++;
+          } else if (invitesDisplayed < MAX_SIDE_BAR_DISPLAY && isInvitee) {
+            addToSideBarDisplay(meeting, sidebarNewsDisplay);
+            invitesDisplayed++;
           }
         }
       }
+    }
+  }
+  
+  
+  private void addToSideBarDisplay(Meeting meeting, TextFlow flow) {
+    Schedule s = meeting.getSchedule();
+    if (s != null) {
+
+      int hour = s.getStartDateTime().getHour();
+      int minute = s.getStartDateTime().getMinute();
+      String minuteString = "00";
+      String dayTime = "AM";
+
+      if (hour >= TIME_HOUR) {
+        if (hour != 12) { 
+          hour = hour - TIME_HOUR;
+        }
+        
+        dayTime = "PM";
+      } else if (hour <= 0) {
+        hour = TIME_HOUR;
+      }
+
+      if (minute < TIME_ONE_DIGIT) {
+        minuteString = "0" + minute;
+      } else {
+        minuteString = String.valueOf(minute);
+      }
+
+      Text newText = new Text("Meeting on " + s.getStartDateTime().getDayOfWeek()
+              + " " + s.getStartDateTime().getDayOfMonth()
+              + " of " + s.getStartDateTime().getMonth()
+              + ", " + s.getStartDateTime().getYear()
+              + " at " + hour
+              + " : " + minuteString
+              + " " + dayTime + "\n");
+
+      flow.getChildren().add(newText);
     }
   }
   
@@ -558,6 +578,14 @@ public class UserGUIController implements Initializable {
         Meeting meeting = dbController.getMeeting(cell.meetingID.get());
       
         if (meeting != null) {
+          if (meeting.getOwnerID() == account.getId()) {
+            editMeetingButton.setDisable(false);
+            cancelMeetingButton.setDisable(false);
+          } else {
+            editMeetingButton.setDisable(true);
+            cancelMeetingButton.setDisable(true);
+          }
+          
           List<Account> cs = meeting.getInvitedList();
           cs.addAll(meeting.getAcceptedList());
           

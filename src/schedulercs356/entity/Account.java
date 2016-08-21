@@ -237,24 +237,31 @@ public class Account implements DataBaseInterface {
 
     public void removeMeeting(Meeting meeting, Connection con){
         
-        try{
+        try {
+          
             PreparedStatement ps = con.prepareStatement(
-            "DELETE FROM " + getMeetingListTableName() + "WHERE ID = ?");
+            "DELETE FROM " + getMeetingListTableName() + " WHERE MEETING_ID = ?");
              ps.setString(1,meeting.getMeetingID());   
              ps.executeUpdate();       
         
-        }catch(SQLException ex){
-            //igorne if not found
+        } catch (SQLException ex) {
+          //igorne if not found
+          System.err.println("In meeting table list...");
+          System.err.println("Meeting ID " + meeting.getMeetingID() + " could not be found in user " + id);
+          //ex.printStackTrace();
         }
         
-        try{
+        try {
             PreparedStatement ps = con.prepareStatement(
-            "DELETE FROM " + getInvitedMeetingListTableName() + "WHERE ID = ?");
+            "DELETE FROM " + getInvitedMeetingListTableName() + " WHERE MEETING_ID = ?");
              ps.setString(1,meeting.getMeetingID());   
              ps.executeUpdate();       
         
-        }catch(SQLException ex){
-            //igorne if not found
+        } catch(SQLException ex) {
+          //igorne if not found
+          System.err.println("In invited meeting table list...");
+          System.err.println("Meeting ID " + meeting.getMeetingID() + " could not be found in user " + id);
+          ex.printStackTrace();
         }
         
         

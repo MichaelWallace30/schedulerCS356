@@ -993,9 +993,13 @@ public class UserGUIController implements Initializable {
       }
       
       // remove users from invite list
+      List<Account> notInvitedBuffer = meeting.getUnInvitedList();
+      
       for (int i = 0; i < tempRejected.size(); ++i) {
         Account acc = dbController.getAccount(tempRejected.get(i).id.get());
         meeting.getRejectedList().add(acc);
+        // Add uninvited users into the buffer.
+        notInvitedBuffer.add(acc);
         // Not sure if this works. May need to check.
         List<Account> invited = meeting.getInvitedList();
         
@@ -1077,6 +1081,9 @@ public class UserGUIController implements Initializable {
     } else {
       System.err.println("Meeting " + id + " does not exist in the database!");
     }
+    
+    // Clear the buffer.
+    tempRejected.clear();
   }
 
   

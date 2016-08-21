@@ -44,6 +44,8 @@ public class Meeting implements DataBaseInterface {
     
     private Integer ownerID;
     
+    private LinkedList<Account> unInvitedList = new LinkedList<>();
+    
     
     private static String CREATE_TABLE_SQL = "(ACCOUNT_ID INTEGER primary key)";
     
@@ -331,18 +333,15 @@ public class Meeting implements DataBaseInterface {
         stmt.executeUpdate("DELETE FROM MEETING " + " WHERE ID = \'" +  meeting.getMeetingID() + "\'");
         
         for (Account tempAccount : invitedList) {
-            tempAccount.removeMeeting(this);
-            tempAccount.updateObject(tempAccount, con);
+            tempAccount.removeMeeting(this, con);                        
         }
         
         for (Account tempAccount : acceptedList) {
-            tempAccount.removeMeeting(this);
-            tempAccount.updateObject(tempAccount, con);
+            tempAccount.removeMeeting(this,con);            
         }
         
         for (Account tempAccount : rejectedList) {
-            tempAccount.removeMeeting(this);
-            tempAccount.updateObject(tempAccount, con);
+            tempAccount.removeMeeting(this,con);            
         }
         
         String sql = "DROP TABLE " + this.acceptedMeetingListTableName.toUpperCase();
@@ -364,9 +363,14 @@ public class Meeting implements DataBaseInterface {
     public Boolean updateObject(DataBaseInterface obj, Connection con)throws SQLException{
         Meeting meeting = (Meeting)obj;
         
-        
         //update invited list for each account
         ListIterator<Account> itAccount;
+        
+        for(Account temp: this.unInvitedList){
+         temp.removeMeeting(this, con);
+        }
+        
+        unInvitedList.clear();//earese the list
         
         itAccount = invitedList.listIterator();//check if people need new invited
         while(itAccount.hasNext()){
@@ -424,6 +428,14 @@ public class Meeting implements DataBaseInterface {
         return false;
         }
         return true;
+    }
+
+    public LinkedList<Account> getUnInvitedList() {
+        return unInvitedList;
+    }
+
+    public void setUnInvitedList(LinkedList<Account> unInvitedList) {
+        this.unInvitedList = unInvitedList;
     }
 
 

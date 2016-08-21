@@ -235,9 +235,29 @@ public class Account implements DataBaseInterface {
         this.invitedMeetingListTableName = invitedMeetingListTableName;
     }
 
-    public void removeMeeting(Meeting meeting){
-        meetingList.removeFirstOccurrence(meeting);
-        invitedMeetingList.removeFirstOccurrence(meeting);
+    public void removeMeeting(Meeting meeting, Connection con){
+        
+        try{
+            PreparedStatement ps = con.prepareStatement(
+            "DELETE FROM " + getMeetingListTableName() + "WHERE ID = ?");
+             ps.setString(1,meeting.getMeetingID());   
+             ps.executeUpdate();       
+        
+        }catch(SQLException ex){
+            //igorne if not found
+        }
+        
+        try{
+            PreparedStatement ps = con.prepareStatement(
+            "DELETE FROM " + getInvitedMeetingListTableName() + "WHERE ID = ?");
+             ps.setString(1,meeting.getMeetingID());   
+             ps.executeUpdate();       
+        
+        }catch(SQLException ex){
+            //igorne if not found
+        }
+        
+        
     }
     
     private Boolean addMeetingTable(Connection con, String meetingID, String listName){

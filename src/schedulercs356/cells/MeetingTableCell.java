@@ -63,6 +63,25 @@ public class MeetingTableCell {
     } else {
       roomNumber = new SimpleIntegerProperty(-1);
     }
-    
+  }
+  
+  public void setDate(String start, String end) {
+    date = new SimpleStringProperty(start + " - " + end);
+  }
+  
+  public void setMeetingID(String id) {
+    meetingID = new SimpleStringProperty(id);
+  }
+  
+  public void setNumberOfAttendees(Integer num) {
+    numberOfAttendees = new SimpleIntegerProperty(num);
+  }
+  
+  public void setIsHosting(Boolean yes) {
+    isHosting = new SimpleBooleanProperty(yes);
+  }
+  
+  public void setRoomNumbeR(Integer room) {
+    roomNumber = new SimpleIntegerProperty(room);
   }
 }

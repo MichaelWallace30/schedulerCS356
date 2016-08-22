@@ -26,6 +26,7 @@ package schedulercs356.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,6 +60,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -91,7 +93,7 @@ public class UserGUIController implements Initializable {
   
   private Account account;
   
-  private int meetingSelectedIndex;
+  private MeetingTableCell selectedMeetingCell;
   
   private List<Meeting> accountMeetings;
   private List<Account> accountReferences;
@@ -355,6 +357,7 @@ public class UserGUIController implements Initializable {
         
         if (account.isEmployee()) {
           status = EMPLOYEE + " " + status;
+          initializeSideBar();
         } else {
           tabPane.getTabs().remove(tabEditMeeting);
           tabPane.getTabs().remove(tabMeetingDetails);
@@ -374,7 +377,7 @@ public class UserGUIController implements Initializable {
         // Remove our admin and edit room tabs.
         tabPane.getTabs().remove(tabAdmin);
         tabPane.getTabs().remove(tabEditRooms);
-        
+        initializeSideBar();
       } 
       
       //sidebarDate.setText(new Date().toString());
@@ -389,6 +392,7 @@ public class UserGUIController implements Initializable {
       throw new RuntimeException("Null account value was passed!");
     }
   }
+  
   
     @FXML
     private void menuAboutButtonAction(ActionEvent event) {
@@ -433,6 +437,11 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * Parse the Date to a reasonable format. This is not a fully developed 
+   * clock, so the format is based on your Operating System.
+   * @param date 
+   */
   private void parseDateToDisplay(LocalDateTime date) {    
       int hour = date.getHour();
       String minuteString = "00";
@@ -486,7 +495,12 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * Adds meetings to tables.
+   * @param meetings 
+   */
   private void addMeetingsToTable(List<Meeting> meetings) {
+    
     for (Meeting meeting : meetings) {
       
       if (meeting != null) {
@@ -519,6 +533,11 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * Add a meeting to one of the TextFlows in the sidebar.
+   * @param meeting
+   * @param flow 
+   */
   private void addToSideBarDisplay(Meeting meeting, TextFlow flow) {
     Schedule s = meeting.getSchedule();
     if (s != null) {
@@ -685,6 +704,51 @@ public class UserGUIController implements Initializable {
   
   
   /**
+   * 
+   */
+  private void initializeSideBar() {
+    sidebarUpcomingMeetingsDisplay.setOnMouseClicked((MouseEvent event) -> {
+      tablMeetings.getTabPane().getSelectionModel().select(tablMeetings);
+    });
+    
+    sidebarNewsDisplay.setOnMouseClicked((MouseEvent event) -> {
+      System.out.println("Invites Display was clicked...");
+      openInviteManagerWindow();
+    });
+    
+    sidebarInvites.setOnMouseClicked((MouseEvent event) -> {
+      openInviteManagerWindow();
+    });
+  }
+  
+  
+  /**
+   * Open up the invite manager for the user to manage their meeting invites.
+   */
+  private void openInviteManagerWindow() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/InviteManager.fxml"));
+      AnchorPane pane = (AnchorPane) loader.load();
+      Scene scene = new Scene(pane);
+      Stage stage = new Stage();
+      
+      Stage parentStage = (Stage) tabPane.getScene().getWindow();
+      
+      stage.initModality(Modality.WINDOW_MODAL);
+      stage.initOwner(parentStage);
+      stage.setScene(scene);
+      
+      stage.setTitle("Invite Manager");
+      stage.centerOnScreen();
+      stage.showAndWait();
+      
+    } catch (IOException e) {
+      System.err.println("Could not load InviteManager!!");
+    }
+  }
+  
+  
+  /**
    * Add rooms into the tables.
    */
   private void addRoomsInTables() {
@@ -746,7 +810,8 @@ public class UserGUIController implements Initializable {
     }
     
     tabEditMeeting.getTabPane().getSelectionModel().select(tabEditMeeting);
-    meetingData.add(new MeetingTableCell(meeting, account));
+    selectedMeetingCell = new MeetingTableCell(meeting, account);
+    meetingData.add(selectedMeetingCell);
     int index = meetingData.size() - 1;
      
     setupEditMeeting(meeting, index);
@@ -1123,11 +1188,22 @@ public class UserGUIController implements Initializable {
       }
       
       // Update the meeting in db.
-      dbController.updateObject(meeting);
+      if (dbController.updateObject(meeting)) {
+        meetingData.remove(selectedMeetingCell);
+        ObservableList<Node> flow = sidebarUpcomingMeetingsDisplay.getChildren();
+        
+        // update the tableview meeting id.
+        selectedMeetingCell.setDate(meeting.getSchedule().getStartDateTime().toString(), 
+                meeting.getSchedule().toString());
+        
+        selectedMeetingCell.setRoomNumbeR(meeting.getRoom().getRoomNumber());
+        selectedMeetingCell.setNumberOfAttendees(meeting.getAcceptedList().size());
+        selectedMeetingCell.setMeetingID(meeting.getMeetingID());
+        meetingData.add(selectedMeetingCell);
+      }
     } else {
       System.err.println("Meeting " + id + " does not exist in the database!");
     }
-    
     // Clear the buffer.
     tempRejected.clear();
   }
@@ -1163,6 +1239,7 @@ public class UserGUIController implements Initializable {
   @FXML
   private void onEditMeeting(ActionEvent event) {
     MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
+    selectedMeetingCell = cell;
     int index = meetingTable.getSelectionModel().getSelectedIndex();
     
     if (cell != null && (cell.isHosting.get())) {
@@ -1189,7 +1266,6 @@ public class UserGUIController implements Initializable {
     editMeetingNotInvitedUsers.clear();
     editMeetingInvitedUsers.clear();
     
-    meetingSelectedIndex = meetingIndex;
     editMeetingIdText.setText(meeting.getMeetingID());
     int index;
         

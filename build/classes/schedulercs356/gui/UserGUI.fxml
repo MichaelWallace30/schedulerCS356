@@ -28,7 +28,7 @@
                      </font>
                   </Text>
                   <Text fx:id="sidebarDate" layoutX="14.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MM/DD/YYYY" AnchorPane.bottomAnchor="597.98828125" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="227.73828125" AnchorPane.topAnchor="66.05078125" />
-                  <Button fx:id="sidebarCreateMeeting" layoutX="13.0" layoutY="641.0" mnemonicParsing="false" onAction="#onCreateMeeting" prefHeight="25.0" prefWidth="292.0" text="Create Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="11.0" />
+                  <Button fx:id="sidebarCreateMeeting" layoutX="13.0" layoutY="641.0" mnemonicParsing="false" onAction="#onCreateMeeting" prefHeight="25.0" prefWidth="292.0" text="Create New Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="11.0" />
                   <Text fx:id="sidebarUpcomingMeetings" layoutX="14.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Upcoming Meetings" underline="true" AnchorPane.bottomAnchor="532.486328125" AnchorPane.leftAnchor="13.42578125" AnchorPane.rightAnchor="176.57421875" AnchorPane.topAnchor="128.892578125">
                      <font>
                         <Font size="14.0" />

@@ -7,8 +7,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="schedulercs356.controllers.InviteManagerController">
+<AnchorPane id="AnchorPane" prefHeight="349.0" prefWidth="448.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="schedulercs356.controllers.InviteManagerController">
     <stylesheets>
-        <URL value="@/schedulercs356/css/invitemanager.css"/>
+        <URL value="@/schedulercs356/css/invitemanager.css" />
     </stylesheets>
+   <children>
+      <Button layoutX="14.0" layoutY="310.0" mnemonicParsing="false" text="Accept" />
+      <Button layoutX="382.0" layoutY="310.0" mnemonicParsing="false" text="Reject" />
+      <Button layoutX="198.0" layoutY="310.0" mnemonicParsing="false" text="Postpone" />
+   </children>
 </AnchorPane>

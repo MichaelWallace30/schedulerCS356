@@ -402,6 +402,41 @@ public class DataBaseController {
         return null;
     }
     
+    public Account getAccount(String firstName){
+        return getAccount(firstName, null);
+    }
+    
+    
+    public Account getAccount(String firstName, String lastName){
+        try
+        {
+            String sql = "";
+            ResultSet rs;
+            //first name only
+            if(lastName == null){   
+                sql = "SELECT * FROM EMPLOYEES WHERE FIRST_NAME = ?";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1, firstName);
+                rs = ps.executeQuery();
+            }else{//first and last name
+                sql = "SELECT * FROM EMPLOYEES WHERE FIRST_NAME = ? AND LAST_NAME = ?";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1, firstName);
+                ps.setString(2, lastName);
+                rs = ps.executeQuery();
+            }
+            
+            if(rs.next())
+            {
+               return parseAccount(rs);
+            } 
+        }        
+        catch(SQLException err)
+        {
+            System.out.println(err.getMessage());
+        }
+        return null;
+    }
     
     public Account getAccount(Integer objID){         
         try

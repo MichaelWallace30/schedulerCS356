@@ -7,13 +7,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="349.0" prefWidth="448.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="schedulercs356.controllers.InviteManagerController">
+<AnchorPane id="AnchorPane" prefHeight="349.0" prefWidth="448.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="schedulercs356.controllers.InviteManagerController">
     <stylesheets>
         <URL value="@/schedulercs356/css/invitemanager.css" />
     </stylesheets>
    <children>
-      <Button layoutX="14.0" layoutY="310.0" mnemonicParsing="false" text="Accept" />
-      <Button layoutX="382.0" layoutY="310.0" mnemonicParsing="false" text="Reject" />
-      <Button layoutX="198.0" layoutY="310.0" mnemonicParsing="false" text="Postpone" />
+      <Button fx:id="acceptButton" layoutX="14.0" layoutY="310.0" mnemonicParsing="false" onAction="#onButtonAccept" text="Accept" />
+      <Button fx:id="rejectButton" layoutX="382.0" layoutY="310.0" mnemonicParsing="false" onAction="#onRejectButton" text="Reject" />
+      <Button fx:id="postponeButton" layoutX="198.0" layoutY="310.0" mnemonicParsing="false" onAction="#onButtonPostpone" text="Postpone" />
+      <TableView fx:id="invitedMeetingsTable" layoutX="24.0" layoutY="14.0" prefHeight="282.0" prefWidth="400.0">
+        <columns>
+          <TableColumn fx:id="invitedMeetingIdColumn" prefWidth="75.0" text="Meeting ID" />
+          <TableColumn fx:id="roomNumberColumn" prefWidth="75.0" text="Room #" />
+            <TableColumn fx:id="dateColumn" prefWidth="247.0" text="Date" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

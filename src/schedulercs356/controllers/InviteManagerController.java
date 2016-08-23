@@ -103,7 +103,7 @@ public class InviteManagerController implements Initializable {
       }
     }
   }
-
+  
   @FXML
   private void onButtonPostpone(ActionEvent event) {
   }

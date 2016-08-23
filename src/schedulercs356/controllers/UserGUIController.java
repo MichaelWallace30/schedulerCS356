@@ -117,8 +117,6 @@ public class UserGUIController implements Initializable {
   @FXML
   private Text sidebarName;
   @FXML
-  private Button attendMeetingButton;
-  @FXML
   private MenuItem menuAboutButton;
   @FXML
   private Tab tabSearch;
@@ -306,12 +304,12 @@ public class UserGUIController implements Initializable {
   private ChoiceBox<String> editMeetingTimeDay;
   @FXML
   private ChoiceBox<String> editMeetingEndTimeDay;
-
+  @FXML
+  private Button manageInvitesButton;
   
   private static final int TIME_HOUR = 12;
   private static final int TIME_MINUTE = 60;
   private static final int TIME_ONE_DIGIT = 10;
-  
   
   void Attending(ActionEvent event) {
 
@@ -1049,8 +1047,11 @@ public class UserGUIController implements Initializable {
       child.getRoomProperty().addListener((obj, old, n) -> {
         if (n != null) {
           RoomTableCell cell = new RoomTableCell(n);
-          dbController.addObject(n);
-          rooms.add(cell);
+          if (dbController.addObject(n)) {
+            rooms.add(cell);
+          } else {
+            System.err.println("Room " + cell.roomNumber.get() + " was not stored!");
+          }
         }
       });
       
@@ -1226,20 +1227,11 @@ public class UserGUIController implements Initializable {
       
       // Update the meeting in db.
       if (dbController.updateObject(meeting)) {
-        meetingData.remove(selectedMeetingCell);
-        ObservableList<Node> flow = sidebarUpcomingMeetingsDisplay.getChildren();
-        
-        // update the tableview meeting id.
-        selectedMeetingCell.setDate(meeting.getSchedule().getStartDateTime().toString(), 
-                meeting.getSchedule().toString());
-        if ( meeting.getRoom() != null ) {
-          selectedMeetingCell.setRoomNumbeR(meeting.getRoom().getRoomNumber());
-        } else {
-          selectedMeetingCell.setRoomNumbeR(-1);
+        if (!meetingData.remove(selectedMeetingCell)) {
+          System.err.println("Cell was not removed!");
         }
-        
-        selectedMeetingCell.setNumberOfAttendees(meeting.getAcceptedList().size());
-        selectedMeetingCell.setMeetingID(meeting.getMeetingID());
+        selectedMeetingCell = new  MeetingTableCell(meeting, account);
+        ObservableList<Node> flow = sidebarUpcomingMeetingsDisplay.getChildren();
         meetingData.add(selectedMeetingCell);
       }
     } else {
@@ -1467,13 +1459,12 @@ public class UserGUIController implements Initializable {
 
   
   @FXML
-  private void onAttendMeeting(ActionEvent event) {
+  private void onMeetingDetails(ActionEvent event) {
     
   }
 
-  
   @FXML
-  private void onMeetingDetails(ActionEvent event) {
-    
+  private void onManageInvitesButton(ActionEvent event) {
+    openInviteManagerWindow();
   }
 }

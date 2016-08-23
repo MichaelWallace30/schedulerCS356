@@ -462,8 +462,21 @@ public class DataBaseController {
         LinkedList<Meeting> invitedMeetingListAccount = account.getInvitedMeetingList();
         LinkedList<Account> invitedMeetingListMeeting = meeting.getInvitedList();    
         
-        invitedMeetingListAccount.removeFirstOccurrence(account);
-        invitedMeetingListMeeting.removeFirstOccurrence(meeting);
+        for (int i = 0; i < invitedMeetingListAccount.size(); ++i) {
+          Meeting temp = invitedMeetingListAccount.get(i);
+          if (temp.getMeetingID().equals(meeting.getMeetingID())) {
+            invitedMeetingListAccount.remove(i);
+            break;
+          }
+        }
+        
+        for (int i = 0; i < invitedMeetingListMeeting.size(); ++i) {
+          Account temp = invitedMeetingListMeeting.get(i);
+          if (temp.getId() == account.getId()) {
+            invitedMeetingListMeeting.remove(i);
+            break;
+          }
+        }
         
         if(attedningMeetingBoolean){//meeting accepted
             LinkedList<Meeting> acceptedMeetingListAccount = account.getMeetingList();

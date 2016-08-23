@@ -66,7 +66,7 @@ public class AccountTableCell {
       } else {
         list = meeting.getRejectedList();
         if (foundInMeetingLists(list, account)) {
-          status = "rejected";
+          status = "Rejected";
         }
       }
     }

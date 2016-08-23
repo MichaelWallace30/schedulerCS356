@@ -460,7 +460,8 @@ public class DataBaseController {
     public void updateAccountMeetingAttendenceStatus(Account account, Meeting meeting, Boolean attedningMeetingBoolean){
         
         LinkedList<Meeting> invitedMeetingListAccount = account.getInvitedMeetingList();
-        LinkedList<Account> invitedMeetingListMeeting = meeting.getInvitedList();    
+        LinkedList<Account> invitedMeetingListMeeting = meeting.getInvitedList();
+        
         
         for (int i = 0; i < invitedMeetingListAccount.size(); ++i) {
           Meeting temp = invitedMeetingListAccount.get(i);
@@ -474,6 +475,7 @@ public class DataBaseController {
           Account temp = invitedMeetingListMeeting.get(i);
           if (temp.getId() == account.getId()) {
             invitedMeetingListMeeting.remove(i);
+            meeting.getUnInvitedList().add(temp);
             break;
           }
         }

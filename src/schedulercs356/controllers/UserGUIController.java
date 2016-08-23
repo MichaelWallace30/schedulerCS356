@@ -613,7 +613,7 @@ public class UserGUIController implements Initializable {
         accounts.clear();
         MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
         Meeting meeting = dbController.getMeeting(cell.meetingID.get());
-      
+        
         if (meeting != null) {
           if (meeting.getOwnerID() == account.getId()) {
             editMeetingButton.setDisable(false);
@@ -624,7 +624,18 @@ public class UserGUIController implements Initializable {
           }
           
           List<Account> cs = meeting.getInvitedList();
-          cs.addAll(meeting.getAcceptedList());
+          
+          for (Account acc : cs) {
+            accounts.add(new AccountTableCell(acc, meeting));
+          }
+          
+          cs = meeting.getAcceptedList();
+          
+          for (Account acc : cs) {
+            accounts.add(new AccountTableCell(acc, meeting));
+          }
+          
+          cs = meeting.getRejectedList();
           
           for (Account acc : cs) {
             accounts.add(new AccountTableCell(acc, meeting));

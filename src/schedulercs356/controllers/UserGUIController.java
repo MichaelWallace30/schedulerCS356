@@ -1112,10 +1112,30 @@ public class UserGUIController implements Initializable {
         // store account ref into invited list.
         if (acc != null) {
           // Add the account into the meeting invite list.
-          meeting.getInvitedList().add(acc);
+          List<Account> list = meeting.getInvitedList();
+          boolean duplicate = false;
           
+          for (Account check : list) {
+            if (check.getId() == acc.getId()) {
+              duplicate = true;
+              break;
+            }
+          }
+          
+          list = meeting.getAcceptedList();
+          
+          for (Account check : list) {
+            if (check.getId() == acc.getId()) {
+              duplicate = true;
+              break;
+            }            
+          }
+         
+          if (!duplicate) {
+            meeting.getInvitedList().add(acc);
+            acc.getInvitedMeetingList().add(meeting);
+          }
           // Add the meeting into the account invited list.
-          acc.getInvitedMeetingList().add(meeting);
           dbController.updateObject(acc);
         }
       }
@@ -1125,7 +1145,7 @@ public class UserGUIController implements Initializable {
       
       for (int i = 0; i < tempRejected.size(); ++i) {
         Account acc = dbController.getAccount(tempRejected.get(i).id.get());
-        meeting.getRejectedList().add(acc);
+        //meeting.getRejectedList().add(acc);
         // Add uninvited users into the buffer.
         notInvitedBuffer.add(acc);
         // Not sure if this works. May need to check.

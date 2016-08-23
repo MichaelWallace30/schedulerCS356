@@ -384,14 +384,26 @@ public class Meeting implements DataBaseInterface {
         //update invited list for each account
         ListIterator<Account> itAccount;
         Statement stmt = con.createStatement();
-        for(Account temp: this.unInvitedList){
+        for(Account temp : this.unInvitedList) {
             temp.removeMeeting(this, con);
+            
+            int removed = stmt.executeUpdate("DELETE FROM " 
+                    + this.acceptedMeetingListTableName.toUpperCase()
+                    + " WHERE ACCOUNT_ID = " + temp.getId());
+            
+            if (removed != 0) {
+              for (int i = 0; i < acceptedList.size(); ++i) {
+                Account acc = acceptedList.get(i);
+                if (acc.getId() == temp.getId()) {
+                  acceptedList.remove(i);
+                  break;
+                }
+              }
+            }
+            
             stmt.executeUpdate("DELETE FROM " 
-                    + this.acceptedMeetingListTableName 
-                    + " WHERE ACCOuNT_ID = " + temp.getId());
-            stmt.executeUpdate("DELETE FROM " 
-                    + this.invitedMeetingListTableName 
-                    + " WHERE ACCOuNT_ID = " + temp.getId());
+                    + this.invitedMeetingListTableName.toUpperCase()
+                    + " WHERE ACCOUNT_ID = " + temp.getId());
         }
         
         unInvitedList.clear();//earese the list

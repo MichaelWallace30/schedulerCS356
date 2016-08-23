@@ -494,8 +494,8 @@ public class DataBaseController {
             
         }
         
-        this.updateObject(account);
-        this.updateObject(meeting);       
+        this.updateObject(meeting);        
+        this.updateObject(account);     
             
     }
     

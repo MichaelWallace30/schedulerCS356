@@ -46,6 +46,7 @@ import schedulercs356.entity.Meeting;
 public class InviteManagerController implements Initializable {
   private ObservableList<MeetingTableCell> meetingInvites;
   private DataBaseController db;
+  private Account account;
   
   @FXML
   private Button acceptButton;
@@ -77,10 +78,30 @@ public class InviteManagerController implements Initializable {
 
   @FXML
   private void onButtonAccept(ActionEvent event) {
+    MeetingTableCell cell = invitedMeetingsTable.getSelectionModel().getSelectedItem();
+    
+    if (cell != null) {
+      Meeting meeting = db.getMeeting(cell.meetingID.get());
+      
+      if (meeting != null) {
+        db.updateAccountMeetingAttendenceStatus(account, meeting, Boolean.TRUE);
+        meetingInvites.remove(cell);
+      }
+    }
   }
 
   @FXML
   private void onRejectButton(ActionEvent event) {
+    MeetingTableCell cell = invitedMeetingsTable.getSelectionModel().getSelectedItem();
+    
+    if (cell != null) {
+      Meeting meeting = db.getMeeting(cell.meetingID.get());
+      
+      if (meeting != null) {
+        db.updateAccountMeetingAttendenceStatus(account, meeting, Boolean.FALSE);
+        meetingInvites.remove(cell);
+      }
+    }
   }
 
   @FXML
@@ -88,6 +109,8 @@ public class InviteManagerController implements Initializable {
   }
   
   public void setupTable(Account account) {
+    this.account = account;
+    
     List<Meeting> meetings = account.getInvitedMeetingList();
     if (meetings != null) {
       for (Meeting meeting : meetings) {

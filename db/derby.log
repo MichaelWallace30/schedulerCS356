@@ -1,7 +1,7 @@
-Mon Aug 22 19:10:03 PDT 2016 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
+Mon Aug 22 19:53:34 PDT 2016 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Mon Aug 22 19:20:14 PDT 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0156-b529-3e38-000025a224b2 
+Mon Aug 22 19:55:27 PDT 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0156-b551-1653-000025a224b2 
 on database directory C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
 Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_101/db/lib/derby.jar
 java.vendor=Oracle Corporation
@@ -13,7 +13,7 @@ os.version=6.3
 derby.system.home=C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db
 Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
-Mon Aug 22 19:52:34 PDT 2016: Shutting down Derby engine
+Mon Aug 22 21:55:43 PDT 2016: Shutting down Derby engine
 ----------------------------------------------------------------
-Mon Aug 22 19:52:34 PDT 2016:
-Shutting down instance a816c00e-0156-b529-3e38-000025a224b2 on database directory C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Mon Aug 22 21:55:43 PDT 2016:
+Shutting down instance a816c00e-0156-b551-1653-000025a224b2 on database directory C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 

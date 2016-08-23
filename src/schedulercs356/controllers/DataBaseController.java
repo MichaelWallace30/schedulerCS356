@@ -485,19 +485,12 @@ public class DataBaseController {
             acceptedMeetingListAccount.add(meeting);
             acceptedMeetingListMeeting.add(account);
             
-            //account.setInvitedMeetingList(acceptedMeetingListAccount);
-            //meeting.setAcceptedList(acceptedMeetingListMeeting);
-            
         }
         else{//meeting rejected            
             LinkedList<Account> rejectedMeetingListMeeting = meeting.getRejectedList();
             rejectedMeetingListMeeting.add(account);
-            //meeting.setRejectedList(rejectedMeetingListMeeting);
             
         }
-        
-        //account.setInvitedMeetingList(invitedMeetingListAccount);
-        //meeting.setInvitedList(invitedMeetingListMeeting);
         
         this.updateObject(account);
         this.updateObject(meeting);       

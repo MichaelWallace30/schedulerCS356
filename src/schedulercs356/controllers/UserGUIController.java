@@ -1201,8 +1201,12 @@ public class UserGUIController implements Initializable {
         // update the tableview meeting id.
         selectedMeetingCell.setDate(meeting.getSchedule().getStartDateTime().toString(), 
                 meeting.getSchedule().toString());
+        if ( meeting.getRoom() != null ) {
+          selectedMeetingCell.setRoomNumbeR(meeting.getRoom().getRoomNumber());
+        } else {
+          selectedMeetingCell.setRoomNumbeR(-1);
+        }
         
-        selectedMeetingCell.setRoomNumbeR(meeting.getRoom().getRoomNumber());
         selectedMeetingCell.setNumberOfAttendees(meeting.getAcceptedList().size());
         selectedMeetingCell.setMeetingID(meeting.getMeetingID());
         meetingData.add(selectedMeetingCell);

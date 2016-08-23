@@ -727,10 +727,15 @@ public class UserGUIController implements Initializable {
    */
   private void openInviteManagerWindow() {
     try {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/InviteManager.fxml"));
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/InviteManager.fxml"));    
+      
       AnchorPane pane = (AnchorPane) loader.load();
       Scene scene = new Scene(pane);
       Stage stage = new Stage();
+      
+      InviteManagerController controller = loader.getController();
+      controller.setDataBaseController(dbController);  
+      controller.setupTable(account);
       
       Stage parentStage = (Stage) tabPane.getScene().getWindow();
       
@@ -744,6 +749,7 @@ public class UserGUIController implements Initializable {
       
     } catch (IOException e) {
       System.err.println("Could not load InviteManager!!");
+      System.err.println(e.getCause().getMessage());
     }
   }
   

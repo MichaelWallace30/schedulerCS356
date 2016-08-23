@@ -24,13 +24,19 @@
 package schedulercs356.controllers;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import schedulercs356.cells.MeetingTableCell;
+import schedulercs356.entity.Account;
+import schedulercs356.entity.Meeting;
 
 /**
  * FXML Controller class
@@ -38,6 +44,9 @@ import javafx.scene.control.TableView;
  * @author MAGarcia
  */
 public class InviteManagerController implements Initializable {
+  private ObservableList<MeetingTableCell> meetingInvites;
+  private DataBaseController db;
+  
   @FXML
   private Button acceptButton;
   @FXML
@@ -45,20 +54,25 @@ public class InviteManagerController implements Initializable {
   @FXML
   private Button postponeButton;
   @FXML
-  private TableView<?> invitedMeetingsTable;
+  private TableView<MeetingTableCell> invitedMeetingsTable;
   @FXML
-  private TableColumn<?, ?> invitedMeetingIdColumn;
+  private TableColumn<MeetingTableCell, String> invitedMeetingIdColumn;
   @FXML
-  private TableColumn<?, ?> roomNumberColumn;
+  private TableColumn<MeetingTableCell, Number> roomNumberColumn;
   @FXML
-  private TableColumn<?, ?> dateColumn;
+  private TableColumn<MeetingTableCell, String> dateColumn;
 
   /**
    * Initializes the controller class.
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    // TODO
+    meetingInvites = FXCollections.observableArrayList();
+    
+    invitedMeetingIdColumn.setCellValueFactory(cellData -> cellData.getValue().meetingID);
+    roomNumberColumn.setCellValueFactory(cellData -> cellData.getValue().roomNumber);
+    dateColumn.setCellValueFactory(cellData -> cellData.getValue().date);
+    invitedMeetingsTable.setItems(meetingInvites);
   }  
 
   @FXML
@@ -73,4 +87,21 @@ public class InviteManagerController implements Initializable {
   private void onButtonPostpone(ActionEvent event) {
   }
   
+  public void setupTable(Account account) {
+    List<Meeting> meetings = account.getInvitedMeetingList();
+    if (meetings != null) {
+      for (Meeting meeting : meetings) {
+        if (meeting != null) {
+          meeting = db.getMeeting(meeting.getMeetingID());
+          if (meeting != null) {
+            meetingInvites.add(new MeetingTableCell(meeting, account));
+          }
+        }
+      }
+    }
+  }
+  
+  public void setDataBaseController(DataBaseController controller) {
+    db = controller;
+  }
 }

@@ -1,20 +1,19 @@
-Mon Aug 22 11:28:42 PDT 2016 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
+Mon Aug 22 17:51:48 PDT 2016 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Mon Aug 22 11:28:43 PDT 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0156-b383-00f2-00003fbb59f8 
-on database directory D:\Users\Bender\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
-Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_91/db/lib/derby.jar
+Mon Aug 22 17:52:13 PDT 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0156-b4e1-99e3-000025a224b2 
+on database directory C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_101/db/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_91-b15
-user.dir=C:\Program Files\Java\jdk1.8.0_91\db
-os.name=Windows 7
+java.runtime.version=1.8.0_20-b26
+user.dir=C:\Program Files\Java\jdk1.8.0_101\db
+os.name=Windows 8.1
 os.arch=amd64
-os.version=6.1
-derby.system.home=D:\Users\Bender\Documents\GitHub\schedulerCS356\db
+os.version=6.3
+derby.system.home=C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db
 Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
-Mon Aug 22 11:37:44 PDT 2016: Shutting down Derby engine
+Mon Aug 22 19:09:23 PDT 2016: Shutting down Derby engine
 ----------------------------------------------------------------
-Mon Aug 22 11:37:44 PDT 2016:
-Shutting down instance a816c00e-0156-b383-00f2-00003fbb59f8 on database directory D:\Users\Bender\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
-----------------------------------------------------------------
+Mon Aug 22 19:09:23 PDT 2016:
+Shutting down instance a816c00e-0156-b4e1-99e3-000025a224b2 on database directory C:\Users\cmgarcia\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 

@@ -30,6 +30,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import schedulercs356.entity.Account;
 import schedulercs356.entity.Meeting;
+import schedulercs356.entity.MeetingStatus;
 
 /**
  *
@@ -49,7 +50,7 @@ public class AccountTableCell {
    * @param meeting 
    */
   public AccountTableCell(Account account, Meeting meeting) {
-    String status = "Unknown";
+    String status = MeetingStatus.UNKNOWN;
     List<Account> list = meeting.getAcceptedList();
     
     username = new SimpleStringProperty(account.getUserName());
@@ -58,21 +59,20 @@ public class AccountTableCell {
     id = new SimpleIntegerProperty(account.getId());
     
     if (foundInMeetingLists(list, account)) {
-      status = "Attending";
+      status = MeetingStatus.ATTENDING;
     } else {
       list = meeting.getInvitedList();
       if (foundInMeetingLists(list, account)) {
-        status = "Pending";
+        status = MeetingStatus.PENDING;
       } else {
         list = meeting.getRejectedList();
         if (foundInMeetingLists(list, account)) {
-          status = "Rejected";
+          status = MeetingStatus.REJECTED;
         }
       }
     }
     
     inviteStatus = new SimpleStringProperty(status);
-    
   }
   
   

@@ -77,6 +77,7 @@ import schedulercs356.cells.AccountTableCell;
 import schedulercs356.entity.Meeting;
 import schedulercs356.cells.MeetingTableCell;
 import schedulercs356.cells.RoomTableCell;
+import schedulercs356.entity.MeetingStatus;
 import schedulercs356.entity.Room;
 import schedulercs356.entity.Schedule;
 
@@ -677,11 +678,11 @@ public class UserGUIController implements Initializable {
           protected void updateItem(String s, boolean b) {
             super.updateItem(s, b);
             if (null != s) {
-              if (s.equals("Pending")) {
+              if (s.equals(MeetingStatus.PENDING)) {
                 this.setTextFill(Color.STEELBLUE);
-              } else if (s.equals("Attending")) {
+              } else if (s.equals(MeetingStatus.ATTENDING)) {
                 this.setTextFill(Color.GREEN);
-              } else if (s.equals("Rejected")) {
+              } else if (s.equals(MeetingStatus.REJECTED)) {
                 this.setTextFill(Color.RED);
               }
               

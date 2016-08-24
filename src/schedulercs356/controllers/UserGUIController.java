@@ -35,6 +35,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -56,16 +57,19 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import schedulercs356.bundles.LoginAccountBundle;
 import schedulercs356.entity.Account;
 import schedulercs356.cells.AccountAdminTableCell;
@@ -661,6 +665,34 @@ public class UserGUIController implements Initializable {
     contactNumberColumn.setCellValueFactory(cellData -> cellData.getValue().contact);
     meetingsRoomColumn.setCellValueFactory(cellData -> cellData.getValue().roomNumber);
     
+    inviteStatusColumn
+            .setCellFactory(
+                    new Callback<TableColumn<AccountTableCell, String>, TableCell<AccountTableCell, String>>() {
+
+      @Override
+      public TableCell<AccountTableCell, String> call(TableColumn<AccountTableCell, String> param) {
+        return new TableCell<AccountTableCell, String>() {
+          
+          @Override
+          protected void updateItem(String s, boolean b) {
+            super.updateItem(s, b);
+            if (null != s) {
+              if (s.equals("Pending")) {
+                this.setTextFill(Color.STEELBLUE);
+              } else if (s.equals("Attending")) {
+                this.setTextFill(Color.GREEN);
+              } else if (s.equals("Rejected")) {
+                this.setTextFill(Color.RED);
+              }
+              
+              setText(s);
+            }
+          }
+        };
+      }
+      
+    });
+    
     editMeetingNotInviteUsernameColumn.setCellValueFactory(cellData -> cellData.getValue().username);
     editMeetingNotInviteNameColumn.setCellValueFactory(cellData -> cellData.getValue().fullname);
     
@@ -668,6 +700,7 @@ public class UserGUIController implements Initializable {
     editMeetingInvitedNameColumn.setCellValueFactory(cellData -> cellData.getValue().fullname);
     
     usersInMeetingTable.setItems(accounts);
+    
     editMeetingUsersNoInviteTable.setItems(editMeetingNotInvitedUsers);
     editMeetingUsersInvitedTable.setItems(editMeetingInvitedUsers);   
   }
@@ -1079,7 +1112,6 @@ public class UserGUIController implements Initializable {
     tabEditRooms.setDisable(false);
     
     editMeetingIdText.setText("");
-    
   }
 
   

@@ -62,6 +62,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -643,6 +644,9 @@ public class UserGUIController implements Initializable {
           for (Account acc : cs) {
             accounts.add(new AccountTableCell(acc, meeting));
           }
+          
+          
+          System.out.println("Size of list is " + accounts.size());
         } else {
           System.err.println("Meeting " + n.meetingID.get() + " does not exist!");
         }
@@ -687,6 +691,8 @@ public class UserGUIController implements Initializable {
               }
               
               setText(s);
+            } else {
+             setText(null);
             }
           }
         };
@@ -862,7 +868,7 @@ public class UserGUIController implements Initializable {
     selectedMeetingCell = new MeetingTableCell(meeting, account);
     meetingData.add(selectedMeetingCell);
     int index = meetingData.size() - 1;
-     
+    editMeetingText.setText("Create New Meeting");
     setupEditMeeting(meeting, index);
   }
   
@@ -1316,6 +1322,7 @@ public class UserGUIController implements Initializable {
         }
         
         tabEditMeeting.getTabPane().getSelectionModel().select(tabEditMeeting);
+        editMeetingText.setText("Edit Meeting");
         setupEditMeeting(meeting, index);
       }
     } 

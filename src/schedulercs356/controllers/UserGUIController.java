@@ -74,6 +74,7 @@ import schedulercs356.cells.RoomTableCell;
 import schedulercs356.entity.MeetingStatus;
 import schedulercs356.entity.Room;
 import schedulercs356.entity.Schedule;
+import schedulercs356.entity.TimeParser;
 
 /**
  * FXML Controller class
@@ -309,10 +310,6 @@ public class UserGUIController implements Initializable {
   @FXML
   private Button editProfileButton;
   
-  private static final int TIME_HOUR = 12;
-  private static final int TIME_MINUTE = 60;
-  private static final int TIME_ONE_DIGIT = 10;
-  
   
   void Attending(ActionEvent event) {
 
@@ -385,7 +382,7 @@ public class UserGUIController implements Initializable {
       profileUserName.setText(account.getUserName());
       profileAddress.setText("Address: " + account.getAddress());
       currentTime = LocalDateTime.now();
-      displayTimeInSideBar(parseDateToDisplay(currentTime));
+      displayTimeInSideBar(TimeParser.parseDateToDisplay(currentTime));
       runTimeOnThread();
       addMeetingsToTables();      
       addRoomsInTables();
@@ -431,55 +428,13 @@ public class UserGUIController implements Initializable {
   private void runTimeOnThread() {
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
       currentTime = LocalDateTime.now();
-      displayTimeInSideBar(parseDateToDisplay(currentTime));
+      displayTimeInSideBar(TimeParser.parseDateToDisplay(currentTime));
     }));
     
     timeline.setCycleCount(Animation.INDEFINITE);
     timeline.play();
   }
-  
-  
-  /**
-   * Parse the Date to a reasonable format. This is not a fully developed 
-   * clock, so the format is based on your Operating System.
-   * @param date 
-   */
-  private static String parseDateToDisplay(LocalDateTime date) {   
-      String strParsed;
-      int hour = date.getHour();
-      String minuteString = "00";
-      String secondString = "00";
-      String timeDay = "AM";
-      
-      if (hour > TIME_HOUR) {
-        hour = hour - TIME_HOUR;
-        timeDay = "PM";
-      } else if (hour <= 0) {
-        hour = TIME_HOUR;
-      }
-      
-      int minute = date.getMinute();
-      if (minute < TIME_ONE_DIGIT) {
-        minuteString = "0" + minute;
-      } else {
-        minuteString = String.valueOf(minute);
-      }
-      
-      int second = date.getSecond();
-      
-      if (second < TIME_ONE_DIGIT) {
-        secondString = "0" + second;
-      } else {
-        secondString = String.valueOf(second);
-      }
-      
-      strParsed = date.getDayOfWeek() + " "
-              + date.getMonth() + " " + date.getDayOfMonth() + ", "
-              + date.getYear() + "\n " + hour + ":" + minuteString 
-              + ":" + secondString + " " + timeDay;
-      
-      return strParsed;
-  }
+
   
   private void displayTimeInSideBar(String time) {
     sidebarDate.setText(time);
@@ -555,17 +510,17 @@ public class UserGUIController implements Initializable {
       String minuteString = "00";
       String dayTime = "AM";
 
-      if (hour >= TIME_HOUR) {
+      if (hour >= TimeParser.TIME_HOUR) {
         if (hour != 12) { 
-          hour = hour - TIME_HOUR;
+          hour = hour - TimeParser.TIME_HOUR;
         }
         
         dayTime = "PM";
       } else if (hour <= 0) {
-        hour = TIME_HOUR;
+        hour = TimeParser.TIME_HOUR;
       }
 
-      if (minute < TIME_ONE_DIGIT) {
+      if (minute < TimeParser.TIME_ONE_DIGIT) {
         minuteString = "0" + minute;
       } else {
         minuteString = String.valueOf(minute);
@@ -618,7 +573,7 @@ public class UserGUIController implements Initializable {
             super.updateItem(time, bool);
             
             if (time != null) {
-              this.setText(parseDateToDisplay(time));
+              this.setText(TimeParser.parseDateToDisplay(time));
             } else {
               this.setText(null);
             }
@@ -638,7 +593,7 @@ public class UserGUIController implements Initializable {
             super.updateItem(time, bool);
             
             if (time != null) {
-              this.setText(parseDateToDisplay(time));
+              this.setText(TimeParser.parseDateToDisplay(time));
             } else {
               this.setText(null);
             }
@@ -1248,16 +1203,16 @@ public class UserGUIController implements Initializable {
       int hour = editMeetingStartTimeChooserHour.getValue().intValue();
       
       if (editMeetingTimeDay.getValue().equals("PM")) {
-        if (hour == TIME_HOUR) {
-          hour = TIME_HOUR;
+        if (hour == TimeParser.TIME_HOUR) {
+          hour = TimeParser.TIME_HOUR;
         } else {
-          hour += TIME_HOUR;
+          hour += TimeParser.TIME_HOUR;
           if (hour > 23) {
-            hour = TIME_HOUR;
+            hour = TimeParser.TIME_HOUR;
           }
         }
       } else {
-        if (hour == TIME_HOUR) {
+        if (hour == TimeParser.TIME_HOUR) {
           hour = 0;
         }
       }
@@ -1272,16 +1227,16 @@ public class UserGUIController implements Initializable {
       hour = editMeetingEndTimeChooserHour1.getValue().intValue();
       
       if (editMeetingEndTimeDay.getValue().equals("PM")) {
-        if (hour == TIME_HOUR) {
-          hour = TIME_HOUR;
+        if (hour == TimeParser.TIME_HOUR) {
+          hour = TimeParser.TIME_HOUR;
         } else {
-          hour += TIME_HOUR;
+          hour += TimeParser.TIME_HOUR;
           if (hour > 23) {
-            hour = TIME_HOUR;
+            hour = TimeParser.TIME_HOUR;
           }
         }
       } else {
-        if (hour == TIME_HOUR) {
+        if (hour == TimeParser.TIME_HOUR) {
           hour = 0;
         }
       }
@@ -1413,16 +1368,16 @@ public class UserGUIController implements Initializable {
     index = sch.getStartDateTime().getHour() - 1;
     
     if (index < 0) {
-      index = TIME_HOUR - 1;
+      index = TimeParser.TIME_HOUR - 1;
       editMeetingTimeDay.getSelectionModel().select(0);
     } else {  
-      if (index >= TIME_HOUR) {
-        index = index - TIME_HOUR;
+      if (index >= TimeParser.TIME_HOUR) {
+        index = index - TimeParser.TIME_HOUR;
         editMeetingTimeDay.getSelectionModel().select(1);
       } else if (index < 0) {
         index = 0;
       } else {
-        if (index == (TIME_HOUR - 1)) {
+        if (index == (TimeParser.TIME_HOUR - 1)) {
           editMeetingTimeDay.getSelectionModel().select(1);
         } else {
           editMeetingTimeDay.getSelectionModel().select(0);
@@ -1438,16 +1393,16 @@ public class UserGUIController implements Initializable {
     index = sch.getEndDateTime().getHour() - 1;
     
     if (index < 0) {
-      index = TIME_HOUR - 1;
+      index = TimeParser.TIME_HOUR - 1;
       editMeetingEndTimeDay.getSelectionModel().select(0);
     } else {  
-      if (index >= TIME_HOUR) {
-        index = index - TIME_HOUR;
+      if (index >= TimeParser.TIME_HOUR) {
+        index = index - TimeParser.TIME_HOUR;
         editMeetingEndTimeDay.getSelectionModel().select(1);
       } else if (index < 0) {
         index = 0;
       } else {
-        if (index == (TIME_HOUR - 1)) {
+        if (index == (TimeParser.TIME_HOUR - 1)) {
           editMeetingEndTimeDay.getSelectionModel().select(1);
         } else {
           editMeetingEndTimeDay.getSelectionModel().select(0);

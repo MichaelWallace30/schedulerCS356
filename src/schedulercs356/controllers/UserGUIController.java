@@ -1554,6 +1554,11 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * Checks if the user is available with the current editMeeting time.
+   * @param account
+   * @return 
+   */
   private boolean checkAvailability(Account account) {
     List<Meeting> meetings = account.getMeetingList();
     boolean success = true; 

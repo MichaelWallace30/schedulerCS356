@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="schedulercs356.controllers.EditProfileGUIController">
+    <stylesheets>
+        <URL value="@/schedulercs356/css/editprofilegui.css" />
+    </stylesheets>
+   <children>
+      <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Profile" wrappingWidth="276.13671875">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Button fx:id="updateProfileButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#onUpdateProfileButton" text="Update Profile" />
+      <Button fx:id="cancelButton" layoutX="534.0" layoutY="361.0" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
+      <Text layoutX="12.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First Name:" />
+      <Text layoutX="12.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Name:" />
+      <PasswordField fx:id="oldPassword" layoutX="14.0" layoutY="234.0" prefHeight="25.0" prefWidth="276.0" promptText="Old Password" />
+      <PasswordField fx:id="newPassword" layoutX="14.0" layoutY="266.0" prefHeight="25.0" prefWidth="276.0" promptText="New Password" />
+      <PasswordField fx:id="retypePassword" layoutX="14.0" layoutY="299.0" prefHeight="25.0" prefWidth="276.0" promptText="Retype Password" />
+      <Button fx:id="changePassword" layoutX="14.0" layoutY="200.0" mnemonicParsing="false" onAction="#onChangePassword" text="Change Password" />
+      <Text layoutX="13.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" />
+      <TextField fx:id="usernameField" layoutX="77.0" layoutY="50.0" prefHeight="25.0" prefWidth="215.0" />
+      <TextField fx:id="firstnameField" layoutX="77.0" layoutY="84.0" prefHeight="25.0" prefWidth="215.0" />
+      <TextField fx:id="lastnameField" layoutX="77.0" layoutY="120.0" prefHeight="25.0" prefWidth="215.0" />
+      <Text layoutX="14.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address:" />
+      <TextField fx:id="addressField" layoutX="77.0" layoutY="158.0" prefHeight="25.0" prefWidth="215.0" />
+   </children>
+</AnchorPane>

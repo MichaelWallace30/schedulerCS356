@@ -1159,8 +1159,8 @@ public class UserGUIController implements Initializable {
     if (meeting != null) {
       if (!checkAvailability(account, meeting)) {
         notifyPopup("Meeting Not Updated! The date is in conflict with one of your meetings!");
-        
-      return;
+        // Return!! This is horrible design right here I know...
+        return;
       }
       
       // TODO (Garcia): Must check if an invitation has already been 

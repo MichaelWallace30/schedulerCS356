@@ -36,6 +36,7 @@ import javafx.application.Platform;
 import javafx.util.Duration;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,7 +54,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -807,6 +807,7 @@ public class UserGUIController implements Initializable {
       stage.centerOnScreen();
       stage.showAndWait();
       
+      updateSidebarMeetings();
     } catch (IOException e) {
       System.err.println("Could not load InviteManager!!");
       System.err.println(e.getCause().getMessage());
@@ -881,6 +882,7 @@ public class UserGUIController implements Initializable {
     int index = meetingData.size() - 1;
     editMeetingText.setText("Create New Meeting");
     setupEditMeeting(meeting, index);
+    updateSidebarMeetings();
   }
   
   
@@ -1300,6 +1302,7 @@ public class UserGUIController implements Initializable {
         meetingData.add(selectedMeetingCell);
         
         notifyPopup("Meeting updated!");
+        updateSidebarMeetings();
       }
     } else {
       System.err.println("Meeting " + id + " does not exist in the database!");
@@ -1553,6 +1556,7 @@ public class UserGUIController implements Initializable {
         if (removed) {
           System.out.println("Removed!");
           meetingData.remove(index);
+          updateSidebarMeetings();
         }
       }
     }
@@ -1744,5 +1748,57 @@ public class UserGUIController implements Initializable {
     profileAddress.setText("Address: " + account.getAddress());
     sidebarName.setText(account.getFirstName() + " " + account.getLastName());
     profileName.setText(account.getFirstName() + " " + account.getLastName());
+  }
+  
+  
+  /**
+   * Run on separate thread to update the sidebar display.
+   */
+  private void updateSidebarMeetings() {
+    // Start the task.
+    Task task = new Task<Void>() {
+
+      @Override
+      protected Void call() {
+        System.err.println("I am a thread!");
+        try {
+          // Run later on the FX thread.
+          Platform.runLater(() -> {
+            sidebarUpcomingMeetingsDisplay.getChildren().clear();
+            sidebarNewsDisplay.getChildren().clear();
+            meetingsDisplayed = 0;
+            invitesDisplayed = 0;
+            
+            for (MeetingTableCell cell : meetingData) {
+              Meeting meeting = dbController.getMeeting(cell.meetingID.get());
+              if (meeting != null) {
+                
+                boolean isInvitee = false;
+                for (Account poss : meeting.getInvitedList()) {
+                  if (poss.getId() == account.getId()) {
+                    isInvitee = true;
+                    break;
+                  }
+                }
+                
+                if (meetingsDisplayed < MAX_SIDE_BAR_DISPLAY && !isInvitee) {
+                  addToSideBarDisplay(meeting, sidebarUpcomingMeetingsDisplay);
+                  meetingsDisplayed++;
+                } else if (invitesDisplayed < MAX_SIDE_BAR_DISPLAY && isInvitee) {
+                  addToSideBarDisplay(meeting, sidebarNewsDisplay);
+                  invitesDisplayed++;
+                }     
+              }
+            }         
+        });
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        return null;
+      }
+      
+    };
+    
+    new Thread(task).start();
   }
 }

@@ -44,6 +44,7 @@ import schedulercs356.entity.Account;
 public class EditProfileGUIController implements Initializable {
   private boolean passwordDisabled;
   private DataBaseController dbController;
+  private UserGUIController observer;
   private Account account;
   
   @FXML
@@ -110,6 +111,10 @@ public class EditProfileGUIController implements Initializable {
     
     if (success) {
       System.out.println("Account edited!");
+      if (observer != null) {
+        observer.notifyPopup("Profile Successfully\nChanged!");
+      }
+      
       onCancelButton(null);
     } else {
       System.err.println("Account was not updated!");
@@ -136,5 +141,9 @@ public class EditProfileGUIController implements Initializable {
   
   public void attachDBController(DataBaseController db) {
     dbController = db;
+  }
+  
+  public void attachUIObserver(UserGUIController observer) {
+    this.observer = observer;
   }
 }

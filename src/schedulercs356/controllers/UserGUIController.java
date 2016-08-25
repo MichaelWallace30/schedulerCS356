@@ -1303,7 +1303,7 @@ public class UserGUIController implements Initializable {
   }
   
   
-  private void notifyPopup(String message) {
+  public void notifyPopup(String message) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/Popup.fxml"));
       AnchorPane pane = (AnchorPane)loader.load();
@@ -1707,8 +1707,10 @@ public class UserGUIController implements Initializable {
       Stage stage = new Stage();
       
       EditProfileGUIController controller = loader.getController();
+      // Functions.
       controller.setAccountProfileInformation(account);
       controller.attachDBController(dbController);
+      controller.attachUIObserver(this);
       
       stage.initModality(Modality.APPLICATION_MODAL);
       stage.initOwner(parentStage);

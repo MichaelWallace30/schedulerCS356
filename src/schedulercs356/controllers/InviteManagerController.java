@@ -33,11 +33,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.util.Callback;
 import schedulercs356.cells.MeetingTableCell;
 import schedulercs356.entity.Account;
 import schedulercs356.entity.Meeting;
+import schedulercs356.entity.TimeParser;
 
 /**
  * FXML Controller class
@@ -75,6 +78,50 @@ public class InviteManagerController implements Initializable {
     
     invitedMeetingIdColumn.setCellValueFactory(cellData -> cellData.getValue().meetingID);
     roomNumberColumn.setCellValueFactory(cellData -> cellData.getValue().roomNumber);
+    startDateColumn.setCellValueFactory(cellData -> cellData.getValue().startDate);
+    startDateColumn.setCellFactory(
+            new Callback<TableColumn<MeetingTableCell, LocalDateTime>
+                    , TableCell<MeetingTableCell, LocalDateTime>>() {
+
+      @Override
+      public TableCell<MeetingTableCell, LocalDateTime> call(TableColumn<MeetingTableCell, LocalDateTime> param) {
+        return new TableCell<MeetingTableCell, LocalDateTime>() {
+          @Override
+          protected void updateItem(LocalDateTime time, boolean bool) {
+            super.updateItem(time, bool);
+            
+            if (time != null) {
+              this.setText(TimeParser.parseDateToDisplay(time));
+            } else {
+              this.setText(null);
+            }
+          }
+        };
+      }
+    });
+    
+    endDateColumn.setCellValueFactory(cellData -> cellData.getValue().endDate);
+    endDateColumn.setCellFactory(
+            new Callback<TableColumn<MeetingTableCell, LocalDateTime>
+                    , TableCell<MeetingTableCell, LocalDateTime>>() {
+
+      @Override
+      public TableCell<MeetingTableCell, LocalDateTime> call(TableColumn<MeetingTableCell, LocalDateTime> param) {
+        return new TableCell<MeetingTableCell, LocalDateTime>() {
+          @Override
+          protected void updateItem(LocalDateTime time, boolean bool) {
+            super.updateItem(time, bool);
+            
+            if (time != null) {
+              this.setText(TimeParser.parseDateToDisplay(time));
+            } else {
+              this.setText(null);
+            }
+          }
+        };
+      }                                    
+    });
+    
     invitedMeetingsTable.setItems(meetingInvites);
   }  
 

@@ -564,7 +564,10 @@ public class UserGUIController implements Initializable {
   private void initializeMeetingTable() {
     meetingIdColumn.setCellValueFactory(cellData -> cellData.getValue().meetingID);
     startDateColumn.setCellValueFactory(cellData -> cellData.getValue().startDate);
-    startDateColumn.setCellFactory(new Callback<TableColumn<MeetingTableCell, LocalDateTime>, TableCell<MeetingTableCell, LocalDateTime> >() { 
+    startDateColumn.setCellFactory(
+            new Callback<TableColumn<MeetingTableCell, LocalDateTime>
+                    , TableCell<MeetingTableCell, LocalDateTime> >() {
+                      
       @Override
       public TableCell<MeetingTableCell, LocalDateTime> call(TableColumn<MeetingTableCell, LocalDateTime> param) {
         return new TableCell<MeetingTableCell, LocalDateTime>() {
@@ -584,7 +587,10 @@ public class UserGUIController implements Initializable {
     
     
     endDateColumn.setCellValueFactory(cellData -> cellData.getValue().endDate);
-    endDateColumn.setCellFactory(new Callback<TableColumn<MeetingTableCell, LocalDateTime>, TableCell<MeetingTableCell, LocalDateTime> >() {
+    endDateColumn.setCellFactory(
+            new Callback<TableColumn<MeetingTableCell, LocalDateTime>
+                    , TableCell<MeetingTableCell, LocalDateTime> >() {
+                      
       @Override
       public TableCell<MeetingTableCell, LocalDateTime> call(TableColumn<MeetingTableCell, LocalDateTime> param) {
         return new TableCell<MeetingTableCell, LocalDateTime>() {

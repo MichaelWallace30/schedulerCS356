@@ -305,10 +305,13 @@ public class UserGUIController implements Initializable {
   private ChoiceBox<String> editMeetingEndTimeDay;
   @FXML
   private Button manageInvitesButton;
+  @FXML
+  private Button editProfileButton;
   
   private static final int TIME_HOUR = 12;
   private static final int TIME_MINUTE = 60;
   private static final int TIME_ONE_DIGIT = 10;
+  
   
   void Attending(ActionEvent event) {
 
@@ -1265,12 +1268,37 @@ public class UserGUIController implements Initializable {
         selectedMeetingCell = new  MeetingTableCell(meeting, account);
         ObservableList<Node> flow = sidebarUpcomingMeetingsDisplay.getChildren();
         meetingData.add(selectedMeetingCell);
+        
+        confirmMeetingUpdated();
       }
     } else {
       System.err.println("Meeting " + id + " does not exist in the database!");
     }
     // Clear the buffer.
     tempRejected.clear();
+  }
+  
+  
+  private void confirmMeetingUpdated() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/Popup.fxml"));
+      AnchorPane pane = (AnchorPane)loader.load();
+      
+      Scene scene = new Scene(pane);
+      Stage parentStage = (Stage)tabPane.getScene().getWindow();
+      Stage stage = new Stage();
+      
+      stage.setTitle("Updated Meeting");
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.initOwner(parentStage);
+      stage.setScene(scene);
+      
+      stage.centerOnScreen();
+      stage.showAndWait();
+      
+    } catch (IOException e) {
+      System.err.println("Popup failed to load!");
+    }
   }
 
   
@@ -1496,8 +1524,14 @@ public class UserGUIController implements Initializable {
     
   }
 
+  
   @FXML
   private void onManageInvitesButton(ActionEvent event) {
     openInviteManagerWindow();
+  }
+
+  
+  @FXML
+  private void onEditProfile(ActionEvent event) {
   }
 }

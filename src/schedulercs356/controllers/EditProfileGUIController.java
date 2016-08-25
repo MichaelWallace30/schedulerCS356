@@ -33,6 +33,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import schedulercs356.entity.Account;
 
@@ -42,6 +45,7 @@ import schedulercs356.entity.Account;
  * @author MAGarcia
  */
 public class EditProfileGUIController implements Initializable {
+  private DropShadow errorGlow = new DropShadow();
   private boolean passwordDisabled;
   private DataBaseController dbController;
   private UserGUIController observer;
@@ -68,6 +72,8 @@ public class EditProfileGUIController implements Initializable {
   private TextField lastnameField;
   @FXML
   private TextField addressField;
+  @FXML
+  private Text errorText;
 
   
   /**
@@ -75,8 +81,15 @@ public class EditProfileGUIController implements Initializable {
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
+    errorText.setVisible(false);
     setEnableForPassword(false);
     success = false;
+    
+    errorGlow.setOffsetX(0f);
+    errorGlow.setOffsetY(0f);
+    errorGlow.setColor(Color.RED);
+    errorGlow.setWidth(20);
+    errorGlow.setHeight(20);
   } 
   
   
@@ -102,12 +115,48 @@ public class EditProfileGUIController implements Initializable {
   }
 
   
+  /**
+   * Update the account.
+   * @param event 
+   */
   @FXML
   private void onUpdateProfileButton(ActionEvent event) {
+    errorText.setVisible(false);
+    oldPassword.setEffect(null);
+    newPassword.setEffect(null);
+    retypePassword.setEffect(null);
+    
     account.setAddress(addressField.getText());
     account.setFirstName(firstnameField.getText());
     account.setLastName(lastnameField.getText());
     account.setUserName(usernameField.getText());
+  
+    // Update the password.
+    if (!passwordDisabled) {
+      int oldPassHash = oldPassword.getText().hashCode();
+      if (oldPassHash == account.getPassword()) {
+        if (!newPassword.getText().isEmpty()) {
+          if (retypePassword.getText().equals(newPassword.getText())) {
+            account.hashPassword(newPassword.getText());
+          } else {
+            errorText.setVisible(true);
+            errorText.setText("retype password does not match new password!");
+            retypePassword.setEffect(errorGlow);
+            return;
+          }
+        } else {
+          errorText.setVisible(true);
+          errorText.setText("A new password is required!");
+          newPassword.setEffect(errorGlow);
+          return;
+        }
+      } else {
+        errorText.setVisible(true);
+        errorText.setText("Old Password does not match original password!");
+        oldPassword.setEffect(errorGlow);
+        return;
+      }
+    }
     
     boolean success = dbController.updateObject(account);
     
@@ -120,6 +169,7 @@ public class EditProfileGUIController implements Initializable {
       
       onCancelButton(null);
     } else {
+      this.success = false;
       System.err.println("Account was not updated!");
     }
   }

@@ -43,7 +43,6 @@ public class AccountTableCell {
   public StringProperty contact;
   public IntegerProperty id;
   
-  
   /**
    * Constructor.
    * @param account

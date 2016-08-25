@@ -1140,7 +1140,11 @@ public class UserGUIController implements Initializable {
    */
   @FXML
   private void onRemoveRoom(ActionEvent event) {
+    RoomTableCell cell = adminRoomsTable.getSelectionModel().getSelectedItem();
     
+    if (cell != null) {
+      
+    }
   }
 
   
@@ -1285,7 +1289,7 @@ public class UserGUIController implements Initializable {
         ObservableList<Node> flow = sidebarUpcomingMeetingsDisplay.getChildren();
         meetingData.add(selectedMeetingCell);
         
-        confirmMeetingUpdated();
+        notifyPopup("Meeting updated!");
       }
     } else {
       System.err.println("Meeting " + id + " does not exist in the database!");
@@ -1295,7 +1299,7 @@ public class UserGUIController implements Initializable {
   }
   
   
-  private void confirmMeetingUpdated() {
+  private void notifyPopup(String message) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/Popup.fxml"));
       AnchorPane pane = (AnchorPane)loader.load();
@@ -1304,7 +1308,10 @@ public class UserGUIController implements Initializable {
       Stage parentStage = (Stage)tabPane.getScene().getWindow();
       Stage stage = new Stage();
       
-      stage.setTitle("Updated Meeting");
+      PopupController cont = loader.getController();
+      cont.setTextNotification(message);
+      
+      stage.setTitle("Notice");
       stage.initModality(Modality.APPLICATION_MODAL);
       stage.initOwner(parentStage);
       stage.setScene(scene);
@@ -1327,8 +1334,15 @@ public class UserGUIController implements Initializable {
     AccountTableCell cell = editMeetingUsersNoInviteTable.getSelectionModel().getSelectedItem();
     
     if (cell != null) {
-      editMeetingNotInvitedUsers.remove(cell);
-      editMeetingInvitedUsers.add(cell);
+      Account acc = dbController.getAccount(cell.id.get());
+      if (acc != null) {
+        if (checkAvailability(acc)) {
+          editMeetingNotInvitedUsers.remove(cell);
+          editMeetingInvitedUsers.add(cell);
+        } else {
+          notifyPopup("Can't add " + acc.getUserName() + " to list!\nTime Conflict!");
+        }
+      }
     }
   }
 
@@ -1532,6 +1546,92 @@ public class UserGUIController implements Initializable {
         }
       }
     }
+  }
+  
+  
+  private boolean checkAvailability(Account account) {
+    List<Meeting> meetings = account.getMeetingList();
+    boolean success = true; 
+    
+    LocalDateTime startDate = getStartTimeFromEditMeeting();
+    LocalDateTime endDate= getEndTimeFromEditMeeting();
+    
+    for (Meeting meeting : meetings) {
+      Schedule sch = meeting.getSchedule();
+      
+      if (sch != null) {
+        LocalDateTime start = sch.getStartDateTime();
+        LocalDateTime end = sch.getEndDateTime();
+        if ((start.isEqual(startDate) || end.equals(endDate)) || 
+                (startDate.isAfter(start) && endDate.isBefore(end)) ||
+                (endDate.isBefore(end) && endDate.isAfter(start)) ||
+                (startDate.isAfter(start) && startDate.isBefore(end))) {
+          success = false;
+        }
+      }
+    }
+    
+    return success;
+  }
+  
+  
+  /**
+   * Get the start time from edit meetings.
+   * @return 
+   */
+  private LocalDateTime getStartTimeFromEditMeeting() {
+    int hour = editMeetingStartTimeChooserHour.getValue().intValue();
+
+    if (editMeetingTimeDay.getValue().equals("PM")) {
+      if (hour == TimeParser.TIME_HOUR) {
+        hour = TimeParser.TIME_HOUR;
+      } else {
+        hour += TimeParser.TIME_HOUR;
+        if (hour > 23) {
+          hour = TimeParser.TIME_HOUR;
+        }
+      }
+    } else {
+      if (hour == TimeParser.TIME_HOUR) {
+        hour = 0;
+      }
+    }
+
+    return editMeetingDatePicker
+            .getValue()
+            .atStartOfDay()
+            .withHour(hour)
+            .withMinute(editMeetingStartTimeMinuteChooser.getValue().intValue()); 
+  }
+  
+  
+  /**
+   * Get the end time from edit meetings.
+   * @return 
+   */
+  private LocalDateTime getEndTimeFromEditMeeting() {
+    int hour = editMeetingEndTimeChooserHour1.getValue().intValue();
+
+    if (editMeetingEndTimeDay.getValue().equals("PM")) {
+      if (hour == TimeParser.TIME_HOUR) {
+        hour = TimeParser.TIME_HOUR;
+      } else {
+        hour += TimeParser.TIME_HOUR;
+        if (hour > 23) {
+          hour = TimeParser.TIME_HOUR;
+        }
+      }
+    } else {
+      if (hour == TimeParser.TIME_HOUR) {
+        hour = 0;
+      }
+    }
+
+    return editMeetingDatePicker
+            .getValue()
+            .atStartOfDay()
+            .withHour(hour)
+            .withMinute(editMeetingEndTimeMinuteChooser1.getValue().intValue());    
   }
 
   

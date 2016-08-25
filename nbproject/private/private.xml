@@ -5,12 +5,15 @@
         <group>
             <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/InviteManagerController.java</file>
             <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/gui/UserGUI.fxml</file>
-            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/CreateNewUserController.java</file>
             <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/cells/AccountTableCell.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/UserGUIController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/PopupController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/cells/MeetingTableCell.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/CreateNewUserController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/gui/Popup.fxml</file>
             <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/gui/InviteManager.fxml</file>
             <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/DataBaseController.java</file>
             <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/entity/Room.java</file>
-            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/UserGUIController.java</file>
             <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/entity/MeetingStatus.java</file>
             <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/entity/Meeting.java</file>
         </group>

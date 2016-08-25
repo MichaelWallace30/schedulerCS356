@@ -192,14 +192,27 @@ public class EditProfileGUIController implements Initializable {
   }
   
   
+  /**
+   * Attach the database controller to this controller.
+   * @param db 
+   */
   public void attachDBController(DataBaseController db) {
     dbController = db;
   }
   
+  
+  /**
+   * Attach the UserGUI that is using this controller.
+   * @param observer 
+   */
   public void attachUIObserver(UserGUIController observer) {
     this.observer = observer;
   }
   
+  
+  /**
+   * Check if the account was successfully updated.
+   */
   public boolean getSuccess() {
     return success;
   }

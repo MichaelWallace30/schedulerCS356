@@ -616,7 +616,7 @@ public class UserGUIController implements Initializable {
             super.updateItem(time, bool);
             
             if (time != null) {
-              this.setText(time.getDayOfWeek() + " " + time.getDayOfMonth() + " " + time.getMonth());
+              this.setText(parseDateToDisplay(time));
             } else {
               this.setText(null);
             }
@@ -636,7 +636,7 @@ public class UserGUIController implements Initializable {
             super.updateItem(time, bool);
             
             if (time != null) {
-              this.setText("Cats");
+              this.setText(parseDateToDisplay(time));
             } else {
               this.setText(null);
             }

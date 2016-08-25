@@ -1156,8 +1156,13 @@ public class UserGUIController implements Initializable {
   private void onEditMeetingUpdate(ActionEvent event) {
     String id = editMeetingIdText.getText();
     Meeting meeting = dbController.getMeeting(id);
-    
     if (meeting != null) {
+      if (!checkAvailability(account, meeting)) {
+        notifyPopup("Meeting Not Updated! The date is in conflict with one of your meetings!");
+        
+      return;
+      }
+      
       // TODO (Garcia): Must check if an invitation has already been 
       // sent. This won't require too much time.
     
@@ -1554,12 +1559,45 @@ public class UserGUIController implements Initializable {
     boolean success = true; 
     
     LocalDateTime startDate = getStartTimeFromEditMeeting();
-    LocalDateTime endDate= getEndTimeFromEditMeeting();
+    LocalDateTime endDate = getEndTimeFromEditMeeting();
     
     for (Meeting meeting : meetings) {
       Schedule sch = meeting.getSchedule();
       
       if (sch != null) {
+        LocalDateTime start = sch.getStartDateTime();
+        LocalDateTime end = sch.getEndDateTime();
+        if ((start.isEqual(startDate) || end.equals(endDate)) || 
+                (startDate.isAfter(start) && endDate.isBefore(end)) ||
+                (endDate.isBefore(end) && endDate.isAfter(start)) ||
+                (startDate.isAfter(start) && startDate.isBefore(end))) {
+          success = false;
+        }
+      }
+    }
+    
+    return success;
+  }
+  
+  
+  /**
+   * Check if the meeting is not in conflict with another meeting. Extra meeting
+   * param is used to ignore a meeting with the same id.
+   * @param account
+   * @param ignored
+   * @return 
+   */
+  private boolean checkAvailability(Account account, Meeting ignored) {
+    List<Meeting> meetings = account.getMeetingList();
+    boolean success = true; 
+    
+    LocalDateTime startDate = getStartTimeFromEditMeeting();
+    LocalDateTime endDate = getEndTimeFromEditMeeting();
+    
+    for (Meeting meeting : meetings) {
+      Schedule sch = meeting.getSchedule();
+      
+      if (sch != null && !meeting.getMeetingID().equals(ignored.getMeetingID())) {
         LocalDateTime start = sch.getStartDateTime();
         LocalDateTime end = sch.getEndDateTime();
         if ((start.isEqual(startDate) || end.equals(endDate)) || 

@@ -1719,8 +1719,12 @@ public class UserGUIController implements Initializable {
       stage.centerOnScreen();
       stage.showAndWait();
       
-      account = dbController.getAccount(account.getId());
-      updateAccountInformation(account);
+      boolean success = controller.getSuccess(); 
+      
+      if (success) {
+        account = dbController.getAccount(account.getId());
+        updateAccountInformation(account);
+      }
     } catch (IOException e) {
       System.err.println("Could not load EditProfileGUI!");
     }

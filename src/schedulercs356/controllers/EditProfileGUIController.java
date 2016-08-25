@@ -46,6 +46,7 @@ public class EditProfileGUIController implements Initializable {
   private DataBaseController dbController;
   private UserGUIController observer;
   private Account account;
+  private boolean success;
   
   @FXML
   private Button updateProfileButton;
@@ -75,6 +76,7 @@ public class EditProfileGUIController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     setEnableForPassword(false);
+    success = false;
   } 
   
   
@@ -110,6 +112,7 @@ public class EditProfileGUIController implements Initializable {
     boolean success = dbController.updateObject(account);
     
     if (success) {
+      this.success = success;
       System.out.println("Account edited!");
       if (observer != null) {
         observer.notifyPopup("Profile Successfully\nChanged!");
@@ -145,5 +148,9 @@ public class EditProfileGUIController implements Initializable {
   
   public void attachUIObserver(UserGUIController observer) {
     this.observer = observer;
+  }
+  
+  public boolean getSuccess() {
+    return success;
   }
 }

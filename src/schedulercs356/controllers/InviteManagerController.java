@@ -24,6 +24,7 @@
 package schedulercs356.controllers;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -61,7 +62,9 @@ public class InviteManagerController implements Initializable {
   @FXML
   private TableColumn<MeetingTableCell, Number> roomNumberColumn;
   @FXML
-  private TableColumn<MeetingTableCell, String> dateColumn;
+  private TableColumn<MeetingTableCell, LocalDateTime> startDateColumn;
+  @FXML
+  private TableColumn<MeetingTableCell, LocalDateTime> endDateColumn;
 
   /**
    * Initializes the controller class.
@@ -72,7 +75,6 @@ public class InviteManagerController implements Initializable {
     
     invitedMeetingIdColumn.setCellValueFactory(cellData -> cellData.getValue().meetingID);
     roomNumberColumn.setCellValueFactory(cellData -> cellData.getValue().roomNumber);
-    dateColumn.setCellValueFactory(cellData -> cellData.getValue().date);
     invitedMeetingsTable.setItems(meetingInvites);
   }  
 

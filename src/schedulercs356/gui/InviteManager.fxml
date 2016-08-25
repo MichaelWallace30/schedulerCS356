@@ -19,7 +19,8 @@
         <columns>
           <TableColumn fx:id="invitedMeetingIdColumn" prefWidth="75.0" text="Meeting ID" />
           <TableColumn fx:id="roomNumberColumn" prefWidth="75.0" text="Room #" />
-            <TableColumn fx:id="dateColumn" prefWidth="247.0" text="Date" />
+            <TableColumn fx:id="startDateColumn" prefWidth="99.0" text="Start Time" />
+            <TableColumn fx:id="endDateColumn" prefWidth="75.0" text="End Time" />
         </columns>
       </TableView>
    </children>

@@ -385,7 +385,7 @@ public class UserGUIController implements Initializable {
       profileUserName.setText(account.getUserName());
       profileAddress.setText("Address: " + account.getAddress());
       currentTime = LocalDateTime.now();
-      parseDateToDisplay(currentTime);
+      displayTimeInSideBar(parseDateToDisplay(currentTime));
       runTimeOnThread();
       addMeetingsToTables();      
       addRoomsInTables();
@@ -431,7 +431,7 @@ public class UserGUIController implements Initializable {
   private void runTimeOnThread() {
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
       currentTime = LocalDateTime.now();
-      parseDateToDisplay(currentTime);
+      displayTimeInSideBar(parseDateToDisplay(currentTime));
     }));
     
     timeline.setCycleCount(Animation.INDEFINITE);
@@ -444,7 +444,7 @@ public class UserGUIController implements Initializable {
    * clock, so the format is based on your Operating System.
    * @param date 
    */
-  private String parseDateToDisplay(LocalDateTime date) {   
+  private static String parseDateToDisplay(LocalDateTime date) {   
       String strParsed;
       int hour = date.getHour();
       String minuteString = "00";
@@ -477,11 +477,13 @@ public class UserGUIController implements Initializable {
               + date.getMonth() + " " + date.getDayOfMonth() + ", "
               + date.getYear() + "\n " + hour + ":" + minuteString 
               + ":" + secondString + " " + timeDay;
-      sidebarDate.setText(strParsed);
       
       return strParsed;
   }
   
+  private void displayTimeInSideBar(String time) {
+    sidebarDate.setText(time);
+  }
   
   /**
    * Adds meeting values into tables for Employees and 

@@ -1142,7 +1142,13 @@ public class UserGUIController implements Initializable {
     RoomTableCell cell = adminRoomsTable.getSelectionModel().getSelectedItem();
     
     if (cell != null) {
-      
+      Room room = dbController.getRoom(cell.roomNumber.get());
+      if (room != null) {
+        if (dbController.removeObject(room)) {
+          System.out.println("Room Successfully removed!");
+          rooms.remove(cell);
+        }
+      }
     }
   }
 

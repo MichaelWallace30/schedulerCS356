@@ -384,7 +384,8 @@ public class UserGUIController implements Initializable {
       //sidebarDate.setText(new Date().toString());
       profileUserName.setText(account.getUserName());
       profileAddress.setText("Address: " + account.getAddress());
-      parseDateToDisplay(LocalDateTime.now());
+      currentTime = LocalDateTime.now();
+      parseDateToDisplay(currentTime);
       runTimeOnThread();
       addMeetingsToTables();      
       addRoomsInTables();
@@ -429,8 +430,8 @@ public class UserGUIController implements Initializable {
    */
   private void runTimeOnThread() {
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
-      LocalDateTime date = LocalDateTime.now();
-      parseDateToDisplay(date);
+      currentTime = LocalDateTime.now();
+      parseDateToDisplay(currentTime);
     }));
     
     timeline.setCycleCount(Animation.INDEFINITE);
@@ -443,8 +444,8 @@ public class UserGUIController implements Initializable {
    * clock, so the format is based on your Operating System.
    * @param date 
    */
-  private void parseDateToDisplay(LocalDateTime date) {   
-      currentTime = date;
+  private String parseDateToDisplay(LocalDateTime date) {   
+      String strParsed;
       int hour = date.getHour();
       String minuteString = "00";
       String secondString = "00";
@@ -472,10 +473,13 @@ public class UserGUIController implements Initializable {
         secondString = String.valueOf(second);
       }
       
-      sidebarDate.setText(date.getDayOfWeek() + " "
+      strParsed = date.getDayOfWeek() + " "
               + date.getMonth() + " " + date.getDayOfMonth() + ", "
               + date.getYear() + "\n " + hour + ":" + minuteString 
-              + ":" + secondString + " " + timeDay);
+              + ":" + secondString + " " + timeDay;
+      sidebarDate.setText(strParsed);
+      
+      return strParsed;
   }
   
   
@@ -611,7 +615,11 @@ public class UserGUIController implements Initializable {
           protected void updateItem(LocalDateTime time, boolean bool) {
             super.updateItem(time, bool);
             
-            this.setText("America!!");
+            if (time != null) {
+              this.setText(time.getDayOfWeek() + " " + time.getDayOfMonth() + " " + time.getMonth());
+            } else {
+              this.setText(null);
+            }
           }
         };
       }
@@ -619,6 +627,24 @@ public class UserGUIController implements Initializable {
     
     
     endDateColumn.setCellValueFactory(cellData -> cellData.getValue().endDate);
+    endDateColumn.setCellFactory(new Callback<TableColumn<MeetingTableCell, LocalDateTime>, TableCell<MeetingTableCell, LocalDateTime> >() {
+      @Override
+      public TableCell<MeetingTableCell, LocalDateTime> call(TableColumn<MeetingTableCell, LocalDateTime> param) {
+        return new TableCell<MeetingTableCell, LocalDateTime>() {
+          @Override
+          protected void updateItem(LocalDateTime time, boolean bool) {
+            super.updateItem(time, bool);
+            
+            if (time != null) {
+              this.setText("Cats");
+            } else {
+              this.setText(null);
+            }
+          }
+        };
+      }  
+    });
+    
     hostingColumn.setCellValueFactory(cellData -> cellData.getValue().isHosting);
     
     meetingTable.setItems(meetingData);

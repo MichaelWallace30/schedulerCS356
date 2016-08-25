@@ -67,13 +67,16 @@ public class Meeting implements DataBaseInterface {
     
     private static String CREATE_TABLE_SQL = "(ACCOUNT_ID INTEGER primary key)";
     
+    private Integer version;
+    
     public Meeting() {
         
         String meetingID = UUID.randomUUID().toString();
         //table name can't have '-' in it
         String newMeetingID = meetingID.replace("-", "");
         setMeetingID(newMeetingID);
-                
+        version = 0;
+        
         setAcceptedMeetingListTableName(queryMeetingAcceptedAccountTable + getMeetingID());
         setInvitedMeetingListTableName(queryMeetingInvitedTable + getMeetingID());
         setRejectedMeetingListTableName(queryMeetingRejectedAccountTable + getMeetingID());
@@ -110,7 +113,7 @@ public class Meeting implements DataBaseInterface {
     
     public Meeting(String meetingID, Schedule schedule, Room room, 
             LinkedList<Account> invitedList, LinkedList<Account> acceptedList,
-            LinkedList<Account> rejectedList, Integer ownerID){
+            LinkedList<Account> rejectedList, Integer ownerID, Integer version){
         this.setMeetingID(meetingID);
         this.setSchedule(schedule);
         this.setRoom(room);
@@ -118,7 +121,8 @@ public class Meeting implements DataBaseInterface {
         this.setAcceptedList(acceptedList);
         this.setRejectedList(rejectedList);
         this.setOwnerID(ownerID);
-                        
+        this.setVersion(version);
+              
         setAcceptedMeetingListTableName(queryMeetingAcceptedAccountTable + getMeetingID());
         setInvitedMeetingListTableName(queryMeetingInvitedTable + getMeetingID());
         setRejectedMeetingListTableName(queryMeetingRejectedAccountTable + getMeetingID());
@@ -320,8 +324,8 @@ public class Meeting implements DataBaseInterface {
         
         PreparedStatement ps = con.prepareStatement(
         "INSERT INTO MEETING" 
-            +"(ID, ROOM_ID, OWNER_ID) VALUES"
-            + "(?,?,?)");        
+            +"(ID, ROOM_ID, OWNER_ID, VERSION) VALUES"
+            + "(?,?,?,?)");        
         
         // set the preparedstatement parameters
         ps.setString(1, meeting.getMeetingID());
@@ -333,6 +337,7 @@ public class Meeting implements DataBaseInterface {
         }
 
         ps.setInt(3,meeting.getOwnerID());
+        ps.setInt(4, meeting.getVersion());
 
         // call executeUpdate to execute our sql update statement
         ps.executeUpdate();
@@ -380,6 +385,7 @@ public class Meeting implements DataBaseInterface {
     @Override
     public Boolean updateObject(DataBaseInterface obj, Connection con)throws SQLException{
         Meeting meeting = (Meeting)obj;
+
         
         //update invited list for each account
         ListIterator<Account> itAccount;
@@ -441,7 +447,7 @@ public class Meeting implements DataBaseInterface {
         
         
         PreparedStatement ps = con.prepareStatement(
-        "UPDATE MEETING SET ROOM_ID = ? ,OWNER_ID = ? WHERE ID = ?");
+        "UPDATE MEETING SET ROOM_ID = ? ,OWNER_ID = ?, VERSION = ? WHERE ID = ?");
           
         // set the preparedstatement parameters        
         if (meeting.getRoom() != null) {
@@ -450,7 +456,10 @@ public class Meeting implements DataBaseInterface {
           ps.setInt(1, -1);
         }
         ps.setInt(2,meeting.getOwnerID());
-        ps.setString(3, meeting.getMeetingID());
+        ps.setInt(3,meeting.getVersion());
+        ps.setString(4, meeting.getMeetingID());
+        
+        
         
         // call executeUpdate to execute our sql update statement
         int i = ps.executeUpdate();
@@ -474,6 +483,17 @@ public class Meeting implements DataBaseInterface {
         this.unInvitedList = unInvitedList;
     }
 
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public void incrementVersion(){
+        this.version++;
+    }
 
     
 }

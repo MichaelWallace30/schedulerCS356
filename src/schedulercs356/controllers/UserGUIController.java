@@ -1163,6 +1163,7 @@ public class UserGUIController implements Initializable {
   private void onEditMeetingUpdate(ActionEvent event) {
     String id = editMeetingIdText.getText();
     Meeting meeting = dbController.getMeeting(id);
+    meeting.incrementVersion();
     if (meeting != null) {
       if (!checkAvailability(account, meeting)) {
         notifyPopup("Meeting Not Updated! The date is in conflict with one of your meetings!");

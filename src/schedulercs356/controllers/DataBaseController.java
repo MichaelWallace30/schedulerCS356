@@ -174,6 +174,7 @@ public class DataBaseController {
                     String meetingID = "";
                     Integer roomID = -1;
                     Integer ownerID = -1;
+                    Integer version = 0;
                     String sq2 = "SELECT * FROM MEETING WHERE ID = ?";
                     PreparedStatement ps = con.prepareStatement(sq2);
                     ps.setString(1, temp);
@@ -183,11 +184,13 @@ public class DataBaseController {
                       meetingID = rs.getString("ID");
                       roomID = rs.getInt("ROOM_ID");            
                       ownerID = rs.getInt("OWNER_ID");
+                      version = rs.getInt("VERSION");
+                      
                     } 
                     
                     Room room = getRoom(roomID);
                     
-                    Meeting meeting = new Meeting(meetingID,schedule,room,null,null,null,ownerID);
+                    Meeting meeting = new Meeting(meetingID,schedule,room,null,null,null,ownerID,version);
                     meetingList.add(meeting);
                 }
             }
@@ -508,6 +511,7 @@ public Meeting parseMeeting(ResultSet rs){
             String meetingID = rs.getString("ID");
             Integer roomID = rs.getInt("ROOM_ID");            
             Integer ownerID = rs.getInt("OWNER_ID");
+            Integer version = rs.getInt("VERSION");
                         
             LinkedList<Account> invitedMeetingList = new LinkedList<>();
             LinkedList<Account> rejectedMeetingList = new LinkedList<>();
@@ -522,7 +526,7 @@ public Meeting parseMeeting(ResultSet rs){
             
             Schedule schedule = getSchedule(meetingID);
             
-            Meeting meeting = new Meeting(meetingID, schedule, room, invitedMeetingList, acceptedMeetingList, rejectedMeetingList, ownerID);
+            Meeting meeting = new Meeting(meetingID, schedule, room, invitedMeetingList, acceptedMeetingList, rejectedMeetingList, ownerID, version);
             return meeting; 
 
         }

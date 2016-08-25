@@ -75,8 +75,8 @@
                                                 <TableView fx:id="meetingTable" layoutX="-3.0" layoutY="-1.0" prefHeight="470.0" prefWidth="306.0" AnchorPane.bottomAnchor="-4.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
                                                   <columns>
                                                     <TableColumn fx:id="meetingIdColumn" prefWidth="75.0" text="Meeting ID" />
-                                                    <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Date" />
-                                                      <TableColumn fx:id="numberAttendingColumn" prefWidth="75.0" text="# Attending" />
+                                                    <TableColumn fx:id="startDateColumn" prefWidth="75.0" text="Start Time" />
+                                                      <TableColumn fx:id="endDateColumn" prefWidth="75.0" text="End Time" />
                                                       <TableColumn fx:id="hostingColumn" prefWidth="75.0" text="Hosting" />
                                                       <TableColumn fx:id="meetingsRoomColumn" prefWidth="75.0" text="Room #" />
                                                   </columns>

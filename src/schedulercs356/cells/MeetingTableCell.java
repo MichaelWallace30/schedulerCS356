@@ -23,11 +23,14 @@
  */
 package schedulercs356.cells;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import schedulercs356.entity.Account;
@@ -38,18 +41,21 @@ import schedulercs356.entity.Meeting;
  * @author MAGarcia
  */
 public class MeetingTableCell {
-  public StringProperty date;
   public StringProperty meetingID;
   public IntegerProperty numberOfAttendees;
   public BooleanProperty isHosting;
   public IntegerProperty roomNumber;
   
+  public ObjectProperty startDate;
+  public ObjectProperty endDate;
+  
   public MeetingTableCell(Meeting meeting, Account account) {
     if (meeting.getSchedule() != null) {
-      date = new SimpleStringProperty(meeting.getSchedule().getStartDateTime().toString()
-        + " - " + meeting.getSchedule().getEndDateTime().toString());
+      startDate = new SimpleObjectProperty(meeting.getSchedule().getStartDateTime());
+      endDate = new SimpleObjectProperty(meeting.getSchedule().getEndDateTime());
     } else {
-      date = new SimpleStringProperty("Unknown time!");
+      startDate = new SimpleObjectProperty(LocalDateTime.now());
+      endDate = new SimpleObjectProperty(LocalDateTime.now());
     }
     
     meetingID = new SimpleStringProperty(meeting.getMeetingID());   
@@ -63,10 +69,6 @@ public class MeetingTableCell {
     } else {
       roomNumber = new SimpleIntegerProperty(-1);
     }
-  }
-  
-  public void setDate(String start, String end) {
-    date = new SimpleStringProperty(start + " - " + end);
   }
   
   public void setMeetingID(String id) {

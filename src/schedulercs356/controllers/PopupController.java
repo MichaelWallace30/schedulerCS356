@@ -29,6 +29,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -39,6 +40,8 @@ import javafx.stage.Stage;
 public class PopupController implements Initializable {
   @FXML
   private Button okButton;
+  @FXML
+  private Text notification;
 
   /**
    * Initializes the controller class.
@@ -52,6 +55,10 @@ public class PopupController implements Initializable {
   private void onOKButton(ActionEvent event) {
     Stage stage = (Stage) okButton.getScene().getWindow();
     stage.close();
+  }
+  
+  public void setTextNotification(String str) {
+    notification.setText(str);
   }
   
 }

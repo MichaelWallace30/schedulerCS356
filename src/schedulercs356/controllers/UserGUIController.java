@@ -97,6 +97,7 @@ public class UserGUIController implements Initializable {
   private List<Meeting> accountMeetings;
   private List<Account> accountReferences;
   private List<Schedule> accountSchedules;
+  private LocalDateTime currentTime;
   
   private ObservableList<AccountTableCell> tempRejected;
   private ObservableList<MeetingTableCell> meetingData;
@@ -170,7 +171,7 @@ public class UserGUIController implements Initializable {
   @FXML
   private TextField searchbarText;
   @FXML
-  private TableColumn<MeetingTableCell, Number> numberAttendingColumn;
+  private TableColumn<MeetingTableCell, LocalDateTime> endDateColumn;
   @FXML
   private TableColumn<AccountTableCell, String> usernameColumn;
   @FXML
@@ -188,7 +189,7 @@ public class UserGUIController implements Initializable {
   @FXML
   private Tab tabProfile;
   @FXML
-  private TableColumn<MeetingTableCell, String> dateColumn;
+  private TableColumn<MeetingTableCell, LocalDateTime> startDateColumn;
   @FXML
   private TableView<AccountTableCell> usersInMeetingTable;
   @FXML
@@ -442,7 +443,8 @@ public class UserGUIController implements Initializable {
    * clock, so the format is based on your Operating System.
    * @param date 
    */
-  private void parseDateToDisplay(LocalDateTime date) {    
+  private void parseDateToDisplay(LocalDateTime date) {   
+      currentTime = date;
       int hour = date.getHour();
       String minuteString = "00";
       String secondString = "00";
@@ -600,11 +602,27 @@ public class UserGUIController implements Initializable {
    */
   private void initializeMeetingTable() {
     meetingIdColumn.setCellValueFactory(cellData -> cellData.getValue().meetingID);
-    dateColumn.setCellValueFactory(cellData -> cellData.getValue().date);
-    numberAttendingColumn.setCellValueFactory(cellData -> cellData.getValue().numberOfAttendees);
+    startDateColumn.setCellValueFactory(cellData -> cellData.getValue().startDate);
+    startDateColumn.setCellFactory(new Callback<TableColumn<MeetingTableCell, LocalDateTime>, TableCell<MeetingTableCell, LocalDateTime> >() { 
+      @Override
+      public TableCell<MeetingTableCell, LocalDateTime> call(TableColumn<MeetingTableCell, LocalDateTime> param) {
+        return new TableCell<MeetingTableCell, LocalDateTime>() {
+          @Override
+          protected void updateItem(LocalDateTime time, boolean bool) {
+            super.updateItem(time, bool);
+            
+            this.setText("America!!");
+          }
+        };
+      }
+    });
+    
+    
+    endDateColumn.setCellValueFactory(cellData -> cellData.getValue().endDate);
     hostingColumn.setCellValueFactory(cellData -> cellData.getValue().isHosting);
     
     meetingTable.setItems(meetingData);
+    
     
     // Set up a listener to the observer.
     meetingTable.getSelectionModel().selectedItemProperty().addListener((edc, old, n) -> {

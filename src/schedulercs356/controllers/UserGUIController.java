@@ -53,6 +53,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -599,6 +600,14 @@ public class UserGUIController implements Initializable {
             super.updateItem(time, bool);
             
             if (time != null) {
+              if (time.isBefore(currentTime)) {
+                this.setTextFill(Color.RED);
+              } else if (time.isAfter(currentTime)) {
+                this.setTextFill(Color.GREEN);               
+              } else {
+                this.setTextFill(Color.BLACK);
+              }
+              
               this.setText(TimeParser.parseDateToDisplay(time));
             } else {
               this.setText(null);

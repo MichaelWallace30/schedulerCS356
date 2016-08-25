@@ -36,6 +36,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import schedulercs356.cells.MeetingTableCell;
 import schedulercs356.entity.Account;
@@ -51,6 +52,7 @@ public class InviteManagerController implements Initializable {
   private ObservableList<MeetingTableCell> meetingInvites;
   private DataBaseController db;
   private Account account;
+  private LocalDateTime timeJustNow;
   
   @FXML
   private Button acceptButton;
@@ -76,6 +78,7 @@ public class InviteManagerController implements Initializable {
   public void initialize(URL url, ResourceBundle rb) {
     meetingInvites = FXCollections.observableArrayList();
     
+    timeJustNow = LocalDateTime.now();
     invitedMeetingIdColumn.setCellValueFactory(cellData -> cellData.getValue().meetingID);
     roomNumberColumn.setCellValueFactory(cellData -> cellData.getValue().roomNumber);
     startDateColumn.setCellValueFactory(cellData -> cellData.getValue().startDate);
@@ -113,6 +116,14 @@ public class InviteManagerController implements Initializable {
             super.updateItem(time, bool);
             
             if (time != null) {
+              if (time.isBefore(timeJustNow)) {
+                this.setTextFill(Color.RED);
+              } else if (time.isAfter(timeJustNow)) {
+                this.setTextFill(Color.GREEN);               
+              } else {
+                this.setTextFill(Color.BLACK);
+              }
+              
               this.setText(TimeParser.parseDateToDisplay(time));
             } else {
               this.setText(null);

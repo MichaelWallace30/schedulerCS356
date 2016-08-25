@@ -25,12 +25,16 @@ package schedulercs356.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import schedulercs356.entity.Account;
 
 /**
  * FXML Controller class
@@ -38,6 +42,10 @@ import javafx.scene.control.TextField;
  * @author MAGarcia
  */
 public class EditProfileGUIController implements Initializable {
+  private boolean passwordDisabled;
+  private DataBaseController dbController;
+  private Account account;
+  
   @FXML
   private Button updateProfileButton;
   @FXML
@@ -59,24 +67,74 @@ public class EditProfileGUIController implements Initializable {
   @FXML
   private TextField addressField;
 
+  
   /**
    * Initializes the controller class.
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    // TODO
-  }  
-
-  @FXML
-  private void onUpdateProfileButton(ActionEvent event) {
-  }
-
-  @FXML
-  private void onCancelButton(ActionEvent event) {
-  }
-
-  @FXML
-  private void onChangePassword(ActionEvent event) {
+    setEnableForPassword(false);
+  } 
+  
+  
+  public void setAccountProfileInformation(Account account) {
+    this.account = account;
+    usernameField.setText(account.getUserName());
+    firstnameField.setText(account.getFirstName());
+    lastnameField.setText(account.getLastName());
+    addressField.setText(account.getAddress());
   }
   
+  
+  private void setEnableForPassword(boolean enable) {
+    passwordDisabled = !enable;
+    oldPassword.setDisable(passwordDisabled);
+    newPassword.setDisable(passwordDisabled);
+    retypePassword.setDisable(passwordDisabled);
+  }
+  
+  
+  public boolean passwordFieldDisabled() {
+    return passwordDisabled;
+  }
+
+  
+  @FXML
+  private void onUpdateProfileButton(ActionEvent event) {
+    account.setAddress(addressField.getText());
+    account.setFirstName(firstnameField.getText());
+    account.setLastName(lastnameField.getText());
+    account.setUserName(usernameField.getText());
+    
+    boolean success = dbController.updateObject(account);
+    
+    if (success) {
+      System.out.println("Account edited!");
+      onCancelButton(null);
+    } else {
+      System.err.println("Account was not updated!");
+    }
+  }
+
+  
+  @FXML
+  private void onCancelButton(ActionEvent event) {
+    Stage stage = (Stage) cancelButton.getScene().getWindow();
+    stage.close();
+  }
+
+  
+  @FXML
+  private void onChangePassword(ActionEvent event) {
+    if (passwordDisabled) {
+      setEnableForPassword(true);
+    } else {
+      setEnableForPassword(false);
+    }
+  }
+  
+  
+  public void attachDBController(DataBaseController db) {
+    dbController = db;
+  }
 }

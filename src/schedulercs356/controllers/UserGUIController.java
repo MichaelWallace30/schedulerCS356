@@ -348,6 +348,7 @@ public class UserGUIController implements Initializable {
       
       sidebarName.setText(account.getFirstName() + " " + account.getLastName());
       profileName.setText(account.getFirstName() + " " + account.getLastName());
+      profileAddress.setText("Address: " + account.getAddress());
       
       if (account.isAdmin()) {
         adminEnabledAccounts = FXCollections.observableArrayList();
@@ -380,8 +381,6 @@ public class UserGUIController implements Initializable {
       } 
       
       //sidebarDate.setText(new Date().toString());
-      profileUserName.setText(account.getUserName());
-      profileAddress.setText("Address: " + account.getAddress());
       currentTime = LocalDateTime.now();
       displayTimeInSideBar(TimeParser.parseDateToDisplay(currentTime));
       runTimeOnThread();
@@ -1678,6 +1677,10 @@ public class UserGUIController implements Initializable {
   }
 
   
+  /**
+   * Navigate to meeting details tab. Set the information from the meetings table.
+   * @param event 
+   */
   @FXML
   private void onMeetingDetails(ActionEvent event) {
     
@@ -1690,7 +1693,44 @@ public class UserGUIController implements Initializable {
   }
 
   
+  /**
+   * Open up the EditProfile Display.
+   * @param event 
+   */
   @FXML
   private void onEditProfile(ActionEvent event) {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/EditProfileGUI.fxml"));
+      AnchorPane pane = (AnchorPane) loader.load();
+      Scene scene = new Scene(pane);
+      Stage parentStage = (Stage) tabPane.getScene().getWindow();
+      Stage stage = new Stage();
+      
+      EditProfileGUIController controller = loader.getController();
+      controller.setAccountProfileInformation(account);
+      controller.attachDBController(dbController);
+      
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.initOwner(parentStage);
+      stage.setScene(scene);
+      
+      stage.centerOnScreen();
+      stage.showAndWait();
+      
+      account = dbController.getAccount(account.getId());
+      updateAccountInformation(account);
+    } catch (IOException e) {
+      System.err.println("Could not load EditProfileGUI!");
+    }
+  }
+  
+  
+  private void updateAccountInformation(Account account) {
+    Account newAccount = dbController.getAccount(account.getId());
+    account = newAccount;
+    profileUserName.setText(account.getUserName());
+    profileAddress.setText("Address: " + account.getAddress());
+    sidebarName.setText(account.getFirstName() + " " + account.getLastName());
+    profileName.setText(account.getFirstName() + " " + account.getLastName());
   }
 }

@@ -1863,7 +1863,8 @@ public class UserGUIController implements Initializable {
       // Remove the user that has accepted that meeting.
       if (controller.isConfirmed()) { 
         Meeting meeting = dbController.getMeeting(cell.meetingID.get());
-       
+        boolean removed = false;
+        
         if (meeting != null) {
           List<Account> accList = meeting.getAcceptedList();
           for (int i = 0; i < accList.size(); ++i) {
@@ -1871,13 +1872,18 @@ public class UserGUIController implements Initializable {
             if (acc.getId() == account.getId()) {
               accList.remove(i);
               meeting.getUnInvitedList().add(account);
+              removed = true;
               break;
             }
           }
           
-          if (dbController.updateObject(meeting)) {
+          // Update the db! Short circuit if user isn't even attending the meeting.
+          if (removed && dbController.updateObject(meeting)) {
             System.out.println("User is successfully removed!");
             
+            notifyPopup("Meeting successfully removed!");
+          } else {
+            notifyPopup("You haven't accepted this invite! Cannot drop!");
           }
         }
       }

@@ -26,6 +26,7 @@ package schedulercs356.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -88,6 +89,7 @@ public class UserGUIController implements Initializable {
   private static final Integer MAX_SIDE_BAR_DISPLAY = 5;
   private Integer meetingsDisplayed = 0;
   private Integer invitesDisplayed = 0;
+  private final Object mutex = new Object();
   
   // Our databaseController.
   private DataBaseController dbController;
@@ -344,6 +346,10 @@ public class UserGUIController implements Initializable {
       initializeUsersInMeetingTable();      
       initializeMeetingTable();
       initializeRoomsInTables();
+      runTimeOnThread();
+      addMeetingsToTables();      
+      addRoomsInTables();
+      initializeChoiceBoxes();
       
       sidebarName.setText(account.getFirstName() + " " + account.getLastName());
       profileName.setText(account.getFirstName() + " " + account.getLastName());
@@ -368,7 +374,7 @@ public class UserGUIController implements Initializable {
         sidebarEmployeeStatus.setText(status);
         profileEmployeeStatus.setText(status);
         initializeAdminTables();
-        
+        // check for changed meetings.
       } else {
         sidebarEmployeeStatus.setText(EMPLOYEE);
         profileEmployeeStatus.setText(EMPLOYEE);
@@ -382,10 +388,6 @@ public class UserGUIController implements Initializable {
       //sidebarDate.setText(new Date().toString());
       currentTime = LocalDateTime.now();
       displayTimeInSideBar(TimeParser.parseDateToDisplay(currentTime));
-      runTimeOnThread();
-      addMeetingsToTables();      
-      addRoomsInTables();
-      initializeChoiceBoxes();
     } else {
       throw new RuntimeException("Null account value was passed!");
     }
@@ -454,6 +456,8 @@ public class UserGUIController implements Initializable {
     addMeetingsToTable(meetings);
     meetings = account.getMeetingList();
     addMeetingsToTable(meetings);
+    // Check for changed meetings.
+    checkForChangedMeetings();
   }
   
   
@@ -462,7 +466,6 @@ public class UserGUIController implements Initializable {
    * @param meetings 
    */
   private void addMeetingsToTable(List<Meeting> meetings) {
-    
     for (Meeting meeting : meetings) {
       
       if (meeting != null) {
@@ -538,6 +541,9 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * initialize the choice boxes in edit meeting tab.
+   */
   private void initializeChoiceBoxes() {
     ObservableList<Number> minutes = FXCollections.observableArrayList();
     
@@ -1712,7 +1718,6 @@ public class UserGUIController implements Initializable {
    */
   @FXML
   private void onMeetingDetails(ActionEvent event) {
-    
   }
 
   
@@ -1920,5 +1925,73 @@ public class UserGUIController implements Initializable {
   @FXML
   private void onEditRromRemoveRoomButton(ActionEvent event) {
     
+  }
+  
+  
+  /**
+   * Checks for any meetings that have changed. Runs on a thread to avoid
+   * slow downs in the FX thread. this is a safe thread as it is not modifying 
+   * the account list, only sending info to the database to update.
+   */
+  private void checkForChangedMeetings() {
+    Task task;
+    task = new Task<Void>() {
+
+      @Override
+      protected Void call() throws Exception {
+        try {
+          List<Meeting> changedMeetings = new LinkedList<>();
+          List<Meeting> meetingList = account.getMeetingList();
+
+          for (Iterator<Meeting> iterator = meetingList.iterator(); iterator.hasNext();) {
+            Meeting meeting = iterator.next();
+            // Save a little time querying to the db by referencing.
+            Meeting meetingFromDb = dbController.getMeeting(meeting.getMeetingID());
+            if (meetingFromDb != null && (meeting.getVersion() < meetingFromDb.getVersion())) {
+              meeting.setVersion(meetingFromDb.getVersion());
+              changedMeetings.add(meeting);
+            }
+          }
+
+          // Update the account meeting versions.
+          dbController.updateObject(account);
+          // Open up the Changed Window if any meetings have changed.
+          if (!changedMeetings.isEmpty()) {
+            System.out.println("Size is " + changedMeetings.size());
+            // run the window.
+            Platform.runLater(() -> {
+
+              try {
+                FXMLLoader loader
+                        = new FXMLLoader(getClass().getResource("/schedulercs356/gui/ChangedMeetingsNotifier.fxml"));
+                AnchorPane pane = (AnchorPane) loader.load();
+                Scene scene = new Scene(pane);
+                Stage parentStage;
+                Stage stage = new Stage();
+
+                parentStage = (Stage) tabPane.getScene().getWindow();
+
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.initOwner(parentStage);
+                stage.setScene(scene);
+                stage.centerOnScreen();
+                // Here we go!
+                stage.showAndWait();
+
+              } catch (IOException e) {
+
+              }
+            });
+          }
+        } catch (Exception e) {
+          System.err.println("Thread failed to execute!");
+          e.printStackTrace();
+        }
+
+        return null;
+      }
+    };
+
+    new Thread(task).start();
   }
 }

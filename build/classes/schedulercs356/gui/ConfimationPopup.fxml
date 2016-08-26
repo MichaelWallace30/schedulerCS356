@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="218.0" prefWidth="367.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="schedulercs356.controllers.ConfirmationPopupController">
+    <stylesheets>
+        <URL value="@/schedulercs356/css/confimationpopup.css" />
+    </stylesheets>
+   <children>
+      <Text fx:id="confirmationText" layoutX="-7.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirmation" textAlignment="CENTER" wrappingWidth="367.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Text fx:id="descriptionText" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are confirming something" textAlignment="CENTER" wrappingWidth="367.0" />
+      <Text fx:id="areYouSureText" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure?" textAlignment="CENTER" wrappingWidth="367.0" />
+      <Button fx:id="yesButton" layoutX="14.0" layoutY="179.0" mnemonicParsing="false" onAction="#onYesButton" text="Yes" />
+      <Button fx:id="noButton" layoutX="320.0" layoutY="179.0" mnemonicParsing="false" onAction="#onNobutton" text="No" />
+   </children>
+</AnchorPane>

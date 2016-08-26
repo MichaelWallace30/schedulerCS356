@@ -127,8 +127,6 @@ public class UserGUIController implements Initializable {
   @FXML
   private Tab tablMeetings;
   @FXML
-  private Tab tabRoomDetails;
-  @FXML
   private Tab tabEditMeeting;
   @FXML
   private MenuBar menuBar;
@@ -176,7 +174,6 @@ public class UserGUIController implements Initializable {
   private TableColumn<MeetingTableCell, LocalDateTime> endDateColumn;
   @FXML
   private TableColumn<AccountTableCell, String> usernameColumn;
-  @FXML
   private Tab tabMeetingDetails;
   @FXML
   private Menu editMenu;
@@ -1145,7 +1142,7 @@ public class UserGUIController implements Initializable {
 
   
   /**
-   * 
+   * Remove the selected Room. This is an admin feature. 
    * @param event 
    */
   @FXML
@@ -1322,6 +1319,10 @@ public class UserGUIController implements Initializable {
   }
   
   
+  /**
+   * 
+   * @param message 
+   */
   public void notifyPopup(String message) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/Popup.fxml"));
@@ -1370,6 +1371,10 @@ public class UserGUIController implements Initializable {
   }
 
   
+  /**
+   * 
+   * @param event 
+   */
   @FXML
   private void onRemoveInvitesButton(ActionEvent event) {
     AccountTableCell cell = editMeetingUsersInvitedTable.getSelectionModel().getSelectedItem();
@@ -1382,6 +1387,10 @@ public class UserGUIController implements Initializable {
   }
 
   
+  /**
+   * 
+   * @param event 
+   */
   @FXML
   private void onEditMeeting(ActionEvent event) {
     MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
@@ -1707,6 +1716,10 @@ public class UserGUIController implements Initializable {
   }
 
   
+  /**
+   * 
+   * @param event 
+   */
   @FXML
   private void onManageInvitesButton(ActionEvent event) {
     openInviteManagerWindow();
@@ -1812,19 +1825,78 @@ public class UserGUIController implements Initializable {
     new Thread(task).start();
   }
 
+  
+  /**
+   * 
+   * @param event 
+   */
   @FXML
   private void onDropMeeting(ActionEvent event) {
+    MeetingTableCell cell = meetingTable.getSelectionModel().getSelectedItem();
+    
+    if (cell != null) {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/schedulercs356/gui/ConfirmationPopup.fxml"));
+      ConfirmationPopupController controller = null;
+      
+      try {
+        AnchorPane pane = (AnchorPane) loader.load();
+        Scene scene = new Scene(pane);
+        Stage parentStage = (Stage) tabPane.getScene().getWindow();
+        Stage stage = new Stage();
+        
+        controller = loader.getController();
+        controller.setConfirmationHeader("Dropping Meeting!");
+        controller.setDescriptionText("You are about to drop meeting " + cell.meetingID.get());
+        
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(parentStage);
+        
+        stage.setScene(scene);
+        stage.centerOnScreen();
+        stage.showAndWait();
+        
+      } catch (IOException e) {
+        System.err.println("Could not load Confirmation!");
+        return;
+      }
+      
+      if (controller.isConfirmed()) {
+        Meeting meeting = dbController.getMeeting(cell.meetingID.get());
+        
+        if (meeting != null) {
+          System.out.println("Removing meeting!");
+        }
+      }
+    }
   }
-
+  
+  
+  /**
+   * 
+   * @param event 
+   */
   @FXML
   private void onUpdateRoomButton(ActionEvent event) {
+  
   }
 
+  
+  /**
+   * 
+   * @param event 
+   */
   @FXML
   private void onEditRoomCancelChangesButton(ActionEvent event) {
+  
   }
 
+  
+  /**
+   * 
+   * @param event 
+   */
   @FXML
   private void onEditRromRemoveRoomButton(ActionEvent event) {
+    
   }
 }

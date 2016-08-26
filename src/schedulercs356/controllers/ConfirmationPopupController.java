@@ -30,13 +30,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
  *
  * @author MAGarcia
  */
-public class ConfimationPopupController implements Initializable {
+public class ConfirmationPopupController implements Initializable {
+  /**
+   * 
+   */
+  private boolean confirmed;
+  
   @FXML
   private Text confirmationText;
   @FXML
@@ -45,21 +51,78 @@ public class ConfimationPopupController implements Initializable {
   private Button yesButton;
   @FXML
   private Button noButton;
+  @FXML
+  private Text areYouSureText;
 
   /**
    * Initializes the controller class.
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    // TODO
+    confirmed = false;
   }  
 
+  
   @FXML
   private void onYesButton(ActionEvent event) {
+    confirmed = true;
+    onNobutton(null);
   }
 
+  
   @FXML
   private void onNobutton(ActionEvent event) {
+    Stage stage = (Stage) noButton.getScene().getWindow();
+    stage.close();
   }
   
+  
+  /**
+   * 
+   * @param text 
+   */
+  public void setYesButtonText(String text) {
+    yesButton.setText(text);
+  }
+  
+  
+  /**
+   * 
+   * @param text 
+   */
+  public void setNoButtonText(String text) {
+    noButton.setText(text);
+  }
+  
+  
+  /**
+   * 
+   * @param header 
+   */
+  public void setConfirmationHeader(String header) {
+    confirmationText.setText(header);
+  }
+  
+  
+  /**
+   * 
+   * @param message 
+   */
+  public void setDescriptionText(String message) {
+    descriptionText.setText(message);
+  }
+  
+  
+  public void setAreYouSureText(String message) {
+    areYouSureText.setText(message);
+  }
+  
+  
+  /**
+   * Get the confirmation.
+   * @return true if the confirmation is true, false otherwise.
+   */
+  public boolean isConfirmed() {
+    return confirmed;
+  }
 }

@@ -1860,11 +1860,25 @@ public class UserGUIController implements Initializable {
         return;
       }
       
-      if (controller.isConfirmed()) {
+      // Remove the user that has accepted that meeting.
+      if (controller.isConfirmed()) { 
         Meeting meeting = dbController.getMeeting(cell.meetingID.get());
-        
+       
         if (meeting != null) {
-          System.out.println("Removing meeting!");
+          List<Account> accList = meeting.getAcceptedList();
+          for (int i = 0; i < accList.size(); ++i) {
+            Account acc = accList.get(i);
+            if (acc.getId() == account.getId()) {
+              accList.remove(i);
+              meeting.getUnInvitedList().add(account);
+              break;
+            }
+          }
+          
+          if (dbController.updateObject(meeting)) {
+            System.out.println("User is successfully removed!");
+            
+          }
         }
       }
     }
@@ -1877,7 +1891,7 @@ public class UserGUIController implements Initializable {
    */
   @FXML
   private void onUpdateRoomButton(ActionEvent event) {
-  
+    
   }
 
   

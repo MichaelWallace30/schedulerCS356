@@ -101,6 +101,7 @@
                                     <Button fx:id="cancelMeetingButton" layoutX="649.0" layoutY="424.0" mnemonicParsing="false" onAction="#onRemoveMeeting" prefHeight="25.0" prefWidth="115.0" text="Cancel Meeting" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                                     <Button fx:id="manageInvitesButton" layoutX="14.0" layoutY="424.0" mnemonicParsing="false" onAction="#onManageInvitesButton" text="Manage Invites" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
                                     <Button fx:id="meetingDetailsButton" layoutX="540.0" layoutY="424.0" mnemonicParsing="false" onAction="#onMeetingDetails" text="Meeting Details" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="138.0" />
+                                    <Button fx:id="dropMeetingButton" layoutX="14.0" layoutY="367.0" mnemonicParsing="false" onAction="#onDropMeeting" text="Drop Meeting" AnchorPane.leftAnchor="14.0" />
                                  </children>
                               </AnchorPane>
                         </content>
@@ -114,9 +115,9 @@
                                           <Font size="24.0" />
                                        </font>
                                     </Text>
-                                    <Button fx:id="editRoomsUpdateButton" layoutX="14.0" layoutY="424.0" mnemonicParsing="false" text="Update Room" />
-                                    <Button fx:id="editRoomsCancelChangesButton" layoutX="664.0" layoutY="424.0" mnemonicParsing="false" text="Cancel Changes" />
-                                    <Button fx:id="editRoomsRemoveRoomButton" layoutX="363.0" layoutY="424.0" mnemonicParsing="false" text="Remove Room" />
+                                    <Button fx:id="editRoomsUpdateButton" layoutX="14.0" layoutY="424.0" mnemonicParsing="false" onAction="#onUpdateRoomButton" text="Update Room" />
+                                    <Button fx:id="editRoomsCancelChangesButton" layoutX="664.0" layoutY="424.0" mnemonicParsing="false" onAction="#onEditRoomCancelChangesButton" text="Cancel Changes" />
+                                    <Button fx:id="editRoomsRemoveRoomButton" layoutX="363.0" layoutY="424.0" mnemonicParsing="false" onAction="#onEditRromRemoveRoomButton" text="Remove Room" />
                                     <Text layoutX="14.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room Number" />
                                     <TextArea fx:id="editRoomsDescription" layoutX="14.0" layoutY="174.0" prefHeight="230.0" prefWidth="750.0" promptText="Add a description about this room!" />
                                     <TextField fx:id="editRoomsRoomNumber" layoutX="104.0" layoutY="58.0" prefHeight="25.0" prefWidth="93.0" promptText="Add a room #" />

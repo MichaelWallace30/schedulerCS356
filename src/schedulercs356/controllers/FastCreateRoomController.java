@@ -79,6 +79,11 @@ public class FastCreateRoomController implements Initializable {
     errorText.setVisible(false);
   }  
 
+  
+  /**
+   * Trigger the call to Create room.
+   * @param event 
+   */
   @FXML
   private void onCreateButton(ActionEvent event) {
     DropShadow errorGlow = new DropShadow();

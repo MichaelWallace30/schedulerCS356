@@ -310,6 +310,8 @@ public class UserGUIController implements Initializable {
   private Button manageInvitesButton;
   @FXML
   private Button editProfileButton;
+  @FXML
+  private Button dropMeetingButton;
   
   
   void Attending(ActionEvent event) {
@@ -633,9 +635,11 @@ public class UserGUIController implements Initializable {
           if (meeting.getOwnerID() == account.getId()) {
             editMeetingButton.setDisable(false);
             cancelMeetingButton.setDisable(false);
+            dropMeetingButton.setDisable(true);
           } else {
             editMeetingButton.setDisable(true);
             cancelMeetingButton.setDisable(true);
+            dropMeetingButton.setDisable(false);
           }
           
           List<Account> cs = meeting.getInvitedList();
@@ -764,7 +768,7 @@ public class UserGUIController implements Initializable {
   
   
   /**
-   * 
+   * Initialize the Sidebar.
    */
   private void initializeSideBar() {
     sidebarUpcomingMeetingsDisplay.setOnMouseClicked((MouseEvent event) -> {
@@ -1122,16 +1126,21 @@ public class UserGUIController implements Initializable {
 
   
   /**
-   * 
+   * Edit the room that was selected.
    * @param event 
    */
   @FXML
   private void onEditRoom(ActionEvent event) {
+    RoomTableCell cell = adminRoomsTable.getSelectionModel().getSelectedItem();
+    
+    if (cell != null) {
+      editRoomsRoomNumber.setText(String.valueOf(cell.roomNumber.get()));
+      editRoomsMaxIOccupancy.setText(String.valueOf(cell.maxOccupancy.get()));
+      editRoomsDescription.setText(cell.description.get());
+    }
     tabEditRooms.getTabPane().getSelectionModel().select(tabEditRooms);
     
     tabEditRooms.setDisable(false);
-    
-    editMeetingIdText.setText("");
   }
 
   
@@ -1801,5 +1810,21 @@ public class UserGUIController implements Initializable {
     };
     
     new Thread(task).start();
+  }
+
+  @FXML
+  private void onDropMeeting(ActionEvent event) {
+  }
+
+  @FXML
+  private void onUpdateRoomButton(ActionEvent event) {
+  }
+
+  @FXML
+  private void onEditRoomCancelChangesButton(ActionEvent event) {
+  }
+
+  @FXML
+  private void onEditRromRemoveRoomButton(ActionEvent event) {
   }
 }

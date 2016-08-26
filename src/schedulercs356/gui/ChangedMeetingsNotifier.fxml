@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="schedulercs356.controllers.ChangedMeetingsNotifierController">
+    <stylesheets>
+        <URL value="@/schedulercs356/css/changedmeetingsnotifier.css" />
+    </stylesheets>
+   <children>
+      <Text layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Meetings Have Changed!" textAlignment="CENTER" wrappingWidth="600.40625" AnchorPane.topAnchor="6.1015625">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Text layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The following meetings in your schedule have changed... You may choose whether you wish to stay in the meeting, or drop from it..." textAlignment="CENTER" wrappingWidth="600.40625" AnchorPane.topAnchor="38.0" />
+      <TableView fx:id="changedMeetingTable" layoutX="14.0" layoutY="82.0" prefHeight="263.0" prefWidth="573.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.40625" AnchorPane.topAnchor="82.0">
+        <columns>
+          <TableColumn fx:id="meetingIdColumn" prefWidth="100.0" text="Meeting ID" />
+          <TableColumn fx:id="startTimeColumn" prefWidth="157.0" text="Start Time" />
+            <TableColumn fx:id="endTimeColumn" prefWidth="183.0" text="End Time" />
+            <TableColumn fx:id="roomNumberColumn" minWidth="0.0" prefWidth="132.0" text="Room #" />
+        </columns>
+      </TableView>
+      <Button fx:id="dropMeetingButton" layoutX="255.0" layoutY="361.0" mnemonicParsing="false" onAction="#onDropMeetingButton" text="Drop Meeting" AnchorPane.bottomAnchor="14.0" />
+   </children>
+</AnchorPane>

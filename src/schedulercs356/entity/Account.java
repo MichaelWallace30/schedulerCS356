@@ -49,6 +49,9 @@ public class Account implements DataBaseInterface {
     private String address;
     private int id;
     
+    
+    private LinkedList<Integer> meetingVersion;
+    
     private LinkedList<Meeting> invitedMeetingList;
     private String invitedMeetingListTableName;
     public static String queryAccountInvitedMeetingTable = "ACCOUNT_INVITED_MEETING_TABLE_LIST_ACCOUNT_ID_";
@@ -84,7 +87,7 @@ public class Account implements DataBaseInterface {
         //create table if dne for meeting list
         DataBaseController db = new DataBaseController();
         if(!db.doesTableExsist(getMeetingListTableName())){
-            String sql = "CREATE TABLE " + getMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key)";
+            String sql = "CREATE TABLE " + getMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key, VERSION INTEGER)";
             db.createTable(sql);            
         }
         else{
@@ -92,7 +95,7 @@ public class Account implements DataBaseInterface {
         }        
         //create table if dne for invited list
         if(!db.doesTableExsist(getInvitedMeetingListTableName())){
-            String sql = "CREATE TABLE " + getInvitedMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key)";
+            String sql = "CREATE TABLE " + getInvitedMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key, VERSION INTEGER)";
             db.createTable(sql);            
         }
         else{
@@ -126,7 +129,7 @@ public class Account implements DataBaseInterface {
         //create table if dne for meeting list
         DataBaseController db = new DataBaseController();
         if(!db.doesTableExsist(this.getMeetingListTableName())){
-            String sql = "CREATE TABLE " + getMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key)";
+            String sql = "CREATE TABLE " + getMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key, VERSION INTEGER)";
             db.createTable(sql);            
         }
         else{
@@ -134,7 +137,7 @@ public class Account implements DataBaseInterface {
         }        
         //create table if dne for invited list
         if(!db.doesTableExsist(this.getInvitedMeetingListTableName())){
-            String sql = "CREATE TABLE " + getInvitedMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key)";
+            String sql = "CREATE TABLE " + getInvitedMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key, VERSION INTEGER)";
             db.createTable(sql);            
         }
         else{
@@ -285,16 +288,16 @@ public class Account implements DataBaseInterface {
         
     }
     
-    private Boolean addMeetingTable(Connection con, String meetingID, String listName){
+    private Boolean addMeetingTable(Connection con, String meetingID, String listName, Integer version){
         try
         {
             PreparedStatement ps = con.prepareStatement(
             "INSERT INTO " + listName 
-                +"(MEETING_ID) VALUES"
-                + "(?)");  
+                +"(MEETING_ID, VERSION) VALUES"
+                + "(?,?)");  
 
             ps.setString(1,meetingID);
-
+            ps.setInt(2,version);
             int i = ps.executeUpdate();
             ps.close();   
 
@@ -336,12 +339,14 @@ public class Account implements DataBaseInterface {
         ListIterator<Meeting> it;
         it = meetingList.listIterator();
         while(it.hasNext()){
-            addMeetingTable(con, it.next().getMeetingID(), meetingListTableName);
+            Meeting tempMeeting = it.next();
+            addMeetingTable(con, tempMeeting.getMeetingID(), meetingListTableName, tempMeeting.getVersion());
         }
         
         it = invitedMeetingList.listIterator();
         while(it.hasNext()){
-            addMeetingTable(con, it.next().getMeetingID(), invitedMeetingListTableName);
+            Meeting tempMeeting = it.next();
+            addMeetingTable(con, tempMeeting.getMeetingID(), invitedMeetingListTableName, tempMeeting.getVersion());
         }
 
         // set the preparedstatement parameters
@@ -386,7 +391,7 @@ public class Account implements DataBaseInterface {
         while(it.hasNext()) {
           Meeting meeting = it.next();
           if (meeting != null) {
-            addMeetingTable(con, meeting.getMeetingID(), meetingListTableName);
+            addMeetingTable(con, meeting.getMeetingID(), meetingListTableName, meeting.getVersion());
           }
         }
         
@@ -394,7 +399,7 @@ public class Account implements DataBaseInterface {
         while(it.hasNext()) {
           Meeting meeting = it.next();
           if (meeting != null) {
-            addMeetingTable(con, meeting.getMeetingID(), invitedMeetingListTableName);
+            addMeetingTable(con, meeting.getMeetingID(), invitedMeetingListTableName, meeting.getVersion());
           }
         }
 

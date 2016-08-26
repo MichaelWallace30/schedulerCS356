@@ -169,12 +169,15 @@ public class DataBaseController {
 
                 while(rsMeetingList.next()){
                     String temp = rsMeetingList.getString("MEETING_ID");
+                    Integer version = rsMeetingList.getInt("VERSION");
+                    
+                    
                     
                     Schedule schedule = getSchedule(temp);
                     String meetingID = "";
                     Integer roomID = -1;
                     Integer ownerID = -1;
-                    Integer version = 0;
+                    
                     String sq2 = "SELECT * FROM MEETING WHERE ID = ?";
                     PreparedStatement ps = con.prepareStatement(sq2);
                     ps.setString(1, temp);
@@ -183,8 +186,7 @@ public class DataBaseController {
                     {
                       meetingID = rs.getString("ID");
                       roomID = rs.getInt("ROOM_ID");            
-                      ownerID = rs.getInt("OWNER_ID");
-                      version = rs.getInt("VERSION");
+                      ownerID = rs.getInt("OWNER_ID");                     
                       
                     } 
                     

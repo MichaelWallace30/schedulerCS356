@@ -1968,6 +1968,11 @@ public class UserGUIController implements Initializable {
                 Scene scene = new Scene(pane);
                 Stage parentStage;
                 Stage stage = new Stage();
+                
+                ChangedMeetingsNotifierController controller = loader.getController();
+                controller.attachDb(dbController);
+                controller.setCurrentTime(currentTime);
+                controller.setupTable(changedMeetings, account);
 
                 parentStage = (Stage) tabPane.getScene().getWindow();
 

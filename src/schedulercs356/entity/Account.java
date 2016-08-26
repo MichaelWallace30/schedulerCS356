@@ -309,6 +309,20 @@ public class Account implements DataBaseInterface {
         catch(SQLException err){
             //System.out.println(err.getMessage());
             //ignore duplicate excetions
+            try{
+            PreparedStatement ps2 = con.prepareStatement(
+            "UPDATE " + listName +" SET VERSION =? WHERE MEETING_ID =?");
+                
+            ps2.setInt(1,version);
+            ps2.setString(2,meetingID);
+            
+            int i = ps2.executeUpdate();
+            ps2.close(); 
+            }catch(SQLException err2){
+                
+            
+            }
+            
         }
         return false;
     }

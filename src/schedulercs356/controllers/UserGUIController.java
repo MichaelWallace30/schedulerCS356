@@ -1882,6 +1882,8 @@ public class UserGUIController implements Initializable {
             System.out.println("User is successfully removed!");
             
             notifyPopup("Meeting successfully removed!");
+            meetingData.remove(cell);
+            updateSidebarMeetings();
           } else {
             notifyPopup("You haven't accepted this invite! Cannot drop!");
           }

@@ -194,7 +194,7 @@ public class Room implements DataBaseInterface {
         // set the preparedstatement parameters
         ps.setString(1,room.getDescription());
         ps.setInt(2,room.getMaxOccupancy());        
-        ps.setInt(4,room.getRoomNumber());
+        ps.setInt(3,room.getRoomNumber());
 
         // call executeUpdate to execute our sql update statement
         // call executeUpdate to execute our sql update statement

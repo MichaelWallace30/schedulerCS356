@@ -306,21 +306,21 @@ public class Account implements DataBaseInterface {
             }
             return true;         
         }
-        catch(SQLException err){
-            //System.out.println(err.getMessage());
+        catch(SQLException err) {
+            System.out.println("Possible duplicate of meeting ID " + meetingID 
+                    + ". Updating instead!");
             //ignore duplicate excetions
-            try{
-            PreparedStatement ps2 = con.prepareStatement(
-            "UPDATE " + listName +" SET VERSION =? WHERE MEETING_ID =?");
+              try {
+              PreparedStatement ps2 = con.prepareStatement(
+                "UPDATE " + listName +" SET VERSION =? WHERE MEETING_ID =?");
                 
-            ps2.setInt(1,version);
-            ps2.setString(2,meetingID);
+              ps2.setInt(1,version);
+              ps2.setString(2,meetingID);
             
-            int i = ps2.executeUpdate();
-            ps2.close(); 
-            }catch(SQLException err2){
-                
-            
+              int i = ps2.executeUpdate();
+              ps2.close(); 
+            } catch(SQLException err2) {
+              System.err.println("Could not update meetingID " + meetingID + "!!");
             }
             
         }

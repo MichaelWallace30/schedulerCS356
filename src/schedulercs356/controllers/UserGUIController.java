@@ -1299,10 +1299,10 @@ public class UserGUIController implements Initializable {
       if (roomCell != null) {
         Room room = dbController.getRoom(roomCell.roomNumber.get());
         // room will keep reference to meeting.
-        //room.addMeeting(meeting);
+        room.addMeeting(meeting);
         meeting.setRoom(room);
         // update room.
-        //dbController.updateObject(room);
+        dbController.updateObject(room);
       }
       
       // Update the meeting in db.
@@ -1579,6 +1579,12 @@ public class UserGUIController implements Initializable {
         
         
         if (removed) {
+          Room room = meeting.getRoom();
+          if (room != null) {
+            room.removeMeeting(meeting);
+            dbController.updateObject(room);
+          }
+          
           System.out.println("Removed!");
           meetingData.remove(index);
           updateSidebarMeetings();

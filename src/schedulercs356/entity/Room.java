@@ -74,6 +74,19 @@ public class Room implements DataBaseInterface {
     }
     
     public void removeMeeting(Meeting meeting){
+                DataBaseController dbController = new DataBaseController();
+        Connection con = dbController.getCon();
+        try{
+               PreparedStatement ps = con.prepareStatement(
+                    "DELETE FROM " + this.getMeetingListTableName() +
+                    " WHERE MEETING_ID = ?");
+               ps.setString(1, meeting.getMeetingID());
+               ps.executeUpdate();
+
+                
+        }catch(SQLException err){
+            err.printStackTrace();
+        }
         meetingList.remove(meeting);
     }
 

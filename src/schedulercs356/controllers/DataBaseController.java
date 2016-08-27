@@ -67,7 +67,7 @@ public class DataBaseController {
     {
         try
         {
-            Statement stmt = con.createStatement();
+            Statement stmt = getCon().createStatement();
             String SQL = "SELECT * FROM EMPLOYEES WHERE USER_NAME='"+userName+"'";
             ResultSet rs = stmt.executeQuery(SQL);
             
@@ -96,7 +96,7 @@ public class DataBaseController {
     public Boolean addObject(DataBaseInterface obj){
         try
         {            
-            obj.addObject(obj, con);
+            obj.addObject(obj, getCon());
             
         }
         catch(SQLException err)
@@ -110,7 +110,7 @@ public class DataBaseController {
     public Boolean removeObject(DataBaseInterface obj){
         try
         {            
-            obj.removeObject(obj, con);
+            obj.removeObject(obj, getCon());
         }
         catch(SQLException err)
         {
@@ -123,7 +123,7 @@ public class DataBaseController {
     public Boolean updateObject(DataBaseInterface obj){
         try
         {            
-            Boolean addSuccess = obj.updateObject(obj, con);
+            Boolean addSuccess = obj.updateObject(obj, getCon());
             if(!addSuccess)return false;//no object to update
         }
         catch(SQLException err)
@@ -138,7 +138,7 @@ public class DataBaseController {
         
         try{
             name = name.toUpperCase();
-            DatabaseMetaData dbmd = con.getMetaData();
+            DatabaseMetaData dbmd = getCon().getMetaData();
             ResultSet rs = dbmd.getTables(null, "ROOT", name, null);
             if (rs.next()) {
                 return true;
@@ -153,7 +153,7 @@ public class DataBaseController {
     //called in entiy class
     public void createTable(String sql){
         try{
-            Statement stmt = con.createStatement();
+            Statement stmt = getCon().createStatement();
             stmt.executeUpdate(sql);
         }
         catch(SQLException err){
@@ -163,7 +163,7 @@ public class DataBaseController {
     
     public void parseMeetingList(String sqlTable, LinkedList<Meeting> meetingList){
          try{
-                Statement stmt = con.createStatement();
+                Statement stmt = getCon().createStatement();
                 String sql = "SELECT * FROM " + sqlTable;
                 ResultSet rsMeetingList = stmt.executeQuery(sql);
 
@@ -179,7 +179,7 @@ public class DataBaseController {
                     Integer ownerID = -1;
                     
                     String sq2 = "SELECT * FROM MEETING WHERE ID = ?";
-                    PreparedStatement ps = con.prepareStatement(sq2);
+                    PreparedStatement ps = getCon().prepareStatement(sq2);
                     ps.setString(1, temp);
                     ResultSet rs = ps.executeQuery();
                     if(rs.next())
@@ -205,7 +205,7 @@ public class DataBaseController {
     
     public void parseAccountList(String sqlTable, LinkedList<Account> accountList){
          try{
-                Statement stmt = con.createStatement();
+                Statement stmt = getCon().createStatement();
                 String sql = "SELECT * FROM " + sqlTable;
                 ResultSet rsAccountList = stmt.executeQuery(sql);
 
@@ -259,7 +259,7 @@ public class DataBaseController {
     public LinkedList<Room> getAllRooms(){
         try
         {
-            Statement stmt = con.createStatement();
+            Statement stmt = getCon().createStatement();
             LinkedList<Room> rooms = new LinkedList<>();
             ResultSet rs = stmt.executeQuery("SELECT * FROM ROOMS");
             while(rs.next())
@@ -279,7 +279,7 @@ public class DataBaseController {
     public Room getRoom(Integer objID){         
         try
         {
-            Statement stmt = con.createStatement();
+            Statement stmt = getCon().createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM ROOMS WHERE ROOM_NUMBER =" + objID);
                 if(rs.next())
                 {
@@ -318,7 +318,7 @@ public class DataBaseController {
     public LinkedList<Schedule> getAllSchedules(){
         try
         {
-            Statement stmt = con.createStatement();
+            Statement stmt = getCon().createStatement();
             LinkedList<Schedule> schedules = new LinkedList<>();
             ResultSet rs = stmt.executeQuery("SELECT * FROM SCHEDULE");
             while(rs.next())
@@ -340,7 +340,7 @@ public class DataBaseController {
         {
             
             String sql = "SELECT * FROM SCHEDULE WHERE OWNER_ID = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
+            PreparedStatement ps = getCon().prepareStatement(sql);
             ps.setString(1, objID);
             ResultSet rs = ps.executeQuery();
             if(rs.next())
@@ -391,7 +391,7 @@ public class DataBaseController {
     public LinkedList<Account> getAllAccounts(){
         try
         {
-            Statement stmt = con.createStatement();
+            Statement stmt = getCon().createStatement();
             LinkedList<Account> accounts = new LinkedList<>();
             ResultSet rs = stmt.executeQuery("SELECT * FROM EMPLOYEES");
             while(rs.next())
@@ -420,12 +420,12 @@ public class DataBaseController {
             //first name only
             if(lastName == null){   
                 sql = "SELECT * FROM EMPLOYEES WHERE FIRST_NAME = ?";
-                PreparedStatement ps = con.prepareStatement(sql);
+                PreparedStatement ps = getCon().prepareStatement(sql);
                 ps.setString(1, firstName);
                 rs = ps.executeQuery();
             }else{//first and last name
                 sql = "SELECT * FROM EMPLOYEES WHERE FIRST_NAME = ? AND LAST_NAME = ?";
-                PreparedStatement ps = con.prepareStatement(sql);
+                PreparedStatement ps = getCon().prepareStatement(sql);
                 ps.setString(1, firstName);
                 ps.setString(2, lastName);
                 rs = ps.executeQuery();
@@ -447,7 +447,7 @@ public class DataBaseController {
         try
         {
             
-            Statement stmt = con.createStatement();
+            Statement stmt = getCon().createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM EMPLOYEES WHERE ID =" + objID);
                 if(rs.next())
                 {
@@ -542,7 +542,7 @@ public Meeting parseMeeting(ResultSet rs){
     public LinkedList<Meeting> getAllMeetings(){
         try
         {
-            Statement stmt = con.createStatement();
+            Statement stmt = getCon().createStatement();
             LinkedList<Meeting> meetings = new LinkedList<>();
             ResultSet rs = stmt.executeQuery("SELECT * FROM MEETING");
             while(rs.next())
@@ -563,7 +563,7 @@ public Meeting parseMeeting(ResultSet rs){
         try
         {            
             String sql = "SELECT * FROM MEETING WHERE ID = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
+            PreparedStatement ps = getCon().prepareStatement(sql);
             ps.setString(1, objID);
             ResultSet rs = ps.executeQuery();
                 if(rs.next())
@@ -576,6 +576,10 @@ public Meeting parseMeeting(ResultSet rs){
             System.out.println(err.getMessage());
         }
         return null;
+    }
+
+    public Connection getCon() {
+        return con;
     }
 }
 

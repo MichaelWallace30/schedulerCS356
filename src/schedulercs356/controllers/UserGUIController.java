@@ -1955,7 +1955,9 @@ public class UserGUIController implements Initializable {
             Meeting meetingFromDb = dbController.getMeeting(meeting.getMeetingID());
             if (meetingFromDb != null && (meeting.getVersion() < meetingFromDb.getVersion())) {
               meeting.setVersion(meetingFromDb.getVersion());
-              changedMeetings.add(meeting);
+              if (meeting.getOwnerID() != account.getId()) {
+                changedMeetings.add(meeting);
+              }
             }
           }
 

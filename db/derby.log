@@ -12,3 +12,9 @@ os.arch=amd64
 os.version=6.1
 derby.system.home=D:\Users\Bender\Documents\GitHub\schedulerCS356\db
 Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Sun Aug 28 23:28:49 PDT 2016: Shutting down Derby engine
+----------------------------------------------------------------
+Sun Aug 28 23:28:49 PDT 2016:
+Shutting down instance a816c00e-0156-d4f6-5b19-00003fbb59f8 on database directory D:\Users\Bender\Documents\GitHub\schedulerCS356\db\companyDataBase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+----------------------------------------------------------------

@@ -80,40 +80,7 @@ public class wrongPassWordController implements Initializable {
           throw new RuntimeException("File does not exist");
         }
     }    
-    
-    
-    private Timeline createBlinker(Node node) {
-        Timeline blink = new Timeline(
-                new KeyFrame(
-                        Duration.seconds(0),
-                        new KeyValue(
-                                node.opacityProperty(), 
-                                1, 
-                                Interpolator.DISCRETE
-                        )
-                ),
-                new KeyFrame(
-                        Duration.seconds(0.5),
-                        new KeyValue(
-                                node.opacityProperty(), 
-                                0, 
-                                Interpolator.DISCRETE
-                        )
-                ),
-                new KeyFrame(
-                        Duration.seconds(1),
-                        new KeyValue(
-                                node.opacityProperty(), 
-                                1, 
-                                Interpolator.DISCRETE
-                        )
-                )
-        );
-        blink.setCycleCount(3);
-
-        return blink;
-    }
-    
+        
     public void stop() {
       mediaPlayer.dispose();
     }

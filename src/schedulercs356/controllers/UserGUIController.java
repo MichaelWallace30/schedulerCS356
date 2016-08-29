@@ -1297,6 +1297,12 @@ public class UserGUIController implements Initializable {
       // now update the room.
       RoomTableCell roomCell = editMeetingRoomSelectColumn.getSelectionModel().getSelectedItem();
       if (roomCell != null) {
+        Room last = meeting.getRoom();
+        
+        if (last != null) {
+          last.removeMeeting(meeting);
+        }
+        // Update to the new room.
         Room room = dbController.getRoom(roomCell.roomNumber.get());
         // Prevent update if room is already booked.
         if (room != null && checkRoomAvailability(room, meeting)) {

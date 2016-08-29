@@ -2,6 +2,33 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/InviteManagerController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/gui/UserGUI.fxml</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/PopupController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/cells/MeetingTableCell.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/gui/Popup.fxml</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/cells/RoomAdminTableCell.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/css/editprofilegui.css</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/ChangedMeetingsNotifierController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/gui/ConfirmationPopup.fxml</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/EditProfileGUIController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/cells/AccountTableCell.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/ConfirmationPopupController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/wrongPassWordController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/UserGUIController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/gui/EditProfileGUI.fxml</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/cells/RoomTableCell.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/LoginControllerFXML.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/entity/Account.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/gui/ChangedMeetingsNotifier.fxml</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/CreateNewUserController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/FastCreateRoomController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/ResetUserPasswordController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/gui/InviteManager.fxml</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/controllers/DataBaseController.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/entity/MeetingStatus.java</file>
+            <file>file:/C:/Users/cmgarcia/Documents/GitHub/schedulerCS356/src/schedulercs356/entity/Meeting.java</file>
+        </group>
     </open-files>
 </project-private>

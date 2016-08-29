@@ -353,6 +353,7 @@ public class UserGUIController implements Initializable {
       
       sidebarName.setText(account.getFirstName() + " " + account.getLastName());
       profileName.setText(account.getFirstName() + " " + account.getLastName());
+      profileUserName.setText(account.getUserName());
       profileAddress.setText("Address: " + account.getAddress());
       
       if (account.isAdmin()) {

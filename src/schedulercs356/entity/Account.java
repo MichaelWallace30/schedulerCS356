@@ -336,13 +336,14 @@ public class Account implements DataBaseInterface {
         String SQL = "SELECT * FROM EMPLOYEES";
         ResultSet rs = stmt.executeQuery(SQL);
 
-        int lastID = 0;
+        int highestID = 0;
         while(rs.next()){
-            lastID = rs.getInt(1);
+            int temp = rs.getInt(1);
+            if(temp > highestID)highestID = temp;
         }
-        lastID++;
+        highestID++;
         
-        account.setId(lastID);
+        account.setId(highestID);
         
         
         PreparedStatement ps = con.prepareStatement(

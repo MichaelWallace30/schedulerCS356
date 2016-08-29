@@ -1298,9 +1298,17 @@ public class UserGUIController implements Initializable {
       RoomTableCell roomCell = editMeetingRoomSelectColumn.getSelectionModel().getSelectedItem();
       if (roomCell != null) {
         Room room = dbController.getRoom(roomCell.roomNumber.get());
-        // room will keep reference to meeting.
-        room.addMeeting(meeting);
-        meeting.setRoom(room);
+        // Prevent update if room is already booked.
+        if (room != null && checkRoomAvailability(room, meeting)) {
+          // room will keep reference to meeting.
+          room.addMeeting(meeting);
+          meeting.setRoom(room);
+        } else {
+          if (room != null) {
+            notifyPopup("Cannot Update! Time conflict with room " + room.getRoomNumber() + "!");
+            return;
+          }
+        }
         // update room.
         dbController.updateObject(room);
       }
@@ -1654,6 +1662,37 @@ public class UserGUIController implements Initializable {
       }
     }
     
+    return success;
+  }
+  
+  
+  /**
+   * Check if a meeting is available at the time alotted from edit meetings.
+   * @param room
+   * @param ignored
+   * @return 
+   */
+  private boolean checkRoomAvailability(Room room, Meeting ignored) {
+    boolean success = true;
+    List<Meeting> meetings = room.getMeetingList();
+    
+    LocalDateTime startDate = getStartTimeFromEditMeeting();
+    LocalDateTime endDate = getEndTimeFromEditMeeting();
+    
+    for (Meeting meeting : meetings) {
+      Schedule sch = meeting.getSchedule();
+      
+      if (sch != null && !meeting.getMeetingID().equals(ignored.getMeetingID())) {
+        LocalDateTime start = sch.getStartDateTime();
+        LocalDateTime end = sch.getEndDateTime();
+        if ((start.isEqual(startDate) || end.equals(endDate)) || 
+                (startDate.isAfter(start) && endDate.isBefore(end)) ||
+                (endDate.isBefore(end) && endDate.isAfter(start)) ||
+                (startDate.isAfter(start) && startDate.isBefore(end))) {
+          success = false;
+        }
+      }
+    }
     return success;
   }
   

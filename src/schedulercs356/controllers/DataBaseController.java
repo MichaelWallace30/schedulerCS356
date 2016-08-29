@@ -161,8 +161,8 @@ public class DataBaseController {
         }
     }
     
-    public void parseMeetingList(String sqlTable, LinkedList<Meeting> meetingList){
-         try{
+    public void parseMeetingList(String sqlTable, LinkedList<Meeting> meetingList) {
+         try {
                 Statement stmt = getCon().createStatement();
                 String sql = "SELECT * FROM " + sqlTable;
                 ResultSet rsMeetingList = stmt.executeQuery(sql);
@@ -190,13 +190,17 @@ public class DataBaseController {
                       
                     } 
                     
-                    Room room = getRoom(roomID);
+                    Room room = null;
                     
-                    Meeting meeting = new Meeting(meetingID,schedule,room,null,null,null,ownerID,version);
+                    if (!sqlTable.contains(Room.queryRoomMeetingTable)) {
+                      room = getRoom(roomID);
+                    }
+                    
+                    Meeting meeting = new Meeting(meetingID, schedule, room, null, null, null, ownerID, version);
                     meetingList.add(meeting);
                 }
             }
-            catch(SQLException err){
+            catch(SQLException err) {
                 //throws exception if table has never been created can ignore
                 //just use empty meeting list
                 System.out.println(err.getMessage());
@@ -243,7 +247,7 @@ public class DataBaseController {
             
             LinkedList<Meeting> meetingList = new LinkedList<>();
                         
-            parseMeetingList(Room.queryRoomMeetingTable + roomid.toString(),meetingList);                
+            parseMeetingList(Room.queryRoomMeetingTable + roomid.toString(), meetingList);                
 
             Room newRoom = new Room(max,description,roomid,meetingList);
             return newRoom; 

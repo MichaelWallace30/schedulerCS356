@@ -58,7 +58,7 @@ public class Room implements DataBaseInterface {
         //create table if dne
         DataBaseController db = new DataBaseController();
         if(!db.doesTableExsist(getMeetingListTableName())){
-            String sql = "CREATE TABLE " + getMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key)";
+            String sql = "CREATE TABLE " + getMeetingListTableName() +"(MEETING_ID VARCHAR(40) primary key, VERSION INTEGER)";
             db.createTable(sql);            
         }
         else{//populate table
@@ -76,7 +76,7 @@ public class Room implements DataBaseInterface {
     public void removeMeeting(Meeting meeting){
                 DataBaseController dbController = new DataBaseController();
         Connection con = dbController.getCon();
-        try{
+        try {
                PreparedStatement ps = con.prepareStatement(
                     "DELETE FROM " + this.getMeetingListTableName() +
                     " WHERE MEETING_ID = ?");
@@ -84,10 +84,18 @@ public class Room implements DataBaseInterface {
                ps.executeUpdate();
 
                 
-        }catch(SQLException err){
+        } catch(SQLException err) {
             err.printStackTrace();
         }
-        meetingList.remove(meeting);
+        
+        // Iterate through to remove the meeting.
+        for (int i = 0; i < meetingList.size(); ++i) {
+          Meeting check = meetingList.get(i);
+          if (check.getMeetingID().equals(meeting.getMeetingID())) {
+            meetingList.remove(i);
+            break;
+          }
+        }
     }
 
     public int getMaxOccupancy() {
@@ -120,23 +128,24 @@ public class Room implements DataBaseInterface {
 
     public void setMeetingList(LinkedList<Meeting> meetingList) {
          
-        if(meetingList == null){
+        if(meetingList == null) {
             this.meetingList = new LinkedList<>();
         }
-        else{            
+        else {            
             this.meetingList = meetingList;
          }
     }
     
-    private Boolean addMeetingTable(Connection con, String meetingID){
+    private Boolean addMeetingTable(Connection con, String meetingID) { 
         try
         {
             PreparedStatement ps = con.prepareStatement(
             "INSERT INTO " + this.meetingListTableName 
-                +"(MEETING_ID) VALUES"
-                + "(?)");  
+                +"(MEETING_ID, VERSION) VALUES"
+                + "(?, ?)");  
 
              ps.setString(1,meetingID);
+             ps.setInt(2, 0);
 
             int i = ps.executeUpdate();
             ps.close();   
@@ -146,7 +155,7 @@ public class Room implements DataBaseInterface {
             }
             return true;         
         }
-        catch(SQLException err){
+        catch(SQLException err) {
             //System.out.println(err.getMessage());
             //ignore duplicate excetions
         }
